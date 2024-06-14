@@ -11,11 +11,14 @@
         <link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
-        #map {
-            width: 1041px;
-            height: 495px;
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
         }
         </style>
         <title></title>
@@ -34,14 +37,12 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
         <script src="js/leaflet-measure.js"></script>
-        <script src="data/LmiteEstatal_1.js"></script>
-        <script src="data/LmiteMpal_2.js"></script>
-        <script src="data/CasosconfirmafosSE22_3.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[18.317530014573034,-99.87196361273348],[19.16974287758897,-98.07592068236116]]);
+        })
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -89,246 +90,22 @@
         document.getElementsByClassName('leaflet-control-measure-toggle')[0].className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
-        }
-        map.createPane('pane_CartoLight_0');
-        map.getPane('pane_CartoLight_0').style.zIndex = 400;
-        var layer_CartoLight_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.pn', {
-            pane: 'pane_CartoLight_0',
-            opacity: 1.0,
-            attribution: '',
-            minZoom: 1,
-            maxZoom: 28,
-        });
-        layer_CartoLight_0;
-        map.addLayer(layer_CartoLight_0);
-        function pop_LmiteEstatal_1(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOM_ENT'] !== null ? autolinker.link(feature.properties['NOM_ENT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_LmiteEstatal_1_0() {
-            return {
-                pane: 'pane_LmiteEstatal_1',
-                opacity: 1,
-                color: 'rgba(145,31,211,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 4.0, 
-                fillOpacity: 0,
-                interactive: true,
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
             }
         }
-        map.createPane('pane_LmiteEstatal_1');
-        map.getPane('pane_LmiteEstatal_1').style.zIndex = 401;
-        map.getPane('pane_LmiteEstatal_1').style['mix-blend-mode'] = 'normal';
-        var layer_LmiteEstatal_1 = new L.geoJson(json_LmiteEstatal_1, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_LmiteEstatal_1',
-            layerName: 'layer_LmiteEstatal_1',
-            pane: 'pane_LmiteEstatal_1',
-            onEachFeature: pop_LmiteEstatal_1,
-            style: style_LmiteEstatal_1_0,
-        });
-        bounds_group.addLayer(layer_LmiteEstatal_1);
-        map.addLayer(layer_LmiteEstatal_1);
-        function pop_LmiteMpal_2(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVE_MUN'] !== null ? autolinker.link(feature.properties['CVE_MUN'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOM_MUN'] !== null ? autolinker.link(feature.properties['NOM_MUN'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVE_JUR'] !== null ? autolinker.link(feature.properties['CVE_JUR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_LmiteMpal_2_0() {
-            return {
-                pane: 'pane_LmiteMpal_2',
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
-                fillOpacity: 0,
-                interactive: true,
-            }
-        }
-        map.createPane('pane_LmiteMpal_2');
-        map.getPane('pane_LmiteMpal_2').style.zIndex = 402;
-        map.getPane('pane_LmiteMpal_2').style['mix-blend-mode'] = 'normal';
-        var layer_LmiteMpal_2 = new L.geoJson(json_LmiteMpal_2, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_LmiteMpal_2',
-            layerName: 'layer_LmiteMpal_2',
-            pane: 'pane_LmiteMpal_2',
-            onEachFeature: pop_LmiteMpal_2,
-            style: style_LmiteMpal_2_0,
-        });
-        bounds_group.addLayer(layer_LmiteMpal_2);
-        map.addLayer(layer_LmiteMpal_2);
-        function pop_CasosconfirmafosSE22_3(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">FOLD_ID</th>\
-                        <td class="visible-with-data" id="FOLD_ID">' + (feature.properties['FOLD_ID'] !== null ? autolinker.link(feature.properties['FOLD_ID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['casos — cas_si'] !== null ? autolinker.link(feature.properties['casos — cas_si'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['casos — cas_defun'] !== null ? autolinker.link(feature.properties['casos — cas_defun'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['casos — cas_en base'] !== null ? autolinker.link(feature.properties['casos — cas_en base'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">casos — cas_dx</th>\
-                        <td class="visible-with-data" id="casos — cas_dx">' + (feature.properties['casos — cas_dx'] !== null ? autolinker.link(feature.properties['casos — cas_dx'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_CasosconfirmafosSE22_3_0(feature) {
-            switch(String(feature.properties['casos — cas_dx'])) {
-                case 'DENGUE NO GRAVE':
-                    return {
-                pane: 'pane_CasosconfirmafosSE22_3',
-                radius: 6.0,
-                stroke: false,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(47,175,47,1.0)',
-                interactive: true,
-            }
-                    break;
-                case 'DENGUE GRAVE':
-                    return {
-                pane: 'pane_CasosconfirmafosSE22_3',
-                radius: 6.0,
-                stroke: false,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(226,16,30,1.0)',
-                interactive: true,
-            }
-                    break;
-                case 'DENGUE CON SIGNOS DE ALARMA':
-                    return {
-                pane: 'pane_CasosconfirmafosSE22_3',
-                radius: 6.0,
-                stroke: false,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(231,237,62,1.0)',
-                interactive: true,
-            }
-                    break;
-                case 'DEFUNCIÓN POR DENGUE':
-                    return {
-                pane: 'pane_CasosconfirmafosSE22_3',
-                shape: 'triangle',
-                radius: 6.4,
-                stroke: false,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(0,0,0,1.0)',
-                interactive: true,
-            }
-                    break;
-                case '#REF!':
-                    return {
-                pane: 'pane_CasosconfirmafosSE22_3',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(67,80,202,1.0)',
-                interactive: true,
-            }
-                    break;
-                case 'NULL':
-                    return {
-                pane: 'pane_CasosconfirmafosSE22_3',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(23,174,48,1.0)',
-                interactive: true,
-            }
-                    break;
-            }
-        }
-        map.createPane('pane_CasosconfirmafosSE22_3');
-        map.getPane('pane_CasosconfirmafosSE22_3').style.zIndex = 403;
-        map.getPane('pane_CasosconfirmafosSE22_3').style['mix-blend-mode'] = 'normal';
-        var layer_CasosconfirmafosSE22_3 = new L.geoJson(json_CasosconfirmafosSE22_3, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_CasosconfirmafosSE22_3',
-            layerName: 'layer_CasosconfirmafosSE22_3',
-            pane: 'pane_CasosconfirmafosSE22_3',
-            onEachFeature: pop_CasosconfirmafosSE22_3,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.circleMarker(latlng, style_CasosconfirmafosSE22_3_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_CasosconfirmafosSE22_3);
-        map.addLayer(layer_CasosconfirmafosSE22_3);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
         var baseMaps = {};
-        var overlaysTree = [
-            {label: 'Casos confirmafos S.E. 22<br /><table><tr><td style="text-align: center;"><img src="legend/CasosconfirmafosSE22_3_DENGUENOGRAVE0.png" /></td><td>DENGUE NO GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosconfirmafosSE22_3_DENGUEGRAVE1.png" /></td><td>DENGUE GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosconfirmafosSE22_3_DENGUECONSIGNOSDEALARMA2.png" /></td><td>DENGUE CON SIGNOS DE ALARMA</td></tr><tr><td style="text-align: center;"><img src="legend/CasosconfirmafosSE22_3_DEFUNCIÓNPORDENGUE3.png" /></td><td>DEFUNCIÓN POR DENGUE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosconfirmafosSE22_3_REF4.png" /></td><td>#REF!</td></tr><tr><td style="text-align: center;"><img src="legend/CasosconfirmafosSE22_3_5.png" /></td><td></td></tr></table>', layer: layer_CasosconfirmafosSE22_3},
-        {label: '<b>Mapa Base</b>', selectAllCheckbox: true, children: [
-            {label: '<img src="legend/LmiteMpal_2.png" /> Límite Mpal.', layer: layer_LmiteMpal_2},
-            {label: '<img src="legend/LmiteEstatal_1.png" /> Límite Estatal', layer: layer_LmiteEstatal_1},]},
-        {label: '<b>Terreno</b>', selectAllCheckbox: true, children: [
-            {label: "Carto Light", layer: layer_CartoLight_0},]},]
+        var overlaysTree = []
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
             //selectorBack: false,
@@ -340,16 +117,6 @@
         });
         lay.addTo(map);
         setBounds();
-        resetLabels([layer_LmiteEstatal_1,layer_LmiteMpal_2]);
-        map.on("zoomend", function(){
-            resetLabels([layer_LmiteEstatal_1,layer_LmiteMpal_2]);
-        });
-        map.on("layeradd", function(){
-            resetLabels([layer_LmiteEstatal_1,layer_LmiteMpal_2]);
-        });
-        map.on("layerremove", function(){
-            resetLabels([layer_LmiteEstatal_1,layer_LmiteMpal_2]);
-        });
         </script>
     </body>
 </html>
