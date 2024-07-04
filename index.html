@@ -50,7 +50,7 @@
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[18.311742046938733,-99.61439893009606],[19.15191674212396,-98.51391577443727]]);
+        }).fitBounds([[18.311742046938733,-99.84529538187847],[19.15191674212396,-98.28301932265485]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -136,7 +136,7 @@
                 lineJoin: 'miter',
                 weight: 8.0, 
                 fillOpacity: 0,
-                interactive: true,
+                interactive: false,
             }
         }
         map.createPane('pane_LimEstatal_1');
@@ -144,7 +144,7 @@
         map.getPane('pane_LimEstatal_1').style['mix-blend-mode'] = 'normal';
         var layer_LimEstatal_1 = new L.geoJson(json_LimEstatal_1, {
             attribution: '',
-            interactive: true,
+            interactive: false,
             dataVar: 'json_LimEstatal_1',
             layerName: 'layer_LimEstatal_1',
             pane: 'pane_LimEstatal_1',
@@ -186,7 +186,7 @@
                 lineJoin: 'miter',
                 weight: 3.0, 
                 fillOpacity: 0,
-                interactive: true,
+                interactive: false,
             }
         }
         map.createPane('pane_LimMpal_2');
@@ -194,7 +194,7 @@
         map.getPane('pane_LimMpal_2').style['mix-blend-mode'] = 'normal';
         var layer_LimMpal_2 = new L.geoJson(json_LimMpal_2, {
             attribution: '',
-            interactive: true,
+            interactive: false,
             dataVar: 'json_LimMpal_2',
             layerName: 'layer_LimMpal_2',
             pane: 'pane_LimMpal_2',
@@ -652,6 +652,9 @@
                         <th scope="row">casos — cas_dx</th>\
                         <td class="visible-with-data" id="casos — cas_dx">' + (feature.properties['casos — cas_dx'] !== null ? autolinker.link(feature.properties['casos — cas_dx'].toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['casos — cas_dupli'] !== null ? autolinker.link(feature.properties['casos — cas_dupli'].toLocaleString()) : '') + '</td>\
+                    </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
 			layer.on('popupopen', function(e) {
@@ -753,7 +756,7 @@
         .title += 'Search for a place';
         var baseMaps = {};
         var overlaysTree = [
-        {label: '<b>Casos Dengue S.E.  25</b>', selectAllCheckbox: true, children: [
+        {label: '<b>Casos Dengue S.E.  26</b>', selectAllCheckbox: true, children: [
             {label: 'Casos Confirmados<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DENGUENOGRAVE0.png" /></td><td>DENGUE NO GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DENGUEGRAVE1.png" /></td><td>DENGUE GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DENGUECONSIGNOSDEALARMA2.png" /></td><td>DENGUE CON SIGNOS DE ALARMA</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DEFUNCIÓNPORDENGUE3.png" /></td><td>DEFUNCIÓN POR DENGUE</td></tr></table>', layer: layer_CasosConfirmados_7},]},
         {label: '<b>Estratos de Riego</b>', selectAllCheckbox: true, children: [
             {label: '<img src="legend/I_6.png" /> I', layer: layer_I_6},
