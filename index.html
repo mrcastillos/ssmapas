@@ -30,7 +30,6 @@
         <script src="js/leaflet.js"></script>
         <script src="js/L.Control.Layers.Tree.min.js"></script>
         <script src="js/L.Control.Locate.min.js"></script>
-        <script src="js/leaflet-svg-shape-markers.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -40,17 +39,14 @@
         <script src="js/labels.js"></script>
         <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
         <script src="js/leaflet-measure.js"></script>
-        <script src="data/LimEstatal_1.js"></script>
-        <script src="data/LimMpal_2.js"></script>
-        <script src="data/TrazaUrbana_3.js"></script>
-        <script src="data/Jurisdicciones_4.js"></script>
-        <script src="data/II_5.js"></script>
-        <script src="data/I_6.js"></script>
-        <script src="data/CasosConfirmados_7.js"></script>
+        <script src="data/LimMpal_1.js"></script>
+        <script src="data/Jurisdicciones_2.js"></script>
+        <script src="data/CasosConfirmadosporMunicipio_3.js"></script>
+        <script src="data/CasosConfirmados_4.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[18.311742046938733,-99.84529538187847],[19.15191674212396,-98.28301932265485]]);
+        }).fitBounds([[16.866925877709765,-101.39424510813772],[20.22762465845067,-95.13558086769142]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -110,50 +106,7 @@
         });
         layer_CartoLight_0;
         map.addLayer(layer_CartoLight_0);
-        function pop_LimEstatal_1(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOM_ENT'] !== null ? autolinker.link(feature.properties['NOM_ENT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_LimEstatal_1_0() {
-            return {
-                pane: 'pane_LimEstatal_1',
-                opacity: 1,
-                color: 'rgba(4,98,54,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 8.0, 
-                fillOpacity: 0,
-                interactive: false,
-            }
-        }
-        map.createPane('pane_LimEstatal_1');
-        map.getPane('pane_LimEstatal_1').style.zIndex = 401;
-        map.getPane('pane_LimEstatal_1').style['mix-blend-mode'] = 'normal';
-        var layer_LimEstatal_1 = new L.geoJson(json_LimEstatal_1, {
-            attribution: '',
-            interactive: false,
-            dataVar: 'json_LimEstatal_1',
-            layerName: 'layer_LimEstatal_1',
-            pane: 'pane_LimEstatal_1',
-            onEachFeature: pop_LimEstatal_1,
-            style: style_LimEstatal_1_0,
-        });
-        bounds_group.addLayer(layer_LimEstatal_1);
-        map.addLayer(layer_LimEstatal_1);
-        function pop_LimMpal_2(feature, layer) {
+        function pop_LimMpal_1(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
@@ -176,9 +129,9 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_LimMpal_2_0() {
+        function style_LimMpal_1_0() {
             return {
-                pane: 'pane_LimMpal_2',
+                pane: 'pane_LimMpal_1',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -186,114 +139,24 @@
                 lineJoin: 'miter',
                 weight: 3.0, 
                 fillOpacity: 0,
-                interactive: false,
+                interactive: true,
             }
         }
-        map.createPane('pane_LimMpal_2');
-        map.getPane('pane_LimMpal_2').style.zIndex = 402;
-        map.getPane('pane_LimMpal_2').style['mix-blend-mode'] = 'normal';
-        var layer_LimMpal_2 = new L.geoJson(json_LimMpal_2, {
+        map.createPane('pane_LimMpal_1');
+        map.getPane('pane_LimMpal_1').style.zIndex = 401;
+        map.getPane('pane_LimMpal_1').style['mix-blend-mode'] = 'normal';
+        var layer_LimMpal_1 = new L.geoJson(json_LimMpal_1, {
             attribution: '',
-            interactive: false,
-            dataVar: 'json_LimMpal_2',
-            layerName: 'layer_LimMpal_2',
-            pane: 'pane_LimMpal_2',
-            onEachFeature: pop_LimMpal_2,
-            style: style_LimMpal_2_0,
+            interactive: true,
+            dataVar: 'json_LimMpal_1',
+            layerName: 'layer_LimMpal_1',
+            pane: 'pane_LimMpal_1',
+            onEachFeature: pop_LimMpal_1,
+            style: style_LimMpal_1_0,
         });
-        bounds_group.addLayer(layer_LimMpal_2);
-        map.addLayer(layer_LimMpal_2);
-        function pop_TrazaUrbana_3(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ENTIDAD'] !== null ? autolinker.link(feature.properties['ENTIDAD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOMBRE_MAN'] !== null ? autolinker.link(feature.properties['NOMBRE_MAN'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CLAVE'] !== null ? autolinker.link(feature.properties['CLAVE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LOC'] !== null ? autolinker.link(feature.properties['LOC'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOM_LOC'] !== null ? autolinker.link(feature.properties['NOM_LOC'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['pob_tot'] !== null ? autolinker.link(feature.properties['pob_tot'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Distance'] !== null ? autolinker.link(feature.properties['Distance'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_entife'] !== null ? autolinker.link(feature.properties['cve_entife'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_ent'] !== null ? autolinker.link(feature.properties['cve_ent'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['IDD_MANC'] !== null ? autolinker.link(feature.properties['IDD_MANC'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['STATUS'] !== null ? autolinker.link(feature.properties['STATUS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVE_MUN'] !== null ? autolinker.link(feature.properties['CVE_MUN'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVE_JUR'] !== null ? autolinker.link(feature.properties['CVE_JUR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_area'] !== null ? autolinker.link(feature.properties['Shape_area'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_len'] !== null ? autolinker.link(feature.properties['Shape_len'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_TrazaUrbana_3_0() {
-            return {
-                pane: 'pane_TrazaUrbana_3',
-                opacity: 1,
-                color: 'rgba(35,35,35,0.05)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(19,3,12,0.05)',
-                interactive: false,
-            }
-        }
-        map.createPane('pane_TrazaUrbana_3');
-        map.getPane('pane_TrazaUrbana_3').style.zIndex = 403;
-        map.getPane('pane_TrazaUrbana_3').style['mix-blend-mode'] = 'normal';
-        var layer_TrazaUrbana_3 = new L.geoJson(json_TrazaUrbana_3, {
-            attribution: '',
-            interactive: false,
-            dataVar: 'json_TrazaUrbana_3',
-            layerName: 'layer_TrazaUrbana_3',
-            pane: 'pane_TrazaUrbana_3',
-            onEachFeature: pop_TrazaUrbana_3,
-            style: style_TrazaUrbana_3_0,
-        });
-        bounds_group.addLayer(layer_TrazaUrbana_3);
-        map.addLayer(layer_TrazaUrbana_3);
-        function pop_Jurisdicciones_4(feature, layer) {
+        bounds_group.addLayer(layer_LimMpal_1);
+        map.addLayer(layer_LimMpal_1);
+        function pop_Jurisdicciones_2(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['Id'] !== null ? autolinker.link(feature.properties['Id'].toLocaleString()) : '') + '</td>\
@@ -315,11 +178,11 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_Jurisdicciones_4_0(feature) {
+        function style_Jurisdicciones_2_0(feature) {
             switch(String(feature.properties['JURIS'])) {
                 case '1':
                     return {
-                pane: 'pane_Jurisdicciones_4',
+                pane: 'pane_Jurisdicciones_2',
                 opacity: 1,
                 color: 'rgba(35,35,210,1.0)',
                 dashArray: '',
@@ -332,7 +195,7 @@
                     break;
                 case '2':
                     return {
-                pane: 'pane_Jurisdicciones_4',
+                pane: 'pane_Jurisdicciones_2',
                 opacity: 1,
                 color: 'rgba(31,22,22,1.0)',
                 dashArray: '',
@@ -345,7 +208,7 @@
                     break;
                 case '3':
                     return {
-                pane: 'pane_Jurisdicciones_4',
+                pane: 'pane_Jurisdicciones_2',
                 opacity: 1,
                 color: 'rgba(205,33,188,1.0)',
                 dashArray: '',
@@ -358,117 +221,50 @@
                     break;
             }
         }
-        map.createPane('pane_Jurisdicciones_4');
-        map.getPane('pane_Jurisdicciones_4').style.zIndex = 404;
-        map.getPane('pane_Jurisdicciones_4').style['mix-blend-mode'] = 'normal';
-        var layer_Jurisdicciones_4 = new L.geoJson(json_Jurisdicciones_4, {
+        map.createPane('pane_Jurisdicciones_2');
+        map.getPane('pane_Jurisdicciones_2').style.zIndex = 402;
+        map.getPane('pane_Jurisdicciones_2').style['mix-blend-mode'] = 'normal';
+        var layer_Jurisdicciones_2 = new L.geoJson(json_Jurisdicciones_2, {
             attribution: '',
             interactive: false,
-            dataVar: 'json_Jurisdicciones_4',
-            layerName: 'layer_Jurisdicciones_4',
-            pane: 'pane_Jurisdicciones_4',
-            onEachFeature: pop_Jurisdicciones_4,
-            style: style_Jurisdicciones_4_0,
+            dataVar: 'json_Jurisdicciones_2',
+            layerName: 'layer_Jurisdicciones_2',
+            pane: 'pane_Jurisdicciones_2',
+            onEachFeature: pop_Jurisdicciones_2,
+            style: style_Jurisdicciones_2_0,
         });
-        bounds_group.addLayer(layer_Jurisdicciones_4);
-        map.addLayer(layer_Jurisdicciones_4);
-        function pop_II_5(feature, layer) {
+        bounds_group.addLayer(layer_Jurisdicciones_2);
+        map.addLayer(layer_Jurisdicciones_2);
+        function pop_CasosConfirmadosporMunicipio_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['ENTIDAD'] !== null ? autolinker.link(feature.properties['ENTIDAD'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['CVE_MUN'] !== null ? autolinker.link(feature.properties['CVE_MUN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['DISTRITO'] !== null ? autolinker.link(feature.properties['DISTRITO'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">NOM_MUN</th>\
+                        <td class="visible-with-data" id="NOM_MUN">' + (feature.properties['NOM_MUN'] !== null ? autolinker.link(feature.properties['NOM_MUN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['MUNICIPIO'] !== null ? autolinker.link(feature.properties['MUNICIPIO'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['CVE_JUR'] !== null ? autolinker.link(feature.properties['CVE_JUR'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['SECCION'] !== null ? autolinker.link(feature.properties['SECCION'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['casos — mpio_CVE_MUN'] !== null ? autolinker.link(feature.properties['casos — mpio_CVE_MUN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['TIPO'] !== null ? autolinker.link(feature.properties['TIPO'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">casos — mpio_CASOS_confir</th>\
+                        <td class="visible-with-data" id="casos — mpio_CASOS_confir">' + (feature.properties['casos — mpio_CASOS_confir'] !== null ? autolinker.link(feature.properties['casos — mpio_CASOS_confir'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['ENTIFE'] !== null ? autolinker.link(feature.properties['ENTIFE'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['casos — mpio_casos_proba'] !== null ? autolinker.link(feature.properties['casos — mpio_casos_proba'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['MUNIFE'] !== null ? autolinker.link(feature.properties['MUNIFE'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['casos — mpio_TOTAL_CASOS'] !== null ? autolinker.link(feature.properties['casos — mpio_TOTAL_CASOS'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['SECTOR'] !== null ? autolinker.link(feature.properties['SECTOR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOMMUNIFE'] !== null ? autolinker.link(feature.properties['NOMMUNIFE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MUNINEG'] !== null ? autolinker.link(feature.properties['MUNINEG'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOMMUNINE'] !== null ? autolinker.link(feature.properties['NOMMUNINE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVEUNIK'] !== null ? autolinker.link(feature.properties['CVEUNIK'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['munineg10'] !== null ? autolinker.link(feature.properties['munineg10'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOMNINE10'] !== null ? autolinker.link(feature.properties['NOMNINE10'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_ent'] !== null ? autolinker.link(feature.properties['cve_ent'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_mun'] !== null ? autolinker.link(feature.properties['cve_mun'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cx'] !== null ? autolinker.link(feature.properties['cx'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cy'] !== null ? autolinker.link(feature.properties['cy'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['minx'] !== null ? autolinker.link(feature.properties['minx'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['miny'] !== null ? autolinker.link(feature.properties['miny'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['maxx'] !== null ? autolinker.link(feature.properties['maxx'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['maxy'] !== null ? autolinker.link(feature.properties['maxy'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_jur'] !== null ? autolinker.link(feature.properties['cve_jur'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cveUnk'] !== null ? autolinker.link(feature.properties['cveUnk'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_area'] !== null ? autolinker.link(feature.properties['Shape_area'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_len'] !== null ? autolinker.link(feature.properties['Shape_len'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final —'] !== null ? autolinker.link(feature.properties['final —'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_1'] !== null ? autolinker.link(feature.properties['final ��_1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_2'] !== null ? autolinker.link(feature.properties['final ��_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_3'] !== null ? autolinker.link(feature.properties['final ��_3'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_4'] !== null ? autolinker.link(feature.properties['final ��_4'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['casos — mpio_DEFUN'] !== null ? autolinker.link(feature.properties['casos — mpio_DEFUN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -478,182 +274,108 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_II_5_0() {
-            return {
-                pane: 'pane_II_5',
+        function style_CasosConfirmadosporMunicipio_3_0(feature) {
+            if (feature.properties['casos — mpio_CASOS_confir'] >= 0.000000 && feature.properties['casos — mpio_CASOS_confir'] <= 2.000000 ) {
+                return {
+                pane: 'pane_CasosConfirmadosporMunicipio_3',
                 opacity: 1,
-                color: 'rgba(35,35,35,0.5)',
+                color: 'rgba(35,35,35,0.393)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(35,227,35,0.5)',
+                fillColor: 'rgba(255,255,212,0.393)',
                 interactive: false,
             }
-        }
-        map.createPane('pane_II_5');
-        map.getPane('pane_II_5').style.zIndex = 405;
-        map.getPane('pane_II_5').style['mix-blend-mode'] = 'normal';
-        var layer_II_5 = new L.geoJson(json_II_5, {
-            attribution: '',
-            interactive: false,
-            dataVar: 'json_II_5',
-            layerName: 'layer_II_5',
-            pane: 'pane_II_5',
-            onEachFeature: pop_II_5,
-            style: style_II_5_0,
-        });
-        bounds_group.addLayer(layer_II_5);
-        map.addLayer(layer_II_5);
-        function pop_I_6(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ENTIDAD'] !== null ? autolinker.link(feature.properties['ENTIDAD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['DISTRITO'] !== null ? autolinker.link(feature.properties['DISTRITO'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>MUNICIPIO</strong><br />' + (feature.properties['MUNICIPIO'] !== null ? autolinker.link(feature.properties['MUNICIPIO'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SECCION'] !== null ? autolinker.link(feature.properties['SECCION'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TIPO'] !== null ? autolinker.link(feature.properties['TIPO'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ENTIFE'] !== null ? autolinker.link(feature.properties['ENTIFE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MUNIFE'] !== null ? autolinker.link(feature.properties['MUNIFE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SECTOR'] !== null ? autolinker.link(feature.properties['SECTOR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOMMUNIFE'] !== null ? autolinker.link(feature.properties['NOMMUNIFE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MUNINEG'] !== null ? autolinker.link(feature.properties['MUNINEG'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOMMUNINE'] !== null ? autolinker.link(feature.properties['NOMMUNINE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CVEUNIK'] !== null ? autolinker.link(feature.properties['CVEUNIK'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['munineg10'] !== null ? autolinker.link(feature.properties['munineg10'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NOMNINE10'] !== null ? autolinker.link(feature.properties['NOMNINE10'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_ent'] !== null ? autolinker.link(feature.properties['cve_ent'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_mun'] !== null ? autolinker.link(feature.properties['cve_mun'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cx'] !== null ? autolinker.link(feature.properties['cx'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cy'] !== null ? autolinker.link(feature.properties['cy'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['minx'] !== null ? autolinker.link(feature.properties['minx'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['miny'] !== null ? autolinker.link(feature.properties['miny'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['maxx'] !== null ? autolinker.link(feature.properties['maxx'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['maxy'] !== null ? autolinker.link(feature.properties['maxy'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cve_jur'] !== null ? autolinker.link(feature.properties['cve_jur'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cveUnk'] !== null ? autolinker.link(feature.properties['cveUnk'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_area'] !== null ? autolinker.link(feature.properties['Shape_area'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_len'] !== null ? autolinker.link(feature.properties['Shape_len'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final —'] !== null ? autolinker.link(feature.properties['final —'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_1'] !== null ? autolinker.link(feature.properties['final ��_1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_2'] !== null ? autolinker.link(feature.properties['final ��_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_3'] !== null ? autolinker.link(feature.properties['final ��_3'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['final ��_4'] !== null ? autolinker.link(feature.properties['final ��_4'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_I_6_0() {
-            return {
-                pane: 'pane_I_6',
+            }
+            if (feature.properties['casos — mpio_CASOS_confir'] >= 2.000000 && feature.properties['casos — mpio_CASOS_confir'] <= 10.800000 ) {
+                return {
+                pane: 'pane_CasosConfirmadosporMunicipio_3',
                 opacity: 1,
-                color: 'rgba(35,35,35,0.5)',
+                color: 'rgba(35,35,35,0.393)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(226,44,20,0.5)',
+                fillColor: 'rgba(254,217,142,0.393)',
                 interactive: false,
             }
+            }
+            if (feature.properties['casos — mpio_CASOS_confir'] >= 10.800000 && feature.properties['casos — mpio_CASOS_confir'] <= 37.400000 ) {
+                return {
+                pane: 'pane_CasosConfirmadosporMunicipio_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.393)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,153,41,0.393)',
+                interactive: false,
+            }
+            }
+            if (feature.properties['casos — mpio_CASOS_confir'] >= 37.400000 && feature.properties['casos — mpio_CASOS_confir'] <= 67.200000 ) {
+                return {
+                pane: 'pane_CasosConfirmadosporMunicipio_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.393)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(217,95,14,0.393)',
+                interactive: false,
+            }
+            }
+            if (feature.properties['casos — mpio_CASOS_confir'] >= 67.200000 && feature.properties['casos — mpio_CASOS_confir'] <= 235.000000 ) {
+                return {
+                pane: 'pane_CasosConfirmadosporMunicipio_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.393)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(153,52,4,0.393)',
+                interactive: false,
+            }
+            }
         }
-        map.createPane('pane_I_6');
-        map.getPane('pane_I_6').style.zIndex = 406;
-        map.getPane('pane_I_6').style['mix-blend-mode'] = 'normal';
-        var layer_I_6 = new L.geoJson(json_I_6, {
+        map.createPane('pane_CasosConfirmadosporMunicipio_3');
+        map.getPane('pane_CasosConfirmadosporMunicipio_3').style.zIndex = 403;
+        map.getPane('pane_CasosConfirmadosporMunicipio_3').style['mix-blend-mode'] = 'normal';
+        var layer_CasosConfirmadosporMunicipio_3 = new L.geoJson(json_CasosConfirmadosporMunicipio_3, {
             attribution: '',
             interactive: false,
-            dataVar: 'json_I_6',
-            layerName: 'layer_I_6',
-            pane: 'pane_I_6',
-            onEachFeature: pop_I_6,
-            style: style_I_6_0,
+            dataVar: 'json_CasosConfirmadosporMunicipio_3',
+            layerName: 'layer_CasosConfirmadosporMunicipio_3',
+            pane: 'pane_CasosConfirmadosporMunicipio_3',
+            onEachFeature: pop_CasosConfirmadosporMunicipio_3,
+            style: style_CasosConfirmadosporMunicipio_3_0,
         });
-        bounds_group.addLayer(layer_I_6);
-        map.addLayer(layer_I_6);
-        function pop_CasosConfirmados_7(feature, layer) {
+        bounds_group.addLayer(layer_CasosConfirmadosporMunicipio_3);
+        map.addLayer(layer_CasosConfirmadosporMunicipio_3);
+        function pop_CasosConfirmados_4(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">FOLD_ID</th>\
                         <td class="visible-with-data" id="FOLD_ID">' + (feature.properties['FOLD_ID'] !== null ? autolinker.link(feature.properties['FOLD_ID'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">casos — cas_dx</th>\
-                        <td class="visible-with-data" id="casos — cas_dx">' + (feature.properties['casos — cas_dx'] !== null ? autolinker.link(feature.properties['casos — cas_dx'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['casos — cas_dupli'] !== null ? autolinker.link(feature.properties['casos — cas_dupli'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['casos — Hoja1_diag'] !== null ? autolinker.link(feature.properties['casos — Hoja1_diag'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -663,86 +385,138 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_CasosConfirmados_7_0(feature) {
-            switch(String(feature.properties['casos — cas_dx'])) {
+        function style_CasosConfirmados_4_0(feature) {
+            switch(String(feature.properties['casos — Hoja1_diag'])) {
                 case 'DENGUE NO GRAVE':
                     return {
-                pane: 'pane_CasosConfirmados_7',
-                radius: 6.0,
-                stroke: false,
+                pane: 'pane_CasosConfirmados_4',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(47,175,47,1.0)',
-                interactive: true,
-            }
-                    break;
-                case 'DENGUE GRAVE':
-                    return {
-                pane: 'pane_CasosConfirmados_7',
-                radius: 6.0,
-                stroke: false,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(226,16,30,1.0)',
-                interactive: true,
+                fillColor: 'rgba(42,197,15,1.0)',
+                interactive: false,
             }
                     break;
                 case 'DENGUE CON SIGNOS DE ALARMA':
                     return {
-                pane: 'pane_CasosConfirmados_7',
-                radius: 6.0,
-                stroke: false,
+                pane: 'pane_CasosConfirmados_4',
+                radius: 5.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(231,237,62,1.0)',
-                interactive: true,
+                fillColor: 'rgba(246,238,79,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'DENGUE GRAVE':
+                    return {
+                pane: 'pane_CasosConfirmados_4',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(231,38,21,1.0)',
+                interactive: false,
             }
                     break;
                 case 'DEFUNCIÓN POR DENGUE':
                     return {
-                pane: 'pane_CasosConfirmados_7',
+                pane: 'pane_CasosConfirmados_4',
                 shape: 'triangle',
-                radius: 6.4,
-                stroke: false,
+                radius: 10.0,
+                opacity: 1,
+                color: 'rgba(61,128,53,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(0,0,0,1.0)',
-                interactive: true,
+                interactive: false,
+            }
+                    break;
+                case 'OTROS':
+                    return {
+                pane: 'pane_CasosConfirmados_4',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,23,213,1.0)',
+                interactive: false,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_CasosConfirmados_4',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(123,140,235,1.0)',
+                interactive: false,
             }
                     break;
             }
         }
-        map.createPane('pane_CasosConfirmados_7');
-        map.getPane('pane_CasosConfirmados_7').style.zIndex = 407;
-        map.getPane('pane_CasosConfirmados_7').style['mix-blend-mode'] = 'normal';
-        var layer_CasosConfirmados_7 = new L.geoJson(json_CasosConfirmados_7, {
+        map.createPane('pane_CasosConfirmados_4');
+        map.getPane('pane_CasosConfirmados_4').style.zIndex = 404;
+        map.getPane('pane_CasosConfirmados_4').style['mix-blend-mode'] = 'normal';
+        var layer_CasosConfirmados_4 = new L.geoJson(json_CasosConfirmados_4, {
             attribution: '',
-            interactive: true,
-            dataVar: 'json_CasosConfirmados_7',
-            layerName: 'layer_CasosConfirmados_7',
-            pane: 'pane_CasosConfirmados_7',
-            onEachFeature: pop_CasosConfirmados_7,
+            interactive: false,
+            dataVar: 'json_CasosConfirmados_4',
+            layerName: 'layer_CasosConfirmados_4',
+            pane: 'pane_CasosConfirmados_4',
+            onEachFeature: pop_CasosConfirmados_4,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.shapeMarker(latlng, style_CasosConfirmados_7_0(feature));
+                return L.circleMarker(latlng, style_CasosConfirmados_4_0(feature));
             },
         });
-        bounds_group.addLayer(layer_CasosConfirmados_7);
-        map.addLayer(layer_CasosConfirmados_7);
+        bounds_group.addLayer(layer_CasosConfirmados_4);
+        map.addLayer(layer_CasosConfirmados_4);
         map.on("zoomend", function(e) {
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_LimMpal_2);
+                map.addLayer(layer_LimMpal_1);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_LimMpal_2);
+                map.removeLayer(layer_LimMpal_1);
             }
         });
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_LimMpal_2);
+                map.addLayer(layer_LimMpal_1);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_LimMpal_2);
+                map.removeLayer(layer_LimMpal_1);
             }
         var osmGeocoder = new L.Control.Geocoder({
             collapsed: true,
@@ -756,16 +530,12 @@
         .title += 'Search for a place';
         var baseMaps = {};
         var overlaysTree = [
-        {label: '<b>Casos Dengue S.E.  26</b>', selectAllCheckbox: true, children: [
-            {label: 'Casos Confirmados<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DENGUENOGRAVE0.png" /></td><td>DENGUE NO GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DENGUEGRAVE1.png" /></td><td>DENGUE GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DENGUECONSIGNOSDEALARMA2.png" /></td><td>DENGUE CON SIGNOS DE ALARMA</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_7_DEFUNCIÓNPORDENGUE3.png" /></td><td>DEFUNCIÓN POR DENGUE</td></tr></table>', layer: layer_CasosConfirmados_7},]},
-        {label: '<b>Estratos de Riego</b>', selectAllCheckbox: true, children: [
-            {label: '<img src="legend/I_6.png" /> I', layer: layer_I_6},
-            {label: '<img src="legend/II_5.png" /> II', layer: layer_II_5},]},
-            {label: 'Jurisdicciones<br /><table><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_4_JSI0.png" /></td><td>JS I</td></tr><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_4_JSII1.png" /></td><td>JS II</td></tr><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_4_JSIII2.png" /></td><td>JS III</td></tr></table>', layer: layer_Jurisdicciones_4},
+        {label: '<b>Casos Dengue S.E.  27</b>', selectAllCheckbox: true, children: [
+            {label: 'Casos Confirmados<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_4_DENGUENOGRAVE0.png" /></td><td>DENGUE NO GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_4_DENGUECONSIGNOSDEALARMA1.png" /></td><td>DENGUE CON SIGNOS DE ALARMA</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_4_DENGUEGRAVE2.png" /></td><td>DENGUE GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_4_DEFUNCIÓNPORDENGUE3.png" /></td><td>DEFUNCIÓN POR DENGUE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_4_OTROS4.png" /></td><td>OTROS</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_4_5.png" /></td><td></td></tr></table>', layer: layer_CasosConfirmados_4},
+            {label: 'Casos Confirmados por Municipio<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_3_020.png" /></td><td>0 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_3_21081.png" /></td><td>2 - 10.8</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_3_1083742.png" /></td><td>10.8 - 37.4</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_3_3746723.png" /></td><td>37.4 - 67.2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_3_6722354.png" /></td><td>67.2 - 235</td></tr></table>', layer: layer_CasosConfirmadosporMunicipio_3},]},
+            {label: 'Jurisdicciones<br /><table><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_2_JSI0.png" /></td><td>JS I</td></tr><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_2_JSII1.png" /></td><td>JS II</td></tr><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_2_JSIII2.png" /></td><td>JS III</td></tr></table>', layer: layer_Jurisdicciones_2},
         {label: '<b>Mapa Base</b>', selectAllCheckbox: true, children: [
-            {label: '<img src="legend/TrazaUrbana_3.png" /> Traza Urbana', layer: layer_TrazaUrbana_3},
-            {label: '<img src="legend/LimMpal_2.png" /> Lim. Mpal.', layer: layer_LimMpal_2},
-            {label: '<img src="legend/LimEstatal_1.png" /> Lim. Estatal', layer: layer_LimEstatal_1},]},
+            {label: '<img src="legend/LimMpal_1.png" /> Lim. Mpal.', layer: layer_LimMpal_1},]},
         {label: '<b>Terreno</b>', selectAllCheckbox: true, children: [
             {label: "Carto Light", layer: layer_CartoLight_0},]},]
         var lay = L.control.layers.tree(null, overlaysTree,{
@@ -780,13 +550,13 @@
         lay.addTo(map);
         map.on("zoomend", function(){
 
-                if (map.hasLayer(layer_LimMpal_2)) {
+                if (map.hasLayer(layer_LimMpal_1)) {
                     if (map.getZoom() <= 19 && map.getZoom() >= 12) {
-                        layer_LimMpal_2.eachLayer(function (layer) {
+                        layer_LimMpal_1.eachLayer(function (layer) {
                             layer.openTooltip();
                         });
                     } else {
-                        layer_LimMpal_2.eachLayer(function (layer) {
+                        layer_LimMpal_1.eachLayer(function (layer) {
                             layer.closeTooltip();
                         });
                     }
@@ -794,38 +564,51 @@
         });
         setBounds();
         var i = 0;
-        layer_LimMpal_2.eachLayer(function(layer) {
+        layer_LimMpal_1.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['NOM_MUN'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['NOM_MUN']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_LimMpal_2'});
+            layer.bindTooltip((layer.feature.properties['NOM_MUN'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['NOM_MUN']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_LimMpal_1'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
               addLabel(layer, i);
               i++;
         });
-                if (map.hasLayer(layer_LimMpal_2)) {
+        var i = 0;
+        layer_CasosConfirmadosporMunicipio_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['casos — mpio_CASOS_confir'] !== null?String('<div style="color: #323232; font-size: 6pt; font-weight: bold; font-family: \'.AppleSystemUIFont\', sans-serif;">' + layer.feature.properties['casos — mpio_CASOS_confir']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CasosConfirmadosporMunicipio_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+                if (map.hasLayer(layer_LimMpal_1)) {
                     if (map.getZoom() <= 19 && map.getZoom() >= 12) {
-                        layer_LimMpal_2.eachLayer(function (layer) {
+                        layer_LimMpal_1.eachLayer(function (layer) {
                             layer.openTooltip();
                         });
                     } else {
-                        layer_LimMpal_2.eachLayer(function (layer) {
+                        layer_LimMpal_1.eachLayer(function (layer) {
                             layer.closeTooltip();
                         });
                     }
                 }
-        resetLabels([layer_LimMpal_2]);
+        resetLabels([layer_LimMpal_1,layer_CasosConfirmadosporMunicipio_3]);
         map.on("zoomend", function(){
-            resetLabels([layer_LimMpal_2]);
+            resetLabels([layer_LimMpal_1,layer_CasosConfirmadosporMunicipio_3]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_LimMpal_2]);
+            resetLabels([layer_LimMpal_1,layer_CasosConfirmadosporMunicipio_3]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_LimMpal_2]);
+            resetLabels([layer_LimMpal_1,layer_CasosConfirmadosporMunicipio_3]);
         });
         </script>
     </body>
