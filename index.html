@@ -30,7 +30,6 @@
         <script src="js/leaflet.js"></script>
         <script src="js/L.Control.Layers.Tree.min.js"></script>
         <script src="js/L.Control.Locate.min.js"></script>
-        <script src="js/leaflet-heat.js"></script>
         <script src="js/leaflet-svg-shape-markers.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
@@ -45,12 +44,11 @@
         <script src="data/Jurisdicciones_2.js"></script>
         <script src="data/II_3.js"></script>
         <script src="data/I_4.js"></script>
-        <script src="data/CasosConfirmadoscopy_5.js"></script>
-        <script src="data/TotaldeCasosporMunicipio_6.js"></script>
-        <script src="data/DefuncionesporMpio_7.js"></script>
-        <script src="data/CasosProbablesporMunicipio_8.js"></script>
-        <script src="data/CasosConfirmadosporMunicipio_9.js"></script>
-        <script src="data/CasosConfirmados_10.js"></script>
+        <script src="data/TotaldeCasosporMunicipio_5.js"></script>
+        <script src="data/DefuncionesporMpio_6.js"></script>
+        <script src="data/CasosProbablesporMunicipio_7.js"></script>
+        <script src="data/CasosConfirmadosporMunicipio_8.js"></script>
+        <script src="data/CasosConfirmados_9.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
@@ -513,40 +511,7 @@
         });
         bounds_group.addLayer(layer_I_4);
         map.addLayer(layer_I_4);
-        function pop_CasosConfirmadoscopy_5(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FOLD_ID'] !== null ? autolinker.link(feature.properties['FOLD_ID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['casos — Hoja1_diag'] !== null ? autolinker.link(feature.properties['casos — Hoja1_diag'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        map.createPane('pane_CasosConfirmadoscopy_5');
-        map.getPane('pane_CasosConfirmadoscopy_5').style.zIndex = 405;
-        map.getPane('pane_CasosConfirmadoscopy_5').style['mix-blend-mode'] = 'normal';
-        var CasosConfirmadoscopy_5_hm = geoJson2heat(json_CasosConfirmadoscopy_5,
-                                      '');
-        var layer_CasosConfirmadoscopy_5 = new L.heatLayer(CasosConfirmadoscopy_5_hm, {
-            attribution: '',
-            interactive: false,
-            radius: 20,
-            max: 1,
-            minOpacity: 1,
-            gradient: {0: '#fff5f0', 0.13: '#fee0d2', 0.26: '#fcbba1', 0.39: '#fc9272', 0.52: '#fb6a4a', 0.65: '#ef3b2c', 0.78: '#cb181d', 0.9: '#a50f15', 1: '#67000d'}});
-        bounds_group.addLayer(layer_CasosConfirmadoscopy_5);
-        map.addLayer(layer_CasosConfirmadoscopy_5);
-        function pop_TotaldeCasosporMunicipio_6(feature, layer) {
+        function pop_TotaldeCasosporMunicipio_5(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
@@ -572,10 +537,10 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_TotaldeCasosporMunicipio_6_0(feature) {
+        function style_TotaldeCasosporMunicipio_5_0(feature) {
             if (feature.properties['casos — mpio_TOTAL_CASOS'] >= 3.000000 && feature.properties['casos — mpio_TOTAL_CASOS'] <= 15.000000 ) {
                 return {
-                pane: 'pane_TotaldeCasosporMunicipio_6',
+                pane: 'pane_TotaldeCasosporMunicipio_5',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -585,7 +550,7 @@
             }
             if (feature.properties['casos — mpio_TOTAL_CASOS'] >= 15.000000 && feature.properties['casos — mpio_TOTAL_CASOS'] <= 115.600000 ) {
                 return {
-                pane: 'pane_TotaldeCasosporMunicipio_6',
+                pane: 'pane_TotaldeCasosporMunicipio_5',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -595,7 +560,7 @@
             }
             if (feature.properties['casos — mpio_TOTAL_CASOS'] >= 115.600000 && feature.properties['casos — mpio_TOTAL_CASOS'] <= 166.000000 ) {
                 return {
-                pane: 'pane_TotaldeCasosporMunicipio_6',
+                pane: 'pane_TotaldeCasosporMunicipio_5',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -605,7 +570,7 @@
             }
             if (feature.properties['casos — mpio_TOTAL_CASOS'] >= 166.000000 && feature.properties['casos — mpio_TOTAL_CASOS'] <= 335.200000 ) {
                 return {
-                pane: 'pane_TotaldeCasosporMunicipio_6',
+                pane: 'pane_TotaldeCasosporMunicipio_5',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -615,7 +580,7 @@
             }
             if (feature.properties['casos — mpio_TOTAL_CASOS'] >= 335.200000 && feature.properties['casos — mpio_TOTAL_CASOS'] <= 1157.000000 ) {
                 return {
-                pane: 'pane_TotaldeCasosporMunicipio_6',
+                pane: 'pane_TotaldeCasosporMunicipio_5',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -624,21 +589,21 @@
             }
             }
         }
-        map.createPane('pane_TotaldeCasosporMunicipio_6');
-        map.getPane('pane_TotaldeCasosporMunicipio_6').style.zIndex = 406;
-        map.getPane('pane_TotaldeCasosporMunicipio_6').style['mix-blend-mode'] = 'normal';
-        var layer_TotaldeCasosporMunicipio_6 = new L.geoJson(json_TotaldeCasosporMunicipio_6, {
+        map.createPane('pane_TotaldeCasosporMunicipio_5');
+        map.getPane('pane_TotaldeCasosporMunicipio_5').style.zIndex = 405;
+        map.getPane('pane_TotaldeCasosporMunicipio_5').style['mix-blend-mode'] = 'normal';
+        var layer_TotaldeCasosporMunicipio_5 = new L.geoJson(json_TotaldeCasosporMunicipio_5, {
             attribution: '',
             interactive: false,
-            dataVar: 'json_TotaldeCasosporMunicipio_6',
-            layerName: 'layer_TotaldeCasosporMunicipio_6',
-            pane: 'pane_TotaldeCasosporMunicipio_6',
-            onEachFeature: pop_TotaldeCasosporMunicipio_6,
-            style: style_TotaldeCasosporMunicipio_6_0,
+            dataVar: 'json_TotaldeCasosporMunicipio_5',
+            layerName: 'layer_TotaldeCasosporMunicipio_5',
+            pane: 'pane_TotaldeCasosporMunicipio_5',
+            onEachFeature: pop_TotaldeCasosporMunicipio_5,
+            style: style_TotaldeCasosporMunicipio_5_0,
         });
-        bounds_group.addLayer(layer_TotaldeCasosporMunicipio_6);
-        map.addLayer(layer_TotaldeCasosporMunicipio_6);
-        function pop_DefuncionesporMpio_7(feature, layer) {
+        bounds_group.addLayer(layer_TotaldeCasosporMunicipio_5);
+        map.addLayer(layer_TotaldeCasosporMunicipio_5);
+        function pop_DefuncionesporMpio_6(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
@@ -664,10 +629,10 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_DefuncionesporMpio_7_0(feature) {
+        function style_DefuncionesporMpio_6_0(feature) {
             if (feature.properties['casos — mpio_DEFUN'] >= 0.000000 && feature.properties['casos — mpio_DEFUN'] <= 0.000000 ) {
                 return {
-                pane: 'pane_DefuncionesporMpio_7',
+                pane: 'pane_DefuncionesporMpio_6',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -677,7 +642,7 @@
             }
             if (feature.properties['casos — mpio_DEFUN'] >= 0.000000 && feature.properties['casos — mpio_DEFUN'] <= 1.000000 ) {
                 return {
-                pane: 'pane_DefuncionesporMpio_7',
+                pane: 'pane_DefuncionesporMpio_6',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -687,7 +652,7 @@
             }
             if (feature.properties['casos — mpio_DEFUN'] >= 1.000000 && feature.properties['casos — mpio_DEFUN'] <= 4.000000 ) {
                 return {
-                pane: 'pane_DefuncionesporMpio_7',
+                pane: 'pane_DefuncionesporMpio_6',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -696,21 +661,21 @@
             }
             }
         }
-        map.createPane('pane_DefuncionesporMpio_7');
-        map.getPane('pane_DefuncionesporMpio_7').style.zIndex = 407;
-        map.getPane('pane_DefuncionesporMpio_7').style['mix-blend-mode'] = 'normal';
-        var layer_DefuncionesporMpio_7 = new L.geoJson(json_DefuncionesporMpio_7, {
+        map.createPane('pane_DefuncionesporMpio_6');
+        map.getPane('pane_DefuncionesporMpio_6').style.zIndex = 406;
+        map.getPane('pane_DefuncionesporMpio_6').style['mix-blend-mode'] = 'normal';
+        var layer_DefuncionesporMpio_6 = new L.geoJson(json_DefuncionesporMpio_6, {
             attribution: '',
             interactive: false,
-            dataVar: 'json_DefuncionesporMpio_7',
-            layerName: 'layer_DefuncionesporMpio_7',
-            pane: 'pane_DefuncionesporMpio_7',
-            onEachFeature: pop_DefuncionesporMpio_7,
-            style: style_DefuncionesporMpio_7_0,
+            dataVar: 'json_DefuncionesporMpio_6',
+            layerName: 'layer_DefuncionesporMpio_6',
+            pane: 'pane_DefuncionesporMpio_6',
+            onEachFeature: pop_DefuncionesporMpio_6,
+            style: style_DefuncionesporMpio_6_0,
         });
-        bounds_group.addLayer(layer_DefuncionesporMpio_7);
-        map.addLayer(layer_DefuncionesporMpio_7);
-        function pop_CasosProbablesporMunicipio_8(feature, layer) {
+        bounds_group.addLayer(layer_DefuncionesporMpio_6);
+        map.addLayer(layer_DefuncionesporMpio_6);
+        function pop_CasosProbablesporMunicipio_7(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
@@ -736,10 +701,10 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_CasosProbablesporMunicipio_8_0(feature) {
+        function style_CasosProbablesporMunicipio_7_0(feature) {
             if (feature.properties['casos — mpio_casos_proba'] >= 3.000000 && feature.properties['casos — mpio_casos_proba'] <= 12.800000 ) {
                 return {
-                pane: 'pane_CasosProbablesporMunicipio_8',
+                pane: 'pane_CasosProbablesporMunicipio_7',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -749,7 +714,7 @@
             }
             if (feature.properties['casos — mpio_casos_proba'] >= 12.800000 && feature.properties['casos — mpio_casos_proba'] <= 88.200000 ) {
                 return {
-                pane: 'pane_CasosProbablesporMunicipio_8',
+                pane: 'pane_CasosProbablesporMunicipio_7',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -759,7 +724,7 @@
             }
             if (feature.properties['casos — mpio_casos_proba'] >= 88.200000 && feature.properties['casos — mpio_casos_proba'] <= 118.400000 ) {
                 return {
-                pane: 'pane_CasosProbablesporMunicipio_8',
+                pane: 'pane_CasosProbablesporMunicipio_7',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -769,7 +734,7 @@
             }
             if (feature.properties['casos — mpio_casos_proba'] >= 118.400000 && feature.properties['casos — mpio_casos_proba'] <= 280.600000 ) {
                 return {
-                pane: 'pane_CasosProbablesporMunicipio_8',
+                pane: 'pane_CasosProbablesporMunicipio_7',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -779,7 +744,7 @@
             }
             if (feature.properties['casos — mpio_casos_proba'] >= 280.600000 && feature.properties['casos — mpio_casos_proba'] <= 1044.000000 ) {
                 return {
-                pane: 'pane_CasosProbablesporMunicipio_8',
+                pane: 'pane_CasosProbablesporMunicipio_7',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -788,21 +753,21 @@
             }
             }
         }
-        map.createPane('pane_CasosProbablesporMunicipio_8');
-        map.getPane('pane_CasosProbablesporMunicipio_8').style.zIndex = 408;
-        map.getPane('pane_CasosProbablesporMunicipio_8').style['mix-blend-mode'] = 'normal';
-        var layer_CasosProbablesporMunicipio_8 = new L.geoJson(json_CasosProbablesporMunicipio_8, {
+        map.createPane('pane_CasosProbablesporMunicipio_7');
+        map.getPane('pane_CasosProbablesporMunicipio_7').style.zIndex = 407;
+        map.getPane('pane_CasosProbablesporMunicipio_7').style['mix-blend-mode'] = 'normal';
+        var layer_CasosProbablesporMunicipio_7 = new L.geoJson(json_CasosProbablesporMunicipio_7, {
             attribution: '',
             interactive: false,
-            dataVar: 'json_CasosProbablesporMunicipio_8',
-            layerName: 'layer_CasosProbablesporMunicipio_8',
-            pane: 'pane_CasosProbablesporMunicipio_8',
-            onEachFeature: pop_CasosProbablesporMunicipio_8,
-            style: style_CasosProbablesporMunicipio_8_0,
+            dataVar: 'json_CasosProbablesporMunicipio_7',
+            layerName: 'layer_CasosProbablesporMunicipio_7',
+            pane: 'pane_CasosProbablesporMunicipio_7',
+            onEachFeature: pop_CasosProbablesporMunicipio_7,
+            style: style_CasosProbablesporMunicipio_7_0,
         });
-        bounds_group.addLayer(layer_CasosProbablesporMunicipio_8);
-        map.addLayer(layer_CasosProbablesporMunicipio_8);
-        function pop_CasosConfirmadosporMunicipio_9(feature, layer) {
+        bounds_group.addLayer(layer_CasosProbablesporMunicipio_7);
+        map.addLayer(layer_CasosProbablesporMunicipio_7);
+        function pop_CasosConfirmadosporMunicipio_8(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['CVE_ENT'] !== null ? autolinker.link(feature.properties['CVE_ENT'].toLocaleString()) : '') + '</td>\
@@ -811,14 +776,14 @@
                         <td colspan="2">' + (feature.properties['CVE_MUN'] !== null ? autolinker.link(feature.properties['CVE_MUN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">NOM_MUN</th>\
-                        <td class="visible-with-data" id="NOM_MUN">' + (feature.properties['NOM_MUN'] !== null ? autolinker.link(feature.properties['NOM_MUN'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['NOM_MUN'] !== null ? autolinker.link(feature.properties['NOM_MUN'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['CVE_JUR'] !== null ? autolinker.link(feature.properties['CVE_JUR'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['casos — mpio_CASOS_confir'] !== null ? autolinker.link(feature.properties['casos — mpio_CASOS_confir'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">casos — mpio_CASOS_confir</th>\
+                        <td class="visible-with-data" id="casos — mpio_CASOS_confir">' + (feature.properties['casos — mpio_CASOS_confir'] !== null ? autolinker.link(feature.properties['casos — mpio_CASOS_confir'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -828,10 +793,10 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_CasosConfirmadosporMunicipio_9_0(feature) {
+        function style_CasosConfirmadosporMunicipio_8_0(feature) {
             if (feature.properties['casos — mpio_CASOS_confir'] >= 0.000000 && feature.properties['casos — mpio_CASOS_confir'] <= 2.000000 ) {
                 return {
-                pane: 'pane_CasosConfirmadosporMunicipio_9',
+                pane: 'pane_CasosConfirmadosporMunicipio_8',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -841,7 +806,7 @@
             }
             if (feature.properties['casos — mpio_CASOS_confir'] >= 2.000000 && feature.properties['casos — mpio_CASOS_confir'] <= 10.800000 ) {
                 return {
-                pane: 'pane_CasosConfirmadosporMunicipio_9',
+                pane: 'pane_CasosConfirmadosporMunicipio_8',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -851,7 +816,7 @@
             }
             if (feature.properties['casos — mpio_CASOS_confir'] >= 10.800000 && feature.properties['casos — mpio_CASOS_confir'] <= 37.400000 ) {
                 return {
-                pane: 'pane_CasosConfirmadosporMunicipio_9',
+                pane: 'pane_CasosConfirmadosporMunicipio_8',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -861,7 +826,7 @@
             }
             if (feature.properties['casos — mpio_CASOS_confir'] >= 37.400000 && feature.properties['casos — mpio_CASOS_confir'] <= 67.200000 ) {
                 return {
-                pane: 'pane_CasosConfirmadosporMunicipio_9',
+                pane: 'pane_CasosConfirmadosporMunicipio_8',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -871,7 +836,7 @@
             }
             if (feature.properties['casos — mpio_CASOS_confir'] >= 67.200000 && feature.properties['casos — mpio_CASOS_confir'] <= 235.000000 ) {
                 return {
-                pane: 'pane_CasosConfirmadosporMunicipio_9',
+                pane: 'pane_CasosConfirmadosporMunicipio_8',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -880,21 +845,21 @@
             }
             }
         }
-        map.createPane('pane_CasosConfirmadosporMunicipio_9');
-        map.getPane('pane_CasosConfirmadosporMunicipio_9').style.zIndex = 409;
-        map.getPane('pane_CasosConfirmadosporMunicipio_9').style['mix-blend-mode'] = 'normal';
-        var layer_CasosConfirmadosporMunicipio_9 = new L.geoJson(json_CasosConfirmadosporMunicipio_9, {
+        map.createPane('pane_CasosConfirmadosporMunicipio_8');
+        map.getPane('pane_CasosConfirmadosporMunicipio_8').style.zIndex = 408;
+        map.getPane('pane_CasosConfirmadosporMunicipio_8').style['mix-blend-mode'] = 'normal';
+        var layer_CasosConfirmadosporMunicipio_8 = new L.geoJson(json_CasosConfirmadosporMunicipio_8, {
             attribution: '',
             interactive: false,
-            dataVar: 'json_CasosConfirmadosporMunicipio_9',
-            layerName: 'layer_CasosConfirmadosporMunicipio_9',
-            pane: 'pane_CasosConfirmadosporMunicipio_9',
-            onEachFeature: pop_CasosConfirmadosporMunicipio_9,
-            style: style_CasosConfirmadosporMunicipio_9_0,
+            dataVar: 'json_CasosConfirmadosporMunicipio_8',
+            layerName: 'layer_CasosConfirmadosporMunicipio_8',
+            pane: 'pane_CasosConfirmadosporMunicipio_8',
+            onEachFeature: pop_CasosConfirmadosporMunicipio_8,
+            style: style_CasosConfirmadosporMunicipio_8_0,
         });
-        bounds_group.addLayer(layer_CasosConfirmadosporMunicipio_9);
-        map.addLayer(layer_CasosConfirmadosporMunicipio_9);
-        function pop_CasosConfirmados_10(feature, layer) {
+        bounds_group.addLayer(layer_CasosConfirmadosporMunicipio_8);
+        map.addLayer(layer_CasosConfirmadosporMunicipio_8);
+        function pop_CasosConfirmados_9(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['FOLD_ID'] !== null ? autolinker.link(feature.properties['FOLD_ID'].toLocaleString()) : '') + '</td>\
@@ -904,7 +869,7 @@
                     </tr>\
                     <tr>\
                         <th scope="row">casos — Hoja1_diag</th>\
-                        <td>' + (feature.properties['casos — Hoja1_diag'] !== null ? autolinker.link(feature.properties['casos — Hoja1_diag'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="casos — Hoja1_diag">' + (feature.properties['casos — Hoja1_diag'] !== null ? autolinker.link(feature.properties['casos — Hoja1_diag'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -914,11 +879,11 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_CasosConfirmados_10_0(feature) {
+        function style_CasosConfirmados_9_0(feature) {
             switch(String(feature.properties['casos — Hoja1_diag'])) {
                 case 'DENGUE NO GRAVE':
                     return {
-                pane: 'pane_CasosConfirmados_10',
+                pane: 'pane_CasosConfirmados_9',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -934,7 +899,7 @@
                     break;
                 case 'DENGUE CON SIGNOS DE ALARMA':
                     return {
-                pane: 'pane_CasosConfirmados_10',
+                pane: 'pane_CasosConfirmados_9',
                 radius: 5.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -950,7 +915,7 @@
                     break;
                 case 'DENGUE GRAVE':
                     return {
-                pane: 'pane_CasosConfirmados_10',
+                pane: 'pane_CasosConfirmados_9',
                 radius: 6.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -966,7 +931,7 @@
                     break;
                 case 'DEFUNCIÓN POR DENGUE':
                     return {
-                pane: 'pane_CasosConfirmados_10',
+                pane: 'pane_CasosConfirmados_9',
                 shape: 'triangle',
                 radius: 10.0,
                 opacity: 1,
@@ -983,26 +948,26 @@
                     break;
             }
         }
-        map.createPane('pane_CasosConfirmados_10');
-        map.getPane('pane_CasosConfirmados_10').style.zIndex = 410;
-        map.getPane('pane_CasosConfirmados_10').style['mix-blend-mode'] = 'normal';
-        var layer_CasosConfirmados_10 = new L.geoJson(json_CasosConfirmados_10, {
+        map.createPane('pane_CasosConfirmados_9');
+        map.getPane('pane_CasosConfirmados_9').style.zIndex = 409;
+        map.getPane('pane_CasosConfirmados_9').style['mix-blend-mode'] = 'normal';
+        var layer_CasosConfirmados_9 = new L.geoJson(json_CasosConfirmados_9, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_CasosConfirmados_10',
-            layerName: 'layer_CasosConfirmados_10',
-            pane: 'pane_CasosConfirmados_10',
-            onEachFeature: pop_CasosConfirmados_10,
+            dataVar: 'json_CasosConfirmados_9',
+            layerName: 'layer_CasosConfirmados_9',
+            pane: 'pane_CasosConfirmados_9',
+            onEachFeature: pop_CasosConfirmados_9,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.shapeMarker(latlng, style_CasosConfirmados_10_0(feature));
+                return L.shapeMarker(latlng, style_CasosConfirmados_9_0(feature));
             },
         });
-        bounds_group.addLayer(layer_CasosConfirmados_10);
-        map.addLayer(layer_CasosConfirmados_10);
+        bounds_group.addLayer(layer_CasosConfirmados_9);
+        map.addLayer(layer_CasosConfirmados_9);
         map.on("zoomend", function(e) {
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
                 map.addLayer(layer_LimMpal_1);
@@ -1010,24 +975,24 @@
                 map.removeLayer(layer_LimMpal_1);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_TotaldeCasosporMunicipio_6);
+                map.addLayer(layer_TotaldeCasosporMunicipio_5);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_TotaldeCasosporMunicipio_6);
+                map.removeLayer(layer_TotaldeCasosporMunicipio_5);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_DefuncionesporMpio_7);
+                map.addLayer(layer_DefuncionesporMpio_6);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_DefuncionesporMpio_7);
+                map.removeLayer(layer_DefuncionesporMpio_6);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_CasosProbablesporMunicipio_8);
+                map.addLayer(layer_CasosProbablesporMunicipio_7);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_CasosProbablesporMunicipio_8);
+                map.removeLayer(layer_CasosProbablesporMunicipio_7);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_CasosConfirmadosporMunicipio_9);
+                map.addLayer(layer_CasosConfirmadosporMunicipio_8);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_CasosConfirmadosporMunicipio_9);
+                map.removeLayer(layer_CasosConfirmadosporMunicipio_8);
             }
         });
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
@@ -1036,24 +1001,24 @@
                 map.removeLayer(layer_LimMpal_1);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_TotaldeCasosporMunicipio_6);
+                map.addLayer(layer_TotaldeCasosporMunicipio_5);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_TotaldeCasosporMunicipio_6);
+                map.removeLayer(layer_TotaldeCasosporMunicipio_5);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_DefuncionesporMpio_7);
+                map.addLayer(layer_DefuncionesporMpio_6);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_DefuncionesporMpio_7);
+                map.removeLayer(layer_DefuncionesporMpio_6);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_CasosProbablesporMunicipio_8);
+                map.addLayer(layer_CasosProbablesporMunicipio_7);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_CasosProbablesporMunicipio_8);
+                map.removeLayer(layer_CasosProbablesporMunicipio_7);
             }
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
-                map.addLayer(layer_CasosConfirmadosporMunicipio_9);
+                map.addLayer(layer_CasosConfirmadosporMunicipio_8);
             } else if (map.getZoom() > 19 || map.getZoom() < 9) {
-                map.removeLayer(layer_CasosConfirmadosporMunicipio_9);
+                map.removeLayer(layer_CasosConfirmadosporMunicipio_8);
             }
         var osmGeocoder = new L.Control.Geocoder({
             collapsed: true,
@@ -1068,13 +1033,13 @@
         var baseMaps = {};
         var overlaysTree = [
         {label: '<b>Casos Dengue S.E.  28</b>', selectAllCheckbox: true, children: [
-            {label: 'Casos Confirmados<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_10_DENGUENOGRAVE0.png" /></td><td>DENGUE NO GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_10_DENGUECONSIGNOSDEALARMA1.png" /></td><td>DENGUE CON SIGNOS DE ALARMA</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_10_DENGUEGRAVE2.png" /></td><td>DENGUE GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_10_DEFUNCIÓNPORDENGUE3.png" /></td><td>DEFUNCIÓN POR DENGUE</td></tr></table>', layer: layer_CasosConfirmados_10},
-            {label: 'Casos Confirmados por Municipio<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_9_020.png" /></td><td>0 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_9_21081.png" /></td><td>2 - 10.8</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_9_1083742.png" /></td><td>10.8 - 37.4</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_9_3746723.png" /></td><td>37.4 - 67.2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_9_6722354.png" /></td><td>67.2 - 235</td></tr></table>', layer: layer_CasosConfirmadosporMunicipio_9},
-            {label: 'Casos Probables por Municipio<br /><table><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_8_31280.png" /></td><td>3 - 12.8</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_8_1288821.png" /></td><td>12.8 - 88.2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_8_88211842.png" /></td><td>88.2 - 118.4</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_8_118428063.png" /></td><td>118.4 - 280.6</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_8_280610444.png" /></td><td>280.6 - 1,044</td></tr></table>', layer: layer_CasosProbablesporMunicipio_8},
-            {label: 'Defunciones por Mpio. <br /><table><tr><td style="text-align: center;"><img src="legend/DefuncionesporMpio_7_000.png" /></td><td>0 - 0</td></tr><tr><td style="text-align: center;"><img src="legend/DefuncionesporMpio_7_011.png" /></td><td>0 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/DefuncionesporMpio_7_142.png" /></td><td>1 - 4</td></tr></table>', layer: layer_DefuncionesporMpio_7},
-            {label: 'Total de Casos por Municipio<br /><table><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_6_3150.png" /></td><td>3 - 15</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_6_151161.png" /></td><td>15 - 116</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_6_1161662.png" /></td><td>116 - 166</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_6_1663353.png" /></td><td>166 - 335</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_6_33511574.png" /></td><td>335 - 1,157</td></tr></table>', layer: layer_TotaldeCasosporMunicipio_6},
+            {label: 'Casos Confirmados<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_9_DENGUENOGRAVE0.png" /></td><td>DENGUE NO GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_9_DENGUECONSIGNOSDEALARMA1.png" /></td><td>DENGUE CON SIGNOS DE ALARMA</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_9_DENGUEGRAVE2.png" /></td><td>DENGUE GRAVE</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmados_9_DEFUNCIÓNPORDENGUE3.png" /></td><td>DEFUNCIÓN POR DENGUE</td></tr></table>', layer: layer_CasosConfirmados_9},
+            {label: 'Casos Confirmados por Municipio<br /><table><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_8_020.png" /></td><td>0 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_8_21081.png" /></td><td>2 - 10.8</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_8_1083742.png" /></td><td>10.8 - 37.4</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_8_3746723.png" /></td><td>37.4 - 67.2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosConfirmadosporMunicipio_8_6722354.png" /></td><td>67.2 - 235</td></tr></table>', layer: layer_CasosConfirmadosporMunicipio_8},
+            {label: 'Casos Probables por Municipio<br /><table><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_7_31280.png" /></td><td>3 - 12.8</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_7_1288821.png" /></td><td>12.8 - 88.2</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_7_88211842.png" /></td><td>88.2 - 118.4</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_7_118428063.png" /></td><td>118.4 - 280.6</td></tr><tr><td style="text-align: center;"><img src="legend/CasosProbablesporMunicipio_7_280610444.png" /></td><td>280.6 - 1,044</td></tr></table>', layer: layer_CasosProbablesporMunicipio_7},
+            {label: 'Defunciones por Mpio. <br /><table><tr><td style="text-align: center;"><img src="legend/DefuncionesporMpio_6_000.png" /></td><td>0 - 0</td></tr><tr><td style="text-align: center;"><img src="legend/DefuncionesporMpio_6_011.png" /></td><td>0 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/DefuncionesporMpio_6_142.png" /></td><td>1 - 4</td></tr></table>', layer: layer_DefuncionesporMpio_6},
+            {label: 'Total de Casos por Municipio<br /><table><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_5_3150.png" /></td><td>3 - 15</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_5_151161.png" /></td><td>15 - 116</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_5_1161662.png" /></td><td>116 - 166</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_5_1663353.png" /></td><td>166 - 335</td></tr><tr><td style="text-align: center;"><img src="legend/TotaldeCasosporMunicipio_5_33511574.png" /></td><td>335 - 1,157</td></tr></table>', layer: layer_TotaldeCasosporMunicipio_5},]},
         {label: '<b>Estratos de Riego</b>', selectAllCheckbox: true, children: [
-            {label: '<img src="legend/I_4.png" /> I', layer: layer_I_4},]},
+            {label: '<img src="legend/I_4.png" /> I', layer: layer_I_4},
             {label: '<img src="legend/II_3.png" /> II', layer: layer_II_3},]},
             {label: 'Jurisdicciones<br /><table><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_2_JSI0.png" /></td><td>JS I</td></tr><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_2_JSII1.png" /></td><td>JS II</td></tr><tr><td style="text-align: center;"><img src="legend/Jurisdicciones_2_JSIII2.png" /></td><td>JS III</td></tr></table>', layer: layer_Jurisdicciones_2},
         {label: '<b>Mapa Base</b>', selectAllCheckbox: true, children: [
@@ -1120,12 +1085,12 @@
               i++;
         });
         var i = 0;
-        layer_TotaldeCasosporMunicipio_6.eachLayer(function(layer) {
+        layer_TotaldeCasosporMunicipio_5.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['casos — mpio_TOTAL_CASOS'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['casos — mpio_TOTAL_CASOS']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_TotaldeCasosporMunicipio_6'});
+            layer.bindTooltip((layer.feature.properties['casos — mpio_TOTAL_CASOS'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['casos — mpio_TOTAL_CASOS']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_TotaldeCasosporMunicipio_5'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -1133,12 +1098,12 @@
               i++;
         });
         var i = 0;
-        layer_DefuncionesporMpio_7.eachLayer(function(layer) {
+        layer_DefuncionesporMpio_6.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['NOM_MUN'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['NOM_MUN']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_DefuncionesporMpio_7'});
+            layer.bindTooltip((layer.feature.properties['NOM_MUN'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['NOM_MUN']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_DefuncionesporMpio_6'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -1146,12 +1111,12 @@
               i++;
         });
         var i = 0;
-        layer_CasosProbablesporMunicipio_8.eachLayer(function(layer) {
+        layer_CasosProbablesporMunicipio_7.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['casos — mpio_casos_proba'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['casos — mpio_casos_proba']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CasosProbablesporMunicipio_8'});
+            layer.bindTooltip((layer.feature.properties['casos — mpio_casos_proba'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['casos — mpio_casos_proba']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CasosProbablesporMunicipio_7'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -1159,12 +1124,12 @@
               i++;
         });
         var i = 0;
-        layer_CasosConfirmadosporMunicipio_9.eachLayer(function(layer) {
+        layer_CasosConfirmadosporMunicipio_8.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['casos — mpio_CASOS_confir'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['casos — mpio_CASOS_confir']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CasosConfirmadosporMunicipio_9'});
+            layer.bindTooltip((layer.feature.properties['casos — mpio_CASOS_confir'] !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Arial Rounded MT Bold\', sans-serif;">' + layer.feature.properties['casos — mpio_CASOS_confir']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CasosConfirmadosporMunicipio_8'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -1182,24 +1147,15 @@
                         });
                     }
                 }
-        function geoJson2heat(geojson, weight) {
-          return geojson.features.map(function(feature) {
-            return [
-              feature.geometry.coordinates[1],
-              feature.geometry.coordinates[0],
-              feature.properties[weight]
-            ];
-          });
-        }
-        resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_6,layer_DefuncionesporMpio_7,layer_CasosProbablesporMunicipio_8,layer_CasosConfirmadosporMunicipio_9]);
+        resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_5,layer_DefuncionesporMpio_6,layer_CasosProbablesporMunicipio_7,layer_CasosConfirmadosporMunicipio_8]);
         map.on("zoomend", function(){
-            resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_6,layer_DefuncionesporMpio_7,layer_CasosProbablesporMunicipio_8,layer_CasosConfirmadosporMunicipio_9]);
+            resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_5,layer_DefuncionesporMpio_6,layer_CasosProbablesporMunicipio_7,layer_CasosConfirmadosporMunicipio_8]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_6,layer_DefuncionesporMpio_7,layer_CasosProbablesporMunicipio_8,layer_CasosConfirmadosporMunicipio_9]);
+            resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_5,layer_DefuncionesporMpio_6,layer_CasosProbablesporMunicipio_7,layer_CasosConfirmadosporMunicipio_8]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_6,layer_DefuncionesporMpio_7,layer_CasosProbablesporMunicipio_8,layer_CasosConfirmadosporMunicipio_9]);
+            resetLabels([layer_LimMpal_1,layer_TotaldeCasosporMunicipio_5,layer_DefuncionesporMpio_6,layer_CasosProbablesporMunicipio_7,layer_CasosConfirmadosporMunicipio_8]);
         });
         </script>
     </body>
