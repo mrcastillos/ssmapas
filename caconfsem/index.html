@@ -44,7 +44,7 @@
         <script src="data/LimMpal_2.js"></script>
         <script src="data/LimJurisdiccional_3.js"></script>
         <script src="data/LimSector_4.js"></script>
-        <script src="data/TotaldeCasos_5.js"></script>
+        <script src="data/CasosConfirmados3sem_5.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
@@ -398,7 +398,7 @@
         });
         bounds_group.addLayer(layer_LimSector_4);
         map.addLayer(layer_LimSector_4);
-        function pop_TotaldeCasos_5(feature, layer) {
+        function pop_CasosConfirmados3sem_5(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['rand_point_id'] !== null ? autolinker.link(feature.properties['rand_point_id'].toLocaleString()) : '') + '</td>\
@@ -471,20 +471,20 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        map.createPane('pane_TotaldeCasos_5');
-        map.getPane('pane_TotaldeCasos_5').style.zIndex = 405;
-        map.getPane('pane_TotaldeCasos_5').style['mix-blend-mode'] = 'normal';
-        var TotaldeCasos_5_hm = geoJson2heat(json_TotaldeCasos_5,
+        map.createPane('pane_CasosConfirmados3sem_5');
+        map.getPane('pane_CasosConfirmados3sem_5').style.zIndex = 405;
+        map.getPane('pane_CasosConfirmados3sem_5').style['mix-blend-mode'] = 'normal';
+        var CasosConfirmados3sem_5_hm = geoJson2heat(json_CasosConfirmados3sem_5,
                                       '');
-        var layer_TotaldeCasos_5 = new L.heatLayer(TotaldeCasos_5_hm, {
+        var layer_CasosConfirmados3sem_5 = new L.heatLayer(CasosConfirmados3sem_5_hm, {
             attribution: '',
             interactive: false,
             radius: 20,
             max: 1,
             minOpacity: 1,
-            gradient: {0: '#ffffff', 1: '#000000'}});
-        bounds_group.addLayer(layer_TotaldeCasos_5);
-        map.addLayer(layer_TotaldeCasos_5);
+            gradient: {0: '#fff5f0', 0.13: '#fee0d2', 0.26: '#fcbba1', 0.39: '#fc9272', 0.52: '#fb6a4a', 0.65: '#ef3b2c', 0.78: '#cb181d', 0.9: '#a50f15', 1: '#67000d'}});
+        bounds_group.addLayer(layer_CasosConfirmados3sem_5);
+        map.addLayer(layer_CasosConfirmados3sem_5);
         map.on("zoomend", function(e) {
             if (map.getZoom() <= 19 && map.getZoom() >= 9) {
                 map.addLayer(layer_LimMpal_2);
