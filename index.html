@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Georreferenciación de casos</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 10px; 
+            padding: 0;
+            background: #f4f6f9;
+        }
+        h2 {
+            text-align: center;
+            color: #0078d7;
+            margin-bottom: 15px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 500px;
+            margin: auto;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        input, select, textarea, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+        textarea { resize: none; height: 60px; }
+        button {
+            background: #0078d7;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover { background: #005a9e; }
+        #map { 
+            /* Se ha agregado una altura fija */
+            height: 400px; /* Puedes ajustar este valor */
+            width: 100%; 
+            border-radius: 8px; 
+            margin-top: 10px;
+        }
+        #resultado {
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            background: #fff;
+        }
+        #mensaje {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 9999;
+            font-weight: bold;
+        }
+        @media (max-width: 600px) {
+            form { padding: 10px; }
+            button { font-size: 14px; padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Georreferenciación de casos</h2>
+    <form id="formulario">
+        
+        <label>Tipo de enfermedad:</label>
+        <select id="enfermedad" required>
+            <option value="">-- Selecciona --</option>
+            <option value="Chagas">Chagas</option>
+            <option value="Dengue">Dengue</option>
+            <option value="Zoonosis">Zoonosis</option>
+            <option value="Otro">Otro</option>
+        </select>
+        <input type="text" id="otraEnfermedad" placeholder="Especificar otra enfermedad" style="display:none;">
+
+        <label>Tipo de caso:</label>
+        <select id="tipoCaso" required>
+            <option value="">-- Selecciona --</option>
+            <option value="Caso confirmado">Caso confirmado</option>
+            <option value="Caso probable">Caso probable</option>
+            <option value="Otro">Otro</option>
+        </select>
+        <input type="text" id="otroCaso" placeholder="Especificar otro tipo de caso" style="display:none;">
+
+        <label>Nombre:</label>
+        <input type="text" id="nombre" required>
+
+        <label>Teléfono:</label>
+        <input type="tel" id="telefono" required>
+
+        <label>Dirección:</label>
+        <textarea id="direccion" readonly required></textarea>
+
+        <input type="hidden" id="latitud" name="latitud">
+        <input type="hidden" id="longitud" name="longitud">
+
+        <div id="map"></div>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div id="resultado"></div>
+    <div id="mensaje">✅ Registro enviado correctamente</div>
+
+    <script>
+        // Inicializar mapa (centrado en Morelos, México)
+        var map = L.map('map').setView([18.6813, -99.1013], 9);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marcador;
+        // ¡URL del script de Google Apps Script actualizada!
+        const scriptURL = "https://script.google.com/macros/s/AKfycbysRYu0Pp9wzmiDvxa7-KeSxd6wWPF-081Firl1ZiBIxBN-yNz154rPBw6g_jC2mhX8RQ/exec";
+
+        // Mostrar/ocultar campo "otro" según selección
+        document.getElementById("enfermedad").addEventListener("change", function() {
+            document.getElementById("otraEnfermedad").style.display = (this.value === "Otro") ? "block" : "none";
+        });
+        document.getElementById("tipoCaso").addEventListener("change", function() {
+            document.getElementById("otroCaso").style.display = (this.value === "Otro") ? "block" : "none";
+        });
+
+        // Evento de clic en el mapa
+        map.on('click', function(e) {
+            var lat = e.latlng.lat.toFixed(6);
+            var lng = e.latlng.lng.toFixed(6);
+
+            document.getElementById('latitud').value = lat;
+            document.getElementById('longitud').value = lng;
+
+            if (marcador) { map.removeLayer(marcador); }
+
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+                .then(res => res.json())
+                .then(data => {
+                    var direccion = data.display_name || "Dirección no encontrada";
+                    document.getElementById('direccion').value = direccion;
+
+                    marcador = L.marker([lat, lng]).addTo(map)
+                        .bindPopup(`<b>Ubicación seleccionada:</b><br>${direccion}<br>(${lat}, ${lng})`)
+                        .openPopup();
+                })
+                .catch(() => {
+                    document.getElementById('direccion').value = "Error al obtener dirección";
+                });
+        });
+
+        function mostrarMensaje() {
+            var msg = document.getElementById("mensaje");
+            msg.style.display = "block";
+            setTimeout(() => { msg.style.display = "none"; }, 3000);
+        }
+
+        // Envío de formulario
+        document.getElementById('formulario').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var enfermedad = document.getElementById('enfermedad').value;
+            var otraEnfermedad = document.getElementById('otraEnfermedad').value.trim();
+            if (enfermedad === "Otro" && !otraEnfermedad) {
+                alert("⚠️ Especifica la otra enfermedad.");
+                return;
+            }
+
+            var tipoCaso = document.getElementById('tipoCaso').value;
+            var otroCaso = document.getElementById('otroCaso').value.trim();
+            if (tipoCaso === "Otro" && !otroCaso) {
+                alert("⚠️ Especifica el otro tipo de caso.");
+                return;
+            }
+
+            var nombre = document.getElementById('nombre').value.trim();
+            var telefono = document.getElementById('telefono').value.trim();
+            var lat = document.getElementById('latitud').value;
+            var lng = document.getElementById('longitud').value;
+            var direccion = document.getElementById('direccion').value.trim();
+
+            if (!nombre || !telefono || !lat || !lng || !direccion) {
+                alert("⚠️ Completa todos los campos y selecciona un punto en el mapa.");
+                return;
+            }
+
+            var formData = new URLSearchParams();
+            formData.append("enfermedad", (enfermedad === "Otro") ? otraEnfermedad : enfermedad);
+            formData.append("tipoCaso", (tipoCaso === "Otro") ? otroCaso : tipoCaso);
+            formData.append("nombre", nombre);
+            formData.append("telefono", telefono);
+            formData.append("latitud", lat);
+            formData.append("longitud", lng);
+            formData.append("direccion", direccion);
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => response.text())
+                .then(res => {
+                    if (res.includes("OK")) {
+                        mostrarMensaje();
+                        document.getElementById('resultado').innerHTML = 
+                            `<h3>Último registro:</h3>
+                            <p><b>Enfermedad:</b> ${(enfermedad === "Otro") ? otraEnfermedad : enfermedad}</p>
+                            <p><b>Tipo de caso:</b> ${(tipoCaso === "Otro") ? otroCaso : tipoCaso}</p>
+                            <p><b>Nombre:</b> ${nombre}</p>
+                            <p><b>Teléfono:</b> ${telefono}</p>
+                            <p><b>Latitud:</b> ${lat}</p>
+                            <p><b>Longitud:</b> ${lng}</p>
+                            <p><b>Dirección:</b> ${direccion}</p>`;
+                        document.getElementById('formulario').reset();
+                        document.getElementById('latitud').value = "";
+                        document.getElementById('longitud').value = "";
+                        if (marcador) { map.removeLayer(marcador); }
+                    } else {
+                        alert("❌ Error en el servidor: " + res);
+                    }
+                })
+                .catch(err => alert("❌ Error al guardar: " + err));
+        });
+    </script>
+
+</body>
+</html>
