@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal de Mapas - SSMapas</title>
-  <link rel="stylesheet" href="leaflet.css" />
-  <script src="leaflet.js"></script>
   <style>
     body {
       margin: 0;
@@ -19,7 +17,7 @@
     header {
       background-color: #2e7d32;
       color: white;
-      padding: 10px 20px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -35,7 +33,7 @@
     #main {
       display: flex;
       flex: 1;
-      height: calc(100vh - 50px);
+      height: calc(100vh - 60px);
     }
 
     /* Panel lateral */
@@ -54,26 +52,18 @@
       color: #2e7d32;
     }
 
-    #layerList {
-      list-style: none;
-      padding: 0;
+    #sidebar p {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.4;
     }
 
-    #layerList li {
-      margin-bottom: 8px;
-    }
-
-    #layerList label {
-      cursor: pointer;
-      user-select: none;
-      color: #333;
-    }
-
-    /* Mapa */
-    #map {
+    /* Mapa (iframe) */
+    #mapframe {
       flex: 1;
-      height: 100%;
+      border: none;
       width: 100%;
+      height: 100%;
     }
 
     footer {
@@ -83,6 +73,13 @@
       font-size: 0.8rem;
       color: #555;
       border-top: 1px solid #ddd;
+    }
+
+    /* Adaptable a móviles */
+    @media (max-width: 768px) {
+      #sidebar {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -94,21 +91,22 @@
 
   <div id="main">
     <aside id="sidebar">
-      <h2>Capas disponibles</h2>
-      <ul id="layerList">
-        <li><label><input type="checkbox" id="layer1" checked> Límites municipales</label></li>
-        <li><label><input type="checkbox" id="layer2" checked> Red vial</label></li>
-        <li><label><input type="checkbox" id="layer3"> Zonas de riesgo</label></li>
+      <h2>Capas y descripción</h2>
+      <p>Explora las capas geográficas disponibles dentro del mapa interactivo.</p>
+      <ul style="list-style:none; padding-left:0;">
+        <li>🗺️ Base OSM</li>
+        <li>🏘️ Localidades y polígonos</li>
+        <li>🚗 Red vial principal</li>
+        <li>⚠️ Áreas de riesgo</li>
       </ul>
     </aside>
 
-    <div id="map"></div>
+    <!-- Aquí se carga tu mapa de QGIS2Web -->
+    <iframe id="mapframe" src="index1.html" title="Mapa SSMapas"></iframe>
   </div>
 
   <footer>
     © 2025 SSMapas | Desarrollado con QGIS2Web y Leaflet
   </footer>
-
-  <script>
-    // Inicializa el mapa (Leaflet)
-    var map = L.map('map').setView([18.8, -99.2], 10);
+</body>
+</html>
