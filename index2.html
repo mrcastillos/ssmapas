@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi WebMap de NextGIS</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+        #mapContainer {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="mapContainer">
+        <!-- Cambia la URL del src al enlace de tu WebMap en NextGIS Web -->
+        <iframe
+            src="https://TU_DOMINIO_DE_NEXTGIS/…/display?panel=layers&hl_lid=XXXX&hl_attr=ID&hl_val=YYY&zoom=true"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            style="border:0"
+            allowfullscreen
+            aria-hidden="false"
+            tabindex="0">
+        </iframe>
+    </div>
+</body>
+</html>
