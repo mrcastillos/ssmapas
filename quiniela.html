@@ -359,7 +359,29 @@ porcentaje:jugados ?
 
 });
 
-ranking.sort((a,b)=>b.puntos-a.puntos);
+ranking = ranking.map(r => ({
+    ...r,
+    nombre: String(r.nombre).trim()
+}));
+
+ranking.sort((a,b)=>{
+
+    // Orden principal: puntos descendente
+    if(b.puntos !== a.puntos){
+        return b.puntos - a.puntos;
+    }
+
+    // Desempate: orden alfabético
+    return a.nombre.localeCompare(
+        b.nombre,
+        'es',
+        {
+            sensitivity:'base',
+            ignorePunctuation:true
+        }
+    );
+
+});
 
 document.getElementById("jugados")
 .innerHTML =
@@ -397,7 +419,7 @@ top3.forEach((p,i)=>{
 podio += `
 <div class="podium-card ${clases[i]}">
 <h2>${emojis[i]}</h2>
-<h3>${p.nombre}</h3>
+<h3>${String(p.nombre).toUpperCase()}</h3>
 <div>${p.puntos} pts</div>
 <div>${p.porcentaje}%</div>
 </div>
@@ -421,7 +443,7 @@ if(i===2) cls="pos3";
 tabla += `
 <tr class="${cls}">
 <td>${i+1}</td>
-<td>${p.nombre}</td>
+<td>${String(p.nombre).toUpperCase()}</td>
 <td>${p.puntos}</td>
 <td>${p.porcentaje}%</td>
 </tr>
