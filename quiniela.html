@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiniela Mundial 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{font-family:Arial;margin:20px;background:#111;color:#eee}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border:1px solid #444;padding:4px;text-align:center}
+input{width:35px;text-align:center}
+.card{background:#1e1e1e;padding:12px;border-radius:10px;margin:10px 0}
+</style>
+</head>
+<body>
+<h1>🏆 Quiniela Mundial 2026</h1>
+<div class="card">
+<p>Capture resultados (L/E/V):</p>
+<div id="results"></div>
+</div>
+
+<div class="card">
+<h2>Tabla General</h2>
+<table id="standings">
+<thead><tr><th>Lugar</th><th>Participante</th><th>Puntos</th><th>% Acierto</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div class="card"><canvas id="chart"></canvas></div>
+
+<script>
+const matches = ["MEX vs RSA", "KOR vs CZE", "CAN vs BIH", "USA vs PAR", "QAT vs SUI", "BRA vs MAR", "HAI vs SCO", "AUS vs TUR", "GER vs CUW", "NED vs JPN", "CIV vs ECU", "SWE vs TUN", "ESP vs CPV", "BEL vs EGY", "KSA vs URU", "IRN vs NZL", "FRA vs SEN", "IRQ vs NOR", "ARG vs ALG", "AUT vs JOR", "POR vs COD", "ENG vs CRO", "GHA vs PAN", "UZB vs COL", "CZE vs RSA", "SUI vs BIH", "CAN vs QAT", "MEX vs KOR", "USA vs AUS", "SCO vs MAR", "BRA vs HAI", "TUR vs PAR", "NED vs SWE", "GER vs CIV", "ECU vs CUW", "TUN vs JPN", "ESP vs KSA", "BEL vs IRN", "URU vs CPV", "NZL vs EGY", "ARG vs AUT", "FRA vs IRQ", "NOR vs SEN", "JOR vs ALG", "POR vs UZB", "ENG vs GHA", "PAN vs CRO", "COL vs COD", "SUI vs CAN", "BIH vs QAT", "MAR vs HAI", "SCO vs BRA", "RSA vs KOR", "CZE vs MEX", "CUW vs CIV", "ECU vs GER", "TUN vs NED", "JPN vs SWE", "TUR vs USA", "PAR vs AUS", "NOR vs FRA", "SEN vs IRQ", "CPV vs KSA", "URU vs ESP", "NZL vs BEL", "EGY vs IRN", "PAN vs ENG", "CRO vs GHA", "COL vs POR", "COD vs UZB", "ALG vs AUT", "JOR vs ARG"];
+const players = [{"name": "alfonso", "picks": ["E", "L", "L", "V", "E", "E", "V", "L", "L", "L", "L", "E", "L", "L", "V", "E", "L", "V", "L", "E", "L", "L", "V", "V", "L", "L", "L", "E", "L", "V", "L", "V", "L", "L", "E", "V", "L", "L", "L", "V", "L", "L", "E", "E", "L", "L", "E", "L", "L", "E", "L", "V", "V", "V", "V", "V", "V", "E", "V", "E", "V", "E", "L", "V", "V", "L", "V", "L", "L", "E", "V", "V"]}, {"name": "angelita", "picks": ["L", "V", "E", "E", "E", "L", "V", "V", "L", "L", "V", "L", "L", "L", "E", "V", "V", "E", "L", "E", "L", "V", "V", "V", "V", "E", "E", "E", "V", "E", "L", "L", "L", "L", "E", "V", "L", "E", "L", "L", "L", "L", "E", "V", "L", "L", "V", "L", "E", "E", "L", "V", "E", "L", "E", "V", "V", "L", "L", "E", "E", "L", "E", "V", "V", "L", "V", "L", "E", "V", "E", "V"]}, {"name": "laura", "picks": ["L", "L", "L", "V", "E", "L", "V", "L", "L", "L", "V", "E", "L", "L", "V", "E", "L", "V", "L", "E", "L", "E", "E", "L", "E", "L", "L", "E", "L", "L", "L", "L", "E", "L", "E", "V", "L", "L", "L", "E", "L", "L", "L", "E", "L", "L", "V", "L", "V", "E", "E", "V", "V", "V", "E", "V", "V", "L", "V", "L", "V", "E", "E", "V", "L", "L", "V", "L", "V", "E", "V", "V"]}, {"name": "david", "picks": ["V", "E", "L", "V", "L", "V", "L", "L", "L", "V", "L", "V", "V", "L", "L", "V", "V", "L", "V", "E", "V", "V", "E", "V", "V", "V", "V", "V", "V", "E", "L", "V", "V", "E", "V", "L", "V", "V", "V", "L", "E", "V", "E", "L", "V", "V", "L", "E", "V", "L", "V", "L", "E", "E", "L", "L", "L", "E", "E", "E", "L", "V", "E", "L", "L", "E", "L", "V", "E", "E", "E", "L"]}, {"name": "salvador", "picks": ["L", "E", "L", "L", "V", "L", "V", "E", "L", "V", "E", "L", "L", "L", "V", "L", "L", "L", "L", "L", "L", "L", "L", "V", "L", "L", "L", "L", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "E", "E", "L", "L", "V", "L", "L", "L", "L", "V", "L", "V", "V", "V", "V", "L", "V", "E", "V", "L", "V", "V", "V", "V", "L", "L", "V", "L", "V", "V"]}, {"name": "pedro", "picks": ["L", "L", "L", "E", "V", "L", "V", "E", "L", "E", "V", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "E", "V", "L", "L", "L", "L", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "L", "V", "L", "L", "V", "L", "V", "L", "L", "V", "V", "V", "V", "V", "V", "E", "V", "L", "V", "L", "V", "E", "V", "L", "V", "L", "V", "L", "L", "V"]}, {"name": "jafet", "picks": ["L", "L", "L", "E", "V", "L", "E", "V", "L", "L", "V", "L", "L", "L", "V", "E", "L", "V", "L", "L", "L", "E", "V", "V", "E", "L", "L", "L", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "E", "L", "E", "L", "L", "V", "E", "V", "V", "E", "V", "E", "L", "E", "L", "L", "V", "V", "V", "L", "V", "L", "V", "L", "V", "V"]}, {"name": "liliana", "picks": ["L", "L", "L", "L", "V", "L", "V", "V", "L", "V", "E", "L", "L", "L", "L", "E", "L", "V", "L", "L", "L", "L", "E", "V", "L", "L", "L", "L", "E", "L", "L", "V", "V", "L", "L", "V", "L", "L", "L", "L", "L", "L", "L", "V", "L", "L", "V", "E", "L", "L", "L", "E", "V", "V", "V", "V", "E", "V", "L", "L", "V", "V", "V", "E", "V", "E", "V", "L", "E", "E", "V", "V"]}, {"name": "eduardol", "picks": ["L", "L", "L", "L", "V", "L", "L", "E", "L", "L", "E", "L", "L", "L", "E", "V", "L", "V", "L", "E", "L", "L", "V", "V", "L", "L", "L", "E", "V", "E", "L", "E", "E", "L", "E", "V", "L", "L", "L", "L", "E", "L", "L", "E", "L", "L", "V", "L", "L", "V", "L", "V", "V", "V", "E", "V", "V", "E", "E", "V", "V", "E", "V", "V", "E", "L", "V", "L", "V", "E", "V", "V"]}, {"name": "yanet", "picks": ["V", "E", "V", "V", "L", "L", "L", "L", "V", "V", "L", "E", "V", "V", "E", "V", "V", "L", "V", "E", "V", "E", "E", "L", "V", "E", "V", "V", "E", "E", "V", "E", "V", "V", "V", "L", "V", "V", "V", "L", "V", "V", "E", "L", "V", "V", "L", "V", "E", "L", "V", "L", "L", "L", "V", "L", "L", "E", "V", "V", "L", "V", "E", "L", "L", "E", "L", "V", "L", "E", "L", "L"]}, {"name": "martin", "picks": ["L", "L", "L", "L", "V", "L", "V", "L", "L", "E", "E", "L", "L", "L", "V", "V", "L", "V", "L", "L", "L", "V", "V", "V", "L", "L", "L", "L", "E", "V", "L", "V", "L", "L", "E", "V", "E", "L", "L", "L", "L", "L", "L", "E", "L", "L", "V", "L", "L", "E", "L", "V", "V", "V", "E", "V", "V", "E", "L", "L", "V", "E", "E", "V", "E", "V", "V", "L", "V", "E", "V", "V"]}, {"name": "omar", "picks": ["L", "E", "L", "L", "V", "L", "V", "E", "L", "L", "E", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "L", "V", "L", "L", "L", "L", "L", "V", "L", "E", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "E", "V", "L", "L", "V", "L", "E", "L", "L", "V", "V", "V", "V", "V", "V", "E", "V", "E", "V", "L", "V", "V", "V", "L", "V", "L", "V", "L", "V", "V"]}, {"name": "adelina", "picks": ["L", "L", "V", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "V", "L", "L", "V", "L", "V", "L", "V", "L", "V", "V", "L", "L", "L", "V", "V", "L", "V", "L", "L", "L", "L", "L", "V", "L", "L", "L", "E", "V", "E", "L", "V", "E", "L", "L", "E", "L", "V", "V", "V", "V", "V", "E", "V", "V", "E", "V", "E", "V", "V", "V", "V", "V", "L", "L", "E", "V", "V"]}, {"name": "emiliano", "picks": ["L", "L", "E", "L", "V", "L", "V", "V", "L", "L", "V", "L", "L", "L", "V", "V", "L", "V", "L", "V", "L", "L", "E", "V", "L", "L", "L", "L", "V", "V", "L", "L", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "V", "L", "V", "E", "L", "V", "V", "V", "L", "V", "V", "L", "V", "V", "V", "L", "V", "V", "V", "L", "V", "L", "V", "L", "L", "V"]}, {"name": "sofi", "picks": ["L", "E", "L", "L", "L", "E", "V", "V", "E", "E", "V", "E", "L", "V", "V", "V", "L", "L", "L", "E", "L", "V", "L", "V", "V", "E", "L", "V", "L", "V", "E", "E", "L", "L", "E", "E", "V", "L", "E", "V", "L", "L", "E", "V", "E", "E", "V", "E", "V", "V", "V", "V", "V", "V", "E", "L", "L", "L", "V", "E", "E", "V", "V", "E", "V", "L", "V", "E", "V", "L", "E", "V"]}, {"name": "israel", "picks": ["L", "E", "V", "E", "V", "E", "V", "V", "L", "L", "E", "L", "L", "L", "V", "E", "E", "V", "L", "E", "L", "L", "L", "V", "L", "L", "L", "E", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "E", "V", "L", "E", "V", "L", "E", "L", "L", "V", "V", "E", "V", "V", "V", "L", "E", "L", "E", "L", "E", "L", "V", "E", "V", "L", "E", "E", "L", "V"]}, {"name": "ulises", "picks": ["E", "L", "E", "L", "V", "L", "E", "V", "L", "L", "V", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "V", "V", "L", "L", "E", "L", "L", "E", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "L", "V", "L", "L", "V", "L", "E", "L", "E", "V", "V", "V", "L", "V", "V", "V", "V", "L", "V", "E", "E", "V", "V", "V", "V", "L", "V", "V", "V", "V"]}, {"name": "didier", "picks": ["L", "L", "E", "L", "L", "L", "V", "E", "L", "V", "L", "L", "L", "L", "E", "V", "L", "V", "L", "E", "L", "L", "E", "V", "L", "L", "V", "L", "L", "E", "L", "E", "V", "L", "V", "V", "L", "L", "E", "L", "L", "L", "L", "E", "L", "L", "V", "V", "L", "V", "L", "V", "V", "V", "L", "V", "E", "L", "V", "E", "V", "E", "L", "V", "V", "E", "V", "E", "V", "E", "L", "V"]}, {"name": "victoria", "picks": ["L", "L", "E", "L", "V", "L", "V", "E", "L", "L", "L", "L", "L", "L", "E", "V", "L", "V", "L", "L", "L", "L", "L", "V", "V", "E", "L", "L", "L", "L", "L", "V", "E", "L", "V", "V", "L", "L", "L", "L", "L", "L", "V", "V", "L", "L", "V", "V", "E", "L", "L", "V", "L", "V", "V", "V", "V", "E", "V", "E", "V", "L", "E", "V", "V", "L", "V", "E", "V", "L", "L", "V"]}];
+
+const resultsDiv=document.getElementById('results');
+matches.forEach((m,i)=>{
+ let d=document.createElement('div');
+ d.innerHTML=`${i+1}. ${m} <input maxlength="1" id="r${i}" oninput="update()">`;
+ resultsDiv.appendChild(d);
+});
+
+function update(){
+ let data=[];
+ players.forEach(p=>{
+   let pts=0, played=0;
+   p.picks.forEach((pick,i)=>{
+      let r=(document.getElementById('r'+i).value||'').toUpperCase();
+      if(['L','E','V'].includes(r)){
+         played++;
+         if(pick===r) pts++;
+      }
+   });
+   data.push({name:p.name, pts:pts, pct:played?((pts/played)*100).toFixed(1):0});
+ });
+
+ data.sort((a,b)=>b.pts-a.pts);
+
+ let tb=document.querySelector('#standings tbody');
+ tb.innerHTML='';
+ data.forEach((p,i)=>{
+   tb.innerHTML += `<tr><td>${i+1}</td><td>${p.name}</td><td>${p.pts}</td><td>${p.pct}%</td></tr>`;
+ });
+
+ if(window.g) window.g.destroy();
+ window.g=new Chart(document.getElementById('chart'),{
+   type:'bar',
+   data:{labels:data.map(x=>x.name),datasets:[{label:'Puntos',data:data.map(x=>x.pts)}]},
+   options:{responsive:true}
+ });
+}
+update();
+</script>
+</body>
+</html>
