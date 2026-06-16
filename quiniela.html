@@ -1,77 +1,314 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiniela Mundial 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body{font-family:Arial;margin:20px;background:#111;color:#eee}
-table{border-collapse:collapse;width:100%;font-size:12px}
-th,td{border:1px solid #444;padding:4px;text-align:center}
-input{width:35px;text-align:center}
-.card{background:#1e1e1e;padding:12px;border-radius:10px;margin:10px 0}
+:root{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --accent:#22c55e;
+    --accent2:#3b82f6;
+    --text:#f8fafc;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.35);
+}
+
+.card h2{
+    font-size:14px;
+    color:#94a3b8;
+}
+
+.card .valor{
+    font-size:34px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+@media(max-width:900px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#334155;
+    padding:10px;
+}
+
+td{
+    padding:8px;
+    border-bottom:1px solid #334155;
+}
+
+tr:hover{
+    background:#1e293b;
+}
+
+.podio{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.puesto{
+    padding:15px;
+    border-radius:15px;
+    text-align:center;
+    min-width:140px;
+}
+
+.oro{background:#eab308;color:black;}
+.plata{background:#cbd5e1;color:black;}
+.bronce{background:#b45309;}
+
+canvas{
+    background:white;
+    border-radius:15px;
+    padding:10px;
+}
 </style>
 </head>
 <body>
+
 <h1>🏆 Quiniela Mundial 2026</h1>
+
+<div class="dashboard">
+
 <div class="card">
-<p>Capture resultados (L/E/V):</p>
-<div id="results"></div>
+<h2>Líder Actual</h2>
+<div class="valor" id="lider">-</div>
 </div>
 
 <div class="card">
-<h2>Tabla General</h2>
-<table id="standings">
-<thead><tr><th>Lugar</th><th>Participante</th><th>Puntos</th><th>% Acierto</th></tr></thead>
+<h2>Puntos del Líder</h2>
+<div class="valor" id="puntosLider">0</div>
+</div>
+
+<div class="card">
+<h2>Partidos Jugados</h2>
+<div class="valor" id="partidosJugados">0</div>
+</div>
+
+<div class="card">
+<h2>Participantes</h2>
+<div class="valor" id="participantes">0</div>
+</div>
+
+</div>
+
+<div class="podio" id="podio"></div>
+
+<div class="grid">
+
+<div class="card">
+<h2>Ranking General</h2>
+<table id="tablaRanking">
+<thead>
+<tr>
+<th>#</th>
+<th>Nombre</th>
+<th>Puntos</th>
+<th>%</th>
+</tr>
+</thead>
 <tbody></tbody>
 </table>
 </div>
 
-<div class="card"><canvas id="chart"></canvas></div>
+<div class="card">
+<h2>Aciertos por Participante</h2>
+<canvas id="graficaRanking"></canvas>
+</div>
+
+</div>
 
 <script>
-const matches = ["MEX vs RSA", "KOR vs CZE", "CAN vs BIH", "USA vs PAR", "QAT vs SUI", "BRA vs MAR", "HAI vs SCO", "AUS vs TUR", "GER vs CUW", "NED vs JPN", "CIV vs ECU", "SWE vs TUN", "ESP vs CPV", "BEL vs EGY", "KSA vs URU", "IRN vs NZL", "FRA vs SEN", "IRQ vs NOR", "ARG vs ALG", "AUT vs JOR", "POR vs COD", "ENG vs CRO", "GHA vs PAN", "UZB vs COL", "CZE vs RSA", "SUI vs BIH", "CAN vs QAT", "MEX vs KOR", "USA vs AUS", "SCO vs MAR", "BRA vs HAI", "TUR vs PAR", "NED vs SWE", "GER vs CIV", "ECU vs CUW", "TUN vs JPN", "ESP vs KSA", "BEL vs IRN", "URU vs CPV", "NZL vs EGY", "ARG vs AUT", "FRA vs IRQ", "NOR vs SEN", "JOR vs ALG", "POR vs UZB", "ENG vs GHA", "PAN vs CRO", "COL vs COD", "SUI vs CAN", "BIH vs QAT", "MAR vs HAI", "SCO vs BRA", "RSA vs KOR", "CZE vs MEX", "CUW vs CIV", "ECU vs GER", "TUN vs NED", "JPN vs SWE", "TUR vs USA", "PAR vs AUS", "NOR vs FRA", "SEN vs IRQ", "CPV vs KSA", "URU vs ESP", "NZL vs BEL", "EGY vs IRN", "PAN vs ENG", "CRO vs GHA", "COL vs POR", "COD vs UZB", "ALG vs AUT", "JOR vs ARG"];
-const players = [{"name": "alfonso", "picks": ["E", "L", "L", "V", "E", "E", "V", "L", "L", "L", "L", "E", "L", "L", "V", "E", "L", "V", "L", "E", "L", "L", "V", "V", "L", "L", "L", "E", "L", "V", "L", "V", "L", "L", "E", "V", "L", "L", "L", "V", "L", "L", "E", "E", "L", "L", "E", "L", "L", "E", "L", "V", "V", "V", "V", "V", "V", "E", "V", "E", "V", "E", "L", "V", "V", "L", "V", "L", "L", "E", "V", "V"]}, {"name": "angelita", "picks": ["L", "V", "E", "E", "E", "L", "V", "V", "L", "L", "V", "L", "L", "L", "E", "V", "V", "E", "L", "E", "L", "V", "V", "V", "V", "E", "E", "E", "V", "E", "L", "L", "L", "L", "E", "V", "L", "E", "L", "L", "L", "L", "E", "V", "L", "L", "V", "L", "E", "E", "L", "V", "E", "L", "E", "V", "V", "L", "L", "E", "E", "L", "E", "V", "V", "L", "V", "L", "E", "V", "E", "V"]}, {"name": "laura", "picks": ["L", "L", "L", "V", "E", "L", "V", "L", "L", "L", "V", "E", "L", "L", "V", "E", "L", "V", "L", "E", "L", "E", "E", "L", "E", "L", "L", "E", "L", "L", "L", "L", "E", "L", "E", "V", "L", "L", "L", "E", "L", "L", "L", "E", "L", "L", "V", "L", "V", "E", "E", "V", "V", "V", "E", "V", "V", "L", "V", "L", "V", "E", "E", "V", "L", "L", "V", "L", "V", "E", "V", "V"]}, {"name": "david", "picks": ["V", "E", "L", "V", "L", "V", "L", "L", "L", "V", "L", "V", "V", "L", "L", "V", "V", "L", "V", "E", "V", "V", "E", "V", "V", "V", "V", "V", "V", "E", "L", "V", "V", "E", "V", "L", "V", "V", "V", "L", "E", "V", "E", "L", "V", "V", "L", "E", "V", "L", "V", "L", "E", "E", "L", "L", "L", "E", "E", "E", "L", "V", "E", "L", "L", "E", "L", "V", "E", "E", "E", "L"]}, {"name": "salvador", "picks": ["L", "E", "L", "L", "V", "L", "V", "E", "L", "V", "E", "L", "L", "L", "V", "L", "L", "L", "L", "L", "L", "L", "L", "V", "L", "L", "L", "L", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "E", "E", "L", "L", "V", "L", "L", "L", "L", "V", "L", "V", "V", "V", "V", "L", "V", "E", "V", "L", "V", "V", "V", "V", "L", "L", "V", "L", "V", "V"]}, {"name": "pedro", "picks": ["L", "L", "L", "E", "V", "L", "V", "E", "L", "E", "V", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "E", "V", "L", "L", "L", "L", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "L", "V", "L", "L", "V", "L", "V", "L", "L", "V", "V", "V", "V", "V", "V", "E", "V", "L", "V", "L", "V", "E", "V", "L", "V", "L", "V", "L", "L", "V"]}, {"name": "jafet", "picks": ["L", "L", "L", "E", "V", "L", "E", "V", "L", "L", "V", "L", "L", "L", "V", "E", "L", "V", "L", "L", "L", "E", "V", "V", "E", "L", "L", "L", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "E", "L", "E", "L", "L", "V", "E", "V", "V", "E", "V", "E", "L", "E", "L", "L", "V", "V", "V", "L", "V", "L", "V", "L", "V", "V"]}, {"name": "liliana", "picks": ["L", "L", "L", "L", "V", "L", "V", "V", "L", "V", "E", "L", "L", "L", "L", "E", "L", "V", "L", "L", "L", "L", "E", "V", "L", "L", "L", "L", "E", "L", "L", "V", "V", "L", "L", "V", "L", "L", "L", "L", "L", "L", "L", "V", "L", "L", "V", "E", "L", "L", "L", "E", "V", "V", "V", "V", "E", "V", "L", "L", "V", "V", "V", "E", "V", "E", "V", "L", "E", "E", "V", "V"]}, {"name": "eduardol", "picks": ["L", "L", "L", "L", "V", "L", "L", "E", "L", "L", "E", "L", "L", "L", "E", "V", "L", "V", "L", "E", "L", "L", "V", "V", "L", "L", "L", "E", "V", "E", "L", "E", "E", "L", "E", "V", "L", "L", "L", "L", "E", "L", "L", "E", "L", "L", "V", "L", "L", "V", "L", "V", "V", "V", "E", "V", "V", "E", "E", "V", "V", "E", "V", "V", "E", "L", "V", "L", "V", "E", "V", "V"]}, {"name": "yanet", "picks": ["V", "E", "V", "V", "L", "L", "L", "L", "V", "V", "L", "E", "V", "V", "E", "V", "V", "L", "V", "E", "V", "E", "E", "L", "V", "E", "V", "V", "E", "E", "V", "E", "V", "V", "V", "L", "V", "V", "V", "L", "V", "V", "E", "L", "V", "V", "L", "V", "E", "L", "V", "L", "L", "L", "V", "L", "L", "E", "V", "V", "L", "V", "E", "L", "L", "E", "L", "V", "L", "E", "L", "L"]}, {"name": "martin", "picks": ["L", "L", "L", "L", "V", "L", "V", "L", "L", "E", "E", "L", "L", "L", "V", "V", "L", "V", "L", "L", "L", "V", "V", "V", "L", "L", "L", "L", "E", "V", "L", "V", "L", "L", "E", "V", "E", "L", "L", "L", "L", "L", "L", "E", "L", "L", "V", "L", "L", "E", "L", "V", "V", "V", "E", "V", "V", "E", "L", "L", "V", "E", "E", "V", "E", "V", "V", "L", "V", "E", "V", "V"]}, {"name": "omar", "picks": ["L", "E", "L", "L", "V", "L", "V", "E", "L", "L", "E", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "L", "V", "L", "L", "L", "L", "L", "V", "L", "E", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "E", "V", "L", "L", "V", "L", "E", "L", "L", "V", "V", "V", "V", "V", "V", "E", "V", "E", "V", "L", "V", "V", "V", "L", "V", "L", "V", "L", "V", "V"]}, {"name": "adelina", "picks": ["L", "L", "V", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "V", "L", "L", "V", "L", "V", "L", "V", "L", "V", "V", "L", "L", "L", "V", "V", "L", "V", "L", "L", "L", "L", "L", "V", "L", "L", "L", "E", "V", "E", "L", "V", "E", "L", "L", "E", "L", "V", "V", "V", "V", "V", "E", "V", "V", "E", "V", "E", "V", "V", "V", "V", "V", "L", "L", "E", "V", "V"]}, {"name": "emiliano", "picks": ["L", "L", "E", "L", "V", "L", "V", "V", "L", "L", "V", "L", "L", "L", "V", "V", "L", "V", "L", "V", "L", "L", "E", "V", "L", "L", "L", "L", "V", "V", "L", "L", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "V", "L", "V", "E", "L", "V", "V", "V", "L", "V", "V", "L", "V", "V", "V", "L", "V", "V", "V", "L", "V", "L", "V", "L", "L", "V"]}, {"name": "sofi", "picks": ["L", "E", "L", "L", "L", "E", "V", "V", "E", "E", "V", "E", "L", "V", "V", "V", "L", "L", "L", "E", "L", "V", "L", "V", "V", "E", "L", "V", "L", "V", "E", "E", "L", "L", "E", "E", "V", "L", "E", "V", "L", "L", "E", "V", "E", "E", "V", "E", "V", "V", "V", "V", "V", "V", "E", "L", "L", "L", "V", "E", "E", "V", "V", "E", "V", "L", "V", "E", "V", "L", "E", "V"]}, {"name": "israel", "picks": ["L", "E", "V", "E", "V", "E", "V", "V", "L", "L", "E", "L", "L", "L", "V", "E", "E", "V", "L", "E", "L", "L", "L", "V", "L", "L", "L", "E", "L", "V", "L", "V", "L", "L", "L", "V", "L", "L", "L", "V", "L", "L", "E", "V", "L", "E", "V", "L", "E", "L", "L", "V", "V", "E", "V", "V", "V", "L", "E", "L", "E", "L", "E", "L", "V", "E", "V", "L", "E", "E", "L", "V"]}, {"name": "ulises", "picks": ["E", "L", "E", "L", "V", "L", "E", "V", "L", "L", "V", "L", "L", "L", "V", "L", "L", "V", "L", "L", "L", "L", "V", "V", "L", "L", "E", "L", "L", "E", "L", "V", "L", "L", "L", "V", "L", "L", "L", "E", "L", "L", "L", "V", "L", "L", "V", "L", "E", "L", "E", "V", "V", "V", "L", "V", "V", "V", "V", "L", "V", "E", "E", "V", "V", "V", "V", "L", "V", "V", "V", "V"]}, {"name": "didier", "picks": ["L", "L", "E", "L", "L", "L", "V", "E", "L", "V", "L", "L", "L", "L", "E", "V", "L", "V", "L", "E", "L", "L", "E", "V", "L", "L", "V", "L", "L", "E", "L", "E", "V", "L", "V", "V", "L", "L", "E", "L", "L", "L", "L", "E", "L", "L", "V", "V", "L", "V", "L", "V", "V", "V", "L", "V", "E", "L", "V", "E", "V", "E", "L", "V", "V", "E", "V", "E", "V", "E", "L", "V"]}, {"name": "victoria", "picks": ["L", "L", "E", "L", "V", "L", "V", "E", "L", "L", "L", "L", "L", "L", "E", "V", "L", "V", "L", "L", "L", "L", "L", "V", "V", "E", "L", "L", "L", "L", "L", "V", "E", "L", "V", "V", "L", "L", "L", "L", "L", "L", "V", "V", "L", "L", "V", "V", "E", "L", "L", "V", "L", "V", "V", "V", "V", "E", "V", "E", "V", "L", "E", "V", "V", "L", "V", "E", "V", "L", "L", "V"]}];
 
-const resultsDiv=document.getElementById('results');
-matches.forEach((m,i)=>{
- let d=document.createElement('div');
- d.innerHTML=`${i+1}. ${m} <input maxlength="1" id="r${i}" oninput="update()">`;
- resultsDiv.appendChild(d);
-});
+async function cargarCSV(url){
+    const r = await fetch(url + "?v=" + Date.now());
+    const t = await r.text();
 
-function update(){
- let data=[];
- players.forEach(p=>{
-   let pts=0, played=0;
-   p.picks.forEach((pick,i)=>{
-      let r=(document.getElementById('r'+i).value||'').toUpperCase();
-      if(['L','E','V'].includes(r)){
-         played++;
-         if(pick===r) pts++;
-      }
-   });
-   data.push({name:p.name, pts:pts, pct:played?((pts/played)*100).toFixed(1):0});
- });
-
- data.sort((a,b)=>b.pts-a.pts);
-
- let tb=document.querySelector('#standings tbody');
- tb.innerHTML='';
- data.forEach((p,i)=>{
-   tb.innerHTML += `<tr><td>${i+1}</td><td>${p.name}</td><td>${p.pts}</td><td>${p.pct}%</td></tr>`;
- });
-
- if(window.g) window.g.destroy();
- window.g=new Chart(document.getElementById('chart'),{
-   type:'bar',
-   data:{labels:data.map(x=>x.name),datasets:[{label:'Puntos',data:data.map(x=>x.pts)}]},
-   options:{responsive:true}
- });
+    return Papa.parse(t,{
+        header:true,
+        skipEmptyLines:true
+    }).data;
 }
-update();
+
+async function actualizar(){
+
+    const resultados = await cargarCSV('/resultado.csv');
+    const participantes = await cargarCSV('resultados_participantes.csv');
+
+    const mapaResultados = {};
+
+    resultados.forEach(r=>{
+        if(r.partido && r.resultado){
+            mapaResultados[r.partido.trim()] =
+            r.resultado.trim().toUpperCase();
+        }
+    });
+
+    let ranking=[];
+
+    participantes.forEach(p=>{
+
+        let puntos=0;
+        let jugados=0;
+
+        Object.keys(mapaResultados).forEach(partido=>{
+
+            if(mapaResultados[partido]!=""){
+
+                jugados++;
+
+                if(
+                    p[partido] &&
+                    p[partido].trim().toUpperCase()
+                    ==
+                    mapaResultados[partido]
+                ){
+                    puntos++;
+                }
+            }
+        });
+
+        ranking.push({
+            nombre:p.Nombre,
+            puntos,
+            porcentaje:
+            jugados>0
+            ? ((puntos/jugados)*100).toFixed(1)
+            : 0
+        });
+
+    });
+
+    ranking.sort((a,b)=>b.puntos-a.puntos);
+
+    document.getElementById("lider").innerText =
+    ranking[0]?.nombre || "-";
+
+    document.getElementById("puntosLider").innerText =
+    ranking[0]?.puntos || 0;
+
+    document.getElementById("participantes").innerText =
+    ranking.length;
+
+    document.getElementById("partidosJugados").innerText =
+    Object.keys(mapaResultados).length;
+
+    let podio="";
+
+    const medallas=["🥇","🥈","🥉"];
+
+    ranking.slice(0,3).forEach((p,i)=>{
+
+        const clases=["oro","plata","bronce"];
+
+        podio+=`
+        <div class="puesto ${clases[i]}">
+            <h2>${medallas[i]}</h2>
+            <h3>${p.nombre}</h3>
+            <strong>${p.puntos} pts</strong>
+        </div>
+        `;
+    });
+
+    document.getElementById("podio").innerHTML=podio;
+
+    let filas="";
+
+    ranking.forEach((p,i)=>{
+
+        filas+=`
+        <tr>
+            <td>${i+1}</td>
+            <td>${p.nombre}</td>
+            <td>${p.puntos}</td>
+            <td>${p.porcentaje}%</td>
+        </tr>`;
+    });
+
+    document.querySelector("#tablaRanking tbody").innerHTML=filas;
+
+    if(window.miGrafica){
+        window.miGrafica.destroy();
+    }
+
+    const ctx =
+    document.getElementById("graficaRanking");
+
+    window.miGrafica = new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels:ranking.map(x=>x.nombre),
+            datasets:[{
+                label:'Aciertos',
+                data:ranking.map(x=>x.puntos)
+            }]
+        },
+        options:{
+            responsive:true,
+            plugins:{
+                legend:{display:false}
+            }
+        }
+    });
+
+}
+
+actualizar();
+setInterval(actualizar,60000);
+
 </script>
+
 </body>
 </html>
