@@ -359,11 +359,43 @@ porcentaje:jugados ?
 
 });
 
-ranking = ranking.map(r => ({
+anking = ranking.map(r => ({
     ...r,
-    nombre: String(r.nombre).trim()
+    nombre: String(r.nombre).trim().toUpperCase()
 }));
 
+ranking.sort((a,b)=>{
+
+    if(b.puntos !== a.puntos){
+        return b.puntos - a.puntos;
+    }
+
+    return a.nombre.localeCompare(
+        b.nombre,
+        'es',
+        {
+            sensitivity:'base',
+            ignorePunctuation:true
+        }
+    );
+
+});
+
+let posicionActual = 1;
+
+ranking.forEach((item,index)=>{
+
+    if(index>0){
+
+        if(item.puntos < ranking[index-1].puntos){
+            posicionActual = index + 1;
+        }
+
+    }
+
+    item.posicion = posicionActual;
+
+});
 ranking.sort((a,b)=>{
 
     // Orden principal: puntos descendente
