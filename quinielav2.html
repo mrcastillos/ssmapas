@@ -380,7 +380,88 @@ setInterval(actualizar,60000);
 
 
 </script>
+<script>
+async function leerCSV(url){
 
+    const r = await fetch(url + "?v=" + Date.now());
+    const txt = await r.text();
+
+    return Papa.parse(txt,{
+        header:true,
+        skipEmptyLines:true
+    }).data;
+}
+
+async function cargarPartidos(){
+
+    const resultados =
+        await leerCSV("resultado.csv");
+
+    const participantes =
+        await leerCSV("resultados_participantes.csv");
+
+    const partidos =
+        await leerCSV("partidos.csv");
+
+    const oficiales = {};
+
+    resultados.forEach(r => {
+
+        if(r.partido && r.resultado){
+
+            oficiales[r.partido.trim()] =
+                r.resultado.trim().toUpperCase();
+
+        }
+
+    });
+
+    let partidosHTML = "";
+
+    for(const p of partidos){
+
+        const id = p.partido;
+
+        if(!oficiales[id]) continue;
+
+        let aciertos = 0;
+
+        participantes.forEach(persona => {
+
+            if(
+                String(persona[id] || "")
+                .trim()
+                .toUpperCase()
+                === oficiales[id]
+            ){
+                aciertos++;
+            }
+
+        });
+
+        const porcentaje =
+            ((aciertos / participantes.length) * 100)
+            .toFixed(1);
+
+        partidosHTML += `
+        <tr>
+            <td>${id}</td>
+            <td>${p.nombre}</td>
+            <td>${oficiales[id]}</td>
+            <td>${porcentaje}%</td>
+        </tr>
+        `;
+    }
+
+    document.getElementById("tablaPartidos").innerHTML =
+        partidosHTML;
+}
+
+cargarPartidos();
+
+/* Actualiza cada minuto */
+setInterval(cargarPartidos,60000);
+</script>
 
 </body>
 </html>
