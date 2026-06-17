@@ -203,6 +203,44 @@ canvas{
 
 </div>
 
+<div class="panel">
+
+<h3>⚽ Partidos Jugados</h3>
+
+<table>
+
+<thead>
+<tr>
+<th>Partido</th>
+<th>Encuentro</th>
+<th>Resultado</th>
+<th>% Acierto</th>
+</tr>
+</thead>
+
+<tbody id="tablaPartidos"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+let chart;
+
+async function leerCSV(url){
+
+const r = await fetch(url + "?v=" + Date.now());
+const txt = await r.text();
+
+return Papa.parse(txt,{
+header:true,
+skipEmptyLines:true
+}).data;
+
+}
 
 <script>
 
