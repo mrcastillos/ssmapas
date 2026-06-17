@@ -444,7 +444,61 @@ const clases =
 const emojis =
 ["🥇","🥈","🥉"];
 
+const lideres =
+ranking.filter(x =>
+x.posicion === 1
+);
+
 let podio = "";
+
+lideres.forEach(p=>{
+
+podio += `
+<div class="podium-card gold">
+<h2>🥇</h2>
+<h3>${p.nombre}</h3>
+<div>${p.puntos} PTS</div>
+<div>${p.porcentaje}%</div>
+</div>
+`;
+
+});
+
+const segundos =
+ranking.filter(x =>
+x.posicion === 2
+);
+
+segundos.forEach(p=>{
+
+podio += `
+<div class="podium-card silver">
+<h2>🥈</h2>
+<h3>${p.nombre}</h3>
+<div>${p.puntos} PTS</div>
+<div>${p.porcentaje}%</div>
+</div>
+`;
+
+});
+
+const terceros =
+ranking.filter(x =>
+x.posicion === 3
+);
+
+terceros.forEach(p=>{
+
+podio += `
+<div class="podium-card bronze">
+<h2>🥉</h2>
+<h3>${p.nombre}</h3>
+<div>${p.puntos} PTS</div>
+<div>${p.porcentaje}%</div>
+</div>
+`;
+
+});
 
 top3.forEach((p,i)=>{
 
@@ -463,6 +517,25 @@ document.getElementById("podium")
 .innerHTML = podio;
 
 let tabla = "";
+
+ranking.forEach((p)=>{
+
+let cls="";
+
+if(p.posicion===1) cls="pos1";
+if(p.posicion===2) cls="pos2";
+if(p.posicion===3) cls="pos3";
+
+tabla += `
+<tr class="${cls}">
+<td>${p.posicion}</td>
+<td>${p.nombre}</td>
+<td>${p.puntos}</td>
+<td>${p.porcentaje}%</td>
+</tr>
+`;
+
+});
 
 ranking.forEach((p,i)=>{
 
