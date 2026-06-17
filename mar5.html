@@ -206,7 +206,7 @@
             const files = {
                 partidos: "partidos.csv",
                 resultado: "resultado.csv",
-                participantes: "resultado_participantes.csv"
+                participantes: "resultados_participantes.csv"
             };
 
             let chartInstance = null;
@@ -283,7 +283,7 @@
 
                     let participantesRows = parseCSV(participantesTxt);
                     if(participantesRows.length <= 1) {
-                        throw new Error("El archivo 'resultado_participantes.csv' no contiene filas legibles.");
+                        throw new Error("El archivo 'resultados_participantes.csv' no contiene filas legibles.");
                     }
                     
                     let pHeader = participantesRows[0];
