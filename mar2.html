@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+        }
+        .font-sports {
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .fifa-card {
+            background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%);
+            border: 3px solid #f3e0a3;
+            box-shadow: 0 10px 25px rgba(184, 135, 40, 0.3);
+            position: relative;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%);
+        }
+        .fifa-card-silver {
+            background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #4b5563 100%);
+            border: 3px solid #f3f4f6;
+            box-shadow: 0 10px 25px rgba(156, 163, 175, 0.3);
+        }
+        .fifa-card-bronze {
+            background: linear-gradient(135deg, #ca8a04 0%, #a16207 50%, #78350f 100%);
+            border: 3px solid #fef08a;
+            box-shadow: 0 10px 25px rgba(161, 98, 7, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+        @keyframes leader-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.5); border-color: #fbbf24; }
+            50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.9); border-color: #fff; }
+        }
+        .leader-flash {
+            animation: leader-glow 2s infinite;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 bg-slate-950">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <header class="bg-slate-900 border-l-8 border-yellow-500 p-6 rounded-lg shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider font-sports text-white flex items-center gap-3">
+                    <i class="fa-solid fa-trophy text-yellow-500 animate-bounce"></i> ⚽ QUINIELA MUNDIAL 2026
+                </h1>
+                <p id="last-updated" class="text-xs md:text-sm font-semibold tracking-widest text-slate-400 mt-1 font-sports uppercase">
+                    ACTUALIZADO: 17 JUN 2026 08:30
+                </p>
+            </div>
+            <div class="bg-slate-800 px-4 py-2 rounded-full border border-slate-700 text-xs font-bold text-yellow-400 font-sports tracking-wide">
+                <i class="fa-solid fa-crown mr-1"></i> VERSIÓN PREMIUM STADIUM
+            </div>
+        </header>
+
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 font-sports">
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🏆 Líder Actual</p>
+                    <p id="kpi-leader" class="text-xl md:text-2xl font-black text-yellow-400 mt-1">-</p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-medal"></i></div>
+            </div>
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">⚽ Jugados</p>
+                    <p id="kpi-played" class="text-2xl md:text-3xl font-black text-emerald-400 mt-1">0 <span class="text-xs text-slate-500 font-normal">/ 72</span></p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-square-poll-vertical"></i></div>
+            </div>
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🎯 Máx Aciertos</p>
+                    <p id="kpi-hits" class="text-2xl md:text-3xl font-black text-cyan-400 mt-1">0</p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-bullseye"></i></div>
+            </div>
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">👥 Part. Totales</p>
+                    <p id="kpi-participants" class="text-2xl md:text-3xl font-black text-purple-400 mt-1">0</p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-users"></i></div>
+            </div>
+        </section>
+
+        <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
+            <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
+                <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO OFICIAL DE GANADORES
+            </h2>
+            <div class="grid grid-cols-3 max-w-2xl mx-auto items-end pt-12 font-sports text-center">
+                <div class="flex flex-col items-center">
+                    <div id="podium-2-names" class="text-sm font-bold text-slate-300 mb-2 truncate max-w-full px-1">🥈 -</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-slate-400 h-24 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-2xl font-black text-slate-400">2°</span>
+                        <span class="text-xs font-bold text-slate-500">PLATA</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fa-solid fa-crown text-yellow-400 text-2xl animate-pulse mb-1"></i>
+                    <div id="podium-1-names" class="text-base font-extrabold text-yellow-400 mb-2 truncate max-w-full px-1">🥇 -</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-yellow-500 h-36 rounded-t-lg flex flex-col justify-center items-center shadow-2xl relative leader-flash">
+                        <span class="text-4xl font-black text-yellow-400">1°</span>
+                        <span class="text-xs font-bold text-yellow-500 tracking-widest">CAMPEÓN</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div id="podium-3-names" class="text-sm font-bold text-amber-600 mb-2 truncate max-w-full px-1">🥉 -</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-amber-700 h-16 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-xl font-black text-amber-600">3°</span>
+                        <span class="text-xs font-bold text-amber-700">BRONCE</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
+                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4 flex items-center justify-between">
+                        <span><i class="fa-solid fa-list-ol text-emerald-500 mr-2"></i> RANKING EN TIEMPO REAL</span>
+                    </h3>
+                    <div id="ranking-container" class
