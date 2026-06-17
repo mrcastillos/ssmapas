@@ -209,7 +209,7 @@
             const files = {
                 partidos: baseUrl + "partidos.csv",
                 resultado: baseUrl + "resultado.csv",
-                participantes: baseUrl + "resultado_participantes.csv"
+                participantes: baseUrl + "resultados_participantes.csv"
             };
 
             let chartInstance = null;
@@ -277,7 +277,7 @@
 
                     let participantesRows = parseCSV(participantesTxt);
                     if(participantesRows.length <= 1) {
-                        throw new Error("El archivo 'resultado_participantes.csv' está vacío o no contiene títulos.");
+                        throw new Error("El archivo 'resultados_participantes.csv' está vacío o no contiene títulos.");
                     }
                     
                     let pHeader = participantesRows[0];
@@ -669,7 +669,7 @@
 
                 } catch (err) {
                     console.error("Error crítico de GitHub:", err);
-                    document.getElementById("error-text").textContent = `Error: ${err.message}. Verifica que 'partidos.csv', 'resultado.csv' y 'resultado_participantes.csv' estén subidos en la misma carpeta 'ssmapas' de tu repositorio de GitHub.`;
+                    document.getElementById("error-text").textContent = `Error: ${err.message}. Verifica que 'partidos.csv', 'resultado.csv' y 'resultados_participantes.csv' estén subidos en la misma carpeta 'ssmapas' de tu repositorio de GitHub.`;
                     document.getElementById("error-banner").classList.remove("hidden");
                 }
             }
