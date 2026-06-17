@@ -1,386 +1,680 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiniela Mundial 2026</title>
-
-
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-<style>
-:root{
-    --bg:#0f172a;
-    --card:#1e293b;
-    --accent:#22c55e;
-    --accent2:#3b82f6;
-    --text:#f8fafc;
-}
-
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI, sans-serif;
-}
-
-
-body{
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-    color:white;
-    padding:20px;
-}
-
-
-h1{
-    text-align:center;
-    margin-bottom:20px;
-}
-
-
-.dashboard{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:15px;
-    margin-bottom:25px;
-}
-
-
-.card{
-    background:var(--card);
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 8px 25px rgba(0,0,0,.35);
-}
-
-
-.card h2{
-    font-size:14px;
-    color:#94a3b8;
-}
-
-
-.card .valor{
-    font-size:34px;
-    font-weight:bold;
-    margin-top:10px;
-}
-
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-
-@media(max-width:900px){
-    .grid{
-        grid-template-columns:1fr;
-    }
-}
-
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-
-th{
-    background:#334155;
-    padding:10px;
-}
-
-
-td{
-    padding:8px;
-    border-bottom:1px solid #334155;
-}
-
-
-tr:hover{
-    background:#1e293b;
-}
-
-
-.podio{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-
-    justify-content:center;
-    gap:15px;
-    margin-bottom:25px;
-}
-
-
-.puesto{
-    padding:15px;
-    border-radius:15px;
-    text-align:center;
-    min-width:140px;
-}
-
-
-.oro{background:#eab308;color:black;}
-.plata{background:#cbd5e1;color:black;}
-.bronce{background:#b45309;}
-
-
-canvas{
-    background:white;
-    border-radius:15px;
-    padding:10px;
-}
-</style>
-</head>
-<body>
-
-
-<h1>🏆 Quiniela Mundial 2026</h1>
-
-
-<div class="dashboard">
-
-
-<div class="card">
-<h2>Líder Actual</h2>
-<div class="valor" id="lider">-</div>
-</div>
-
-
-<div class="card">
-<h2>Puntos del Líder</h2>
-<div class="valor" id="puntosLider">0</div>
-</div>
-
-
-<div class="card">
-<h2>Partidos Jugados</h2>
-<div class="valor" id="partidosJugados">0</div>
-</div>
-
-
-<div class="card">
-<h2>Participantes</h2>
-<div class="valor" id="participantes">0</div>
-</div>
-
-
-</div>
-
-
-<div class="podio" id="podio"></div>
-
-
-<div class="grid">
-
-
-<div class="card">
-<h2>Ranking General</h2>
-<table id="tablaRanking">
-<thead>
-<tr>
-<th>#</th>
-<th>Nombre</th>
-<th>Puntos</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
-
-
-<div class="card">
-<h2>Aciertos por Participante</h2>
-<canvas id="graficaRanking"></canvas>
-</div>
-
-
-</div>
-
-
-<script>
-
-
-async function actualizar(){
-
-
-    const resultados = [{"partido": "1", "resultado": "L"}, {"partido": "2", "resultado": "L"}, {"partido": "3", "resultado": "E"}, {"partido": "4", "resultado": "L"}, {"partido": "5", "resultado": "E"}, {"partido": "6", "resultado": "E"}, {"partido": "7", "resultado": "V"}, {"partido": "8", "resultado": "L"}, {"partido": "9", "resultado": "L"}, {"partido": "10", "resultado": "E"}, {"partido": "11", "resultado": "L"}, {"partido": "12", "resultado": "L"}, {"partido": "13", "resultado": "E"}, {"partido": "14", "resultado": "E"}, {"partido": "15", "resultado": "E"}, {"partido": "16", "resultado": "E"}, {"partido": "17", "resultado": "L"}, {"partido": "18", "resultado": ""}, {"partido": "19", "resultado": ""}, {"partido": "20", "resultado": ""}, {"partido": "21", "resultado": ""}, {"partido": "22", "resultado": ""}, {"partido": "23", "resultado": ""}, {"partido": "24", "resultado": ""}, {"partido": "25", "resultado": ""}, {"partido": "26", "resultado": ""}, {"partido": "27", "resultado": ""}, {"partido": "28", "resultado": ""}, {"partido": "29", "resultado": ""}, {"partido": "30", "resultado": ""}, {"partido": "31", "resultado": ""}, {"partido": "32", "resultado": ""}, {"partido": "33", "resultado": ""}, {"partido": "34", "resultado": ""}, {"partido": "35", "resultado": ""}, {"partido": "36", "resultado": ""}, {"partido": "37", "resultado": ""}, {"partido": "38", "resultado": ""}, {"partido": "39", "resultado": ""}, {"partido": "40", "resultado": ""}, {"partido": "41", "resultado": ""}, {"partido": "42", "resultado": ""}, {"partido": "43", "resultado": ""}, {"partido": "44", "resultado": ""}, {"partido": "45", "resultado": ""}, {"partido": "46", "resultado": ""}, {"partido": "47", "resultado": ""}, {"partido": "48", "resultado": ""}, {"partido": "49", "resultado": ""}, {"partido": "50", "resultado": ""}, {"partido": "51", "resultado": ""}, {"partido": "52", "resultado": ""}, {"partido": "53", "resultado": ""}, {"partido": "54", "resultado": ""}, {"partido": "55", "resultado": ""}, {"partido": "56", "resultado": ""}, {"partido": "57", "resultado": ""}, {"partido": "58", "resultado": ""}, {"partido": "59", "resultado": ""}, {"partido": "60", "resultado": ""}, {"partido": "61", "resultado": ""}, {"partido": "62", "resultado": ""}, {"partido": "63", "resultado": ""}, {"partido": "64", "resultado": ""}, {"partido": "65", "resultado": ""}, {"partido": "66", "resultado": ""}, {"partido": "67", "resultado": ""}, {"partido": "68", "resultado": ""}, {"partido": "69", "resultado": ""}, {"partido": "70", "resultado": ""}, {"partido": "71", "resultado": ""}, {"partido": "72", "resultado": ""}];
-    const participantes = [{"Nombre": "alfonso", "1": "E", "2": "L", "3": "L", "4": "V", "5": "E", "6": "E", "7": "V", "8": "L", "9": "L", "10": "L", "11": "L", "12": "E", "13": "L", "14": "L", "15": "V", "16": "E", "17": "L", "18": "V", "19": "L", "20": "E", "21": "L", "22": "L", "23": "V", "24": "V", "25": "L", "26": "L", "27": "L", "28": "E", "29": "L", "30": "V", "31": "L", "32": "V", "33": "L", "34": "L", "35": "E", "36": "V", "37": "L", "38": "L", "39": "L", "40": "V", "41": "L", "42": "L", "43": "E", "44": "E", "45": "L", "46": "L", "47": "E", "48": "L", "49": "L", "50": "E", "51": "L", "52": "V", "53": "V", "54": "V", "55": "V", "56": "V", "57": "V", "58": "E", "59": "V", "60": "E", "61": "V", "62": "E", "63": "L", "64": "V", "65": "V", "66": "L", "67": "V", "68": "L", "69": "L", "70": "E", "71": "V", "72": "V"}, {"Nombre": "angelita", "1": "L", "2": "V", "3": "E", "4": "E", "5": "E", "6": "L", "7": "V", "8": "V", "9": "L", "10": "L", "11": "V", "12": "L", "13": "L", "14": "L", "15": "E", "16": "V", "17": "V", "18": "E", "19": "L", "20": "E", "21": "L", "22": "V", "23": "V", "24": "V", "25": "V", "26": "E", "27": "E", "28": "E", "29": "V", "30": "E", "31": "L", "32": "L", "33": "L", "34": "L", "35": "E", "36": "V", "37": "L", "38": "E", "39": "L", "40": "L", "41": "L", "42": "L", "43": "E", "44": "V", "45": "L", "46": "L", "47": "V", "48": "L", "49": "E", "50": "E", "51": "L", "52": "V", "53": "E", "54": "L", "55": "E", "56": "V", "57": "V", "58": "L", "59": "L", "60": "E", "61": "E", "62": "L", "63": "E", "64": "V", "65": "V", "66": "L", "67": "V", "68": "L", "69": "E", "70": "V", "71": "E", "72": "V"}, {"Nombre": "laura", "1": "L", "2": "L", "3": "L", "4": "V", "5": "E", "6": "L", "7": "V", "8": "L", "9": "L", "10": "L", "11": "V", "12": "E", "13": "L", "14": "L", "15": "V", "16": "E", "17": "L", "18": "V", "19": "L", "20": "E", "21": "L", "22": "E", "23": "E", "24": "L", "25": "E", "26": "L", "27": "L", "28": "E", "29": "L", "30": "L", "31": "L", "32": "L", "33": "E", "34": "L", "35": "E", "36": "V", "37": "L", "38": "L", "39": "L", "40": "E", "41": "L", "42": "L", "43": "L", "44": "E", "45": "L", "46": "L", "47": "V", "48": "L", "49": "V", "50": "E", "51": "E", "52": "V", "53": "V", "54": "V", "55": "E", "56": "V", "57": "V", "58": "L", "59": "V", "60": "L", "61": "V", "62": "E", "63": "E", "64": "V", "65": "L", "66": "L", "67": "V", "68": "L", "69": "V", "70": "E", "71": "V", "72": "V"}, {"Nombre": "david", "1": "V", "2": "E", "3": "L", "4": "V", "5": "L", "6": "V", "7": "L", "8": "L", "9": "L", "10": "V", "11": "L", "12": "V", "13": "V", "14": "L", "15": "L", "16": "V", "17": "V", "18": "L", "19": "V", "20": "E", "21": "V", "22": "V", "23": "E", "24": "V", "25": "V", "26": "V", "27": "V", "28": "V", "29": "V", "30": "E", "31": "L", "32": "V", "33": "V", "34": "E", "35": "V", "36": "L", "37": "V", "38": "V", "39": "V", "40": "L", "41": "E", "42": "V", "43": "E", "44": "L", "45": "V", "46": "V", "47": "L", "48": "E", "49": "V", "50": "L", "51": "V", "52": "L", "53": "E", "54": "E", "55": "L", "56": "L", "57": "L", "58": "E", "59": "E", "60": "E", "61": "L", "62": "V", "63": "E", "64": "L", "65": "L", "66": "E", "67": "L", "68": "V", "69": "E", "70": "E", "71": "E", "72": "L"}, {"Nombre": "salvador", "1": "L", "2": "E", "3": "L", "4": "L", "5": "V", "6": "L", "7": "V", "8": "E", "9": "L", "10": "V", "11": "E", "12": "L", "13": "L", "14": "L", "15": "V", "16": "L", "17": "L", "18": "L", "19": "L", "20": "L", "21": "L", "22": "L", "23": "L", "24": "V", "25": "L", "26": "L", "27": "L", "28": "L", "29": "L", "30": "V", "31": "L", "32": "V", "33": "L", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "V", "41": "L", "42": "L", "43": "E", "44": "E", "45": "L", "46": "L", "47": "V", "48": "L", "49": "L", "50": "L", "51": "L", "52": "V", "53": "L", "54": "V", "55": "V", "56": "V", "57": "V", "58": "L", "59": "V", "60": "E", "61": "V", "62": "L", "63": "V", "64": "V", "65": "V", "66": "V", "67": "L", "68": "L", "69": "V", "70": "L", "71": "V", "72": "V"}, {"Nombre": "pedro", "1": "L", "2": "L", "3": "L", "4": "E", "5": "V", "6": "L", "7": "V", "8": "E", "9": "L", "10": "E", "11": "V", "12": "L", "13": "L", "14": "L", "15": "V", "16": "L", "17": "L", "18": "V", "19": "L", "20": "L", "21": "L", "22": "L", "23": "E", "24": "V", "25": "L", "26": "L", "27": "L", "28": "L", "29": "L", "30": "V", "31": "L", "32": "V", "33": "L", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "E", "41": "L", "42": "L", "43": "L", "44": "V", "45": "L", "46": "L", "47": "V", "48": "L", "49": "V", "50": "L", "51": "L", "52": "V", "53": "V", "54": "V", "55": "V", "56": "V", "57": "V", "58": "E", "59": "V", "60": "L", "61": "V", "62": "L", "63": "V", "64": "E", "65": "V", "66": "L", "67": "V", "68": "L", "69": "V", "70": "L", "71": "L", "72": "V"}, {"Nombre": "jafet", "1": "L", "2": "L", "3": "L", "4": "E", "5": "V", "6": "L", "7": "E", "8": "V", "9": "L", "10": "L", "11": "V", "12": "L", "13": "L", "14": "L", "15": "V", "16": "E", "17": "L", "18": "V", "19": "L", "20": "L", "21": "L", "22": "E", "23": "V", "24": "V", "25": "E", "26": "L", "27": "L", "28": "L", "29": "L", "30": "V", "31": "L", "32": "V", "33": "L", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "V", "41": "L", "42": "L", "43": "L", "44": "E", "45": "L", "46": "L", "47": "E", "48": "L", "49": "E", "50": "L", "51": "L", "52": "V", "53": "E", "54": "V", "55": "V", "56": "E", "57": "V", "58": "E", "59": "L", "60": "E", "61": "L", "62": "L", "63": "V", "64": "V", "65": "V", "66": "L", "67": "V", "68": "L", "69": "V", "70": "L", "71": "V", "72": "V"}, {"Nombre": "liliana", "1": "L", "2": "L", "3": "L", "4": "L", "5": "V", "6": "L", "7": "V", "8": "V", "9": "L", "10": "V", "11": "E", "12": "L", "13": "L", "14": "L", "15": "L", "16": "E", "17": "L", "18": "V", "19": "L", "20": "L", "21": "L", "22": "L", "23": "E", "24": "V", "25": "L", "26": "L", "27": "L", "28": "L", "29": "E", "30": "L", "31": "L", "32": "V", "33": "V", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "L", "41": "L", "42": "L", "43": "L", "44": "V", "45": "L", "46": "L", "47": "V", "48": "E", "49": "L", "50": "L", "51": "L", "52": "E", "53": "V", "54": "V", "55": "V", "56": "V", "57": "E", "58": "V", "59": "L", "60": "L", "61": "V", "62": "V", "63": "V", "64": "E", "65": "V", "66": "E", "67": "V", "68": "L", "69": "E", "70": "E", "71": "V", "72": "V"}, {"Nombre": "eduardol", "1": "L", "2": "L", "3": "L", "4": "L", "5": "V", "6": "L", "7": "L", "8": "E", "9": "L", "10": "L", "11": "E", "12": "L", "13": "L", "14": "L", "15": "E", "16": "V", "17": "L", "18": "V", "19": "L", "20": "E", "21": "L", "22": "L", "23": "V", "24": "V", "25": "L", "26": "L", "27": "L", "28": "E", "29": "V", "30": "E", "31": "L", "32": "E", "33": "E", "34": "L", "35": "E", "36": "V", "37": "L", "38": "L", "39": "L", "40": "L", "41": "E", "42": "L", "43": "L", "44": "E", "45": "L", "46": "L", "47": "V", "48": "L", "49": "L", "50": "V", "51": "L", "52": "V", "53": "V", "54": "V", "55": "E", "56": "V", "57": "V", "58": "E", "59": "E", "60": "V", "61": "V", "62": "E", "63": "V", "64": "V", "65": "E", "66": "L", "67": "V", "68": "L", "69": "V", "70": "E", "71": "V", "72": "V"}, {"Nombre": "yanet", "1": "V", "2": "E", "3": "V", "4": "V", "5": "L", "6": "L", "7": "L", "8": "L", "9": "V", "10": "V", "11": "L", "12": "E", "13": "V", "14": "V", "15": "E", "16": "V", "17": "V", "18": "L", "19": "V", "20": "E", "21": "V", "22": "E", "23": "E", "24": "L", "25": "V", "26": "E", "27": "V", "28": "V", "29": "E", "30": "E", "31": "V", "32": "E", "33": "V", "34": "V", "35": "V", "36": "L", "37": "V", "38": "V", "39": "V", "40": "L", "41": "V", "42": "V", "43": "E", "44": "L", "45": "V", "46": "V", "47": "L", "48": "V", "49": "E", "50": "L", "51": "V", "52": "L", "53": "L", "54": "L", "55": "V", "56": "L", "57": "L", "58": "E", "59": "V", "60": "V", "61": "L", "62": "V", "63": "E", "64": "L", "65": "L", "66": "E", "67": "L", "68": "V", "69": "L", "70": "E", "71": "L", "72": "L"}, {"Nombre": "martin", "1": "L", "2": "L", "3": "L", "4": "L", "5": "V", "6": "L", "7": "V", "8": "L", "9": "L", "10": "E", "11": "E", "12": "L", "13": "L", "14": "L", "15": "V", "16": "V", "17": "L", "18": "V", "19": "L", "20": "L", "21": "L", "22": "V", "23": "V", "24": "V", "25": "L", "26": "L", "27": "L", "28": "L", "29": "E", "30": "V", "31": "L", "32": "V", "33": "L", "34": "L", "35": "E", "36": "V", "37": "E", "38": "L", "39": "L", "40": "L", "41": "L", "42": "L", "43": "L", "44": "E", "45": "L", "46": "L", "47": "V", "48": "L", "49": "L", "50": "E", "51": "L", "52": "V", "53": "V", "54": "V", "55": "E", "56": "V", "57": "V", "58": "E", "59": "L", "60": "L", "61": "V", "62": "E", "63": "E", "64": "V", "65": "E", "66": "V", "67": "V", "68": "L", "69": "V", "70": "E", "71": "V", "72": "V"}, {"Nombre": "omar", "1": "L", "2": "E", "3": "L", "4": "L", "5": "V", "6": "L", "7": "V", "8": "E", "9": "L", "10": "L", "11": "E", "12": "L", "13": "L", "14": "L", "15": "V", "16": "L", "17": "L", "18": "V", "19": "L", "20": "L", "21": "L", "22": "L", "23": "L", "24": "V", "25": "L", "26": "L", "27": "L", "28": "L", "29": "L", "30": "V", "31": "L", "32": "E", "33": "L", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "V", "41": "L", "42": "L", "43": "E", "44": "V", "45": "L", "46": "L", "47": "V", "48": "L", "49": "E", "50": "L", "51": "L", "52": "V", "53": "V", "54": "V", "55": "V", "56": "V", "57": "V", "58": "E", "59": "V", "60": "E", "61": "V", "62": "L", "63": "V", "64": "V", "65": "V", "66": "L", "67": "V", "68": "L", "69": "V", "70": "L", "71": "V", "72": "V"}, {"Nombre": "adelina", "1": "L", "2": "L", "3": "V", "4": "L", "5": "L", "6": "L", "7": "V", "8": "L", "9": "L", "10": "V", "11": "L", "12": "L", "13": "L", "14": "L", "15": "V", "16": "L", "17": "L", "18": "V", "19": "L", "20": "V", "21": "L", "22": "V", "23": "L", "24": "V", "25": "V", "26": "L", "27": "L", "28": "L", "29": "V", "30": "V", "31": "L", "32": "V", "33": "L", "34": "L", "35": "L", "36": "L", "37": "L", "38": "V", "39": "L", "40": "L", "41": "L", "42": "E", "43": "V", "44": "E", "45": "L", "46": "V", "47": "E", "48": "L", "49": "L", "50": "E", "51": "L", "52": "V", "53": "V", "54": "V", "55": "V", "56": "V", "57": "E", "58": "V", "59": "V", "60": "E", "61": "V", "62": "E", "63": "V", "64": "V", "65": "V", "66": "V", "67": "V", "68": "L", "69": "L", "70": "E", "71": "V", "72": "V"}, {"Nombre": "emiliano", "1": "L", "2": "L", "3": "E", "4": "L", "5": "V", "6": "L", "7": "V", "8": "V", "9": "L", "10": "L", "11": "V", "12": "L", "13": "L", "14": "L", "15": "V", "16": "V", "17": "L", "18": "V", "19": "L", "20": "V", "21": "L", "22": "L", "23": "E", "24": "V", "25": "L", "26": "L", "27": "L", "28": "L", "29": "V", "30": "V", "31": "L", "32": "L", "33": "L", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "V", "41": "L", "42": "L", "43": "L", "44": "E", "45": "L", "46": "L", "47": "V", "48": "L", "49": "V", "50": "E", "51": "L", "52": "V", "53": "V", "54": "V", "55": "L", "56": "V", "57": "V", "58": "L", "59": "V", "60": "V", "61": "V", "62": "L", "63": "V", "64": "V", "65": "V", "66": "L", "67": "V", "68": "L", "69": "V", "70": "L", "71": "L", "72": "V"}, {"Nombre": "sofi", "1": "L", "2": "E", "3": "L", "4": "L", "5": "L", "6": "E", "7": "V", "8": "V", "9": "E", "10": "E", "11": "V", "12": "E", "13": "L", "14": "V", "15": "V", "16": "V", "17": "L", "18": "L", "19": "L", "20": "E", "21": "L", "22": "V", "23": "L", "24": "V", "25": "V", "26": "E", "27": "L", "28": "V", "29": "L", "30": "V", "31": "E", "32": "E", "33": "L", "34": "L", "35": "E", "36": "E", "37": "V", "38": "L", "39": "E", "40": "V", "41": "L", "42": "L", "43": "E", "44": "V", "45": "E", "46": "E", "47": "V", "48": "E", "49": "V", "50": "V", "51": "V", "52": "V", "53": "V", "54": "V", "55": "E", "56": "L", "57": "L", "58": "L", "59": "V", "60": "E", "61": "E", "62": "V", "63": "V", "64": "E", "65": "V", "66": "L", "67": "V", "68": "E", "69": "V", "70": "L", "71": "E", "72": "V"}, {"Nombre": "israel", "1": "L", "2": "E", "3": "V", "4": "E", "5": "V", "6": "E", "7": "V", "8": "V", "9": "L", "10": "L", "11": "E", "12": "L", "13": "L", "14": "L", "15": "V", "16": "E", "17": "E", "18": "V", "19": "L", "20": "E", "21": "L", "22": "L", "23": "L", "24": "V", "25": "L", "26": "L", "27": "L", "28": "E", "29": "L", "30": "V", "31": "L", "32": "V", "33": "L", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "V", "41": "L", "42": "L", "43": "E", "44": "V", "45": "L", "46": "E", "47": "V", "48": "L", "49": "E", "50": "L", "51": "L", "52": "V", "53": "V", "54": "E", "55": "V", "56": "V", "57": "V", "58": "L", "59": "E", "60": "L", "61": "E", "62": "L", "63": "E", "64": "L", "65": "V", "66": "E", "67": "V", "68": "L", "69": "E", "70": "E", "71": "L", "72": "V"}, {"Nombre": "ulises", "1": "E", "2": "L", "3": "E", "4": "L", "5": "V", "6": "L", "7": "E", "8": "V", "9": "L", "10": "L", "11": "V", "12": "L", "13": "L", "14": "L", "15": "V", "16": "L", "17": "L", "18": "V", "19": "L", "20": "L", "21": "L", "22": "L", "23": "V", "24": "V", "25": "L", "26": "L", "27": "E", "28": "L", "29": "L", "30": "E", "31": "L", "32": "V", "33": "L", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "E", "41": "L", "42": "L", "43": "L", "44": "V", "45": "L", "46": "L", "47": "V", "48": "L", "49": "E", "50": "L", "51": "E", "52": "V", "53": "V", "54": "V", "55": "L", "56": "V", "57": "V", "58": "V", "59": "V", "60": "L", "61": "V", "62": "E", "63": "E", "64": "V", "65": "V", "66": "V", "67": "V", "68": "L", "69": "V", "70": "V", "71": "V", "72": "V"}, {"Nombre": "didier", "1": "L", "2": "L", "3": "E", "4": "L", "5": "L", "6": "L", "7": "V", "8": "E", "9": "L", "10": "V", "11": "L", "12": "L", "13": "L", "14": "L", "15": "E", "16": "V", "17": "L", "18": "V", "19": "L", "20": "E", "21": "L", "22": "L", "23": "E", "24": "V", "25": "L", "26": "L", "27": "V", "28": "L", "29": "L", "30": "E", "31": "L", "32": "E", "33": "V", "34": "L", "35": "V", "36": "V", "37": "L", "38": "L", "39": "E", "40": "L", "41": "L", "42": "L", "43": "L", "44": "E", "45": "L", "46": "L", "47": "V", "48": "V", "49": "L", "50": "V", "51": "L", "52": "V", "53": "V", "54": "V", "55": "L", "56": "V", "57": "E", "58": "L", "59": "V", "60": "E", "61": "V", "62": "E", "63": "L", "64": "V", "65": "V", "66": "E", "67": "V", "68": "E", "69": "V", "70": "E", "71": "L", "72": "V"}, {"Nombre": "victoria", "1": "L", "2": "L", "3": "E", "4": "L", "5": "V", "6": "L", "7": "V", "8": "E", "9": "L", "10": "L", "11": "L", "12": "L", "13": "L", "14": "L", "15": "E", "16": "V", "17": "L", "18": "V", "19": "L", "20": "L", "21": "L", "22": "L", "23": "L", "24": "V", "25": "V", "26": "E", "27": "L", "28": "L", "29": "L", "30": "L", "31": "L", "32": "V", "33": "E", "34": "L", "35": "V", "36": "V", "37": "L", "38": "L", "39": "L", "40": "L", "41": "L", "42": "L", "43": "V", "44": "V", "45": "L", "46": "L", "47": "V", "48": "V", "49": "E", "50": "L", "51": "L", "52": "V", "53": "L", "54": "V", "55": "V", "56": "V", "57": "V", "58": "E", "59": "V", "60": "E", "61": "V", "62": "L", "63": "E", "64": "V", "65": "V", "66": "L", "67": "V", "68": "E", "69": "V", "70": "L", "71": "L", "72": "V"}, {"Nombre": "eduardos", "1": "L", "2": "L", "3": "E", "4": "L", "5": "V", "6": "V", "7": "L", "8": "V", "9": "L", "10": "V", "11": "L", "12": "L", "13": "L", "14": "E", "15": "V", "16": "L", "17": "L", "18": "E", "19": "L", "20": "L", "21": "L", "22": "L", "23": "L", "24": "V", "25": "L", "26": "L", "27": "L", "28": "E", "29": "L", "30": "V", "31": "L", "32": "L", "33": "E", "34": "L", "35": "L", "36": "V", "37": "L", "38": "L", "39": "L", "40": "V", "41": "L", "42": "L", "43": "L", "44": "V", "45": "L", "46": "L", "47": "V", "48": "L", "49": "L", "50": "L", "51": "L", "52": "V", "53": "V", "54": "V", "55": "V", "56": "L", "57": "V", "58": "L", "59": "L", "60": "L", "61": "V", "62": "L", "63": "V", "64": "E", "65": "V", "66": "L", "67": "V", "68": "L", "69": "V", "70": "V", "71": "L", "72": "V"}];
-
-
-    const mapaResultados = {};
-
-
-    resultados.forEach(r=>{
-        if(r.partido && r.resultado){
-            mapaResultados[r.partido.trim()] =
-            r.resultado.trim().toUpperCase();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
         }
-    });
+        .font-sports {
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .fifa-card {
+            background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%);
+            border: 3px solid #f3e0a3;
+            box-shadow: 0 10px 25px rgba(184, 135, 40, 0.3);
+            position: relative;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%);
+        }
+        .fifa-card-silver {
+            background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #4b5563 100%);
+            border: 3px solid #f3f4f6;
+            box-shadow: 0 10px 25px rgba(156, 163, 175, 0.3);
+        }
+        .fifa-card-bronze {
+            background: linear-gradient(135deg, #ca8a04 0%, #a16207 50%, #78350f 100%);
+            border: 3px solid #fef08a;
+            box-shadow: 0 10px 25px rgba(161, 98, 7, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+        @keyframes leader-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.5); border-color: #fbbf24; }
+            50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.9); border-color: #fff; }
+        }
+        .leader-flash {
+            animation: leader-glow 2s infinite;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 bg-slate-950">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <header class="bg-slate-900 border-l-8 border-yellow-500 p-6 rounded-lg shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider font-sports text-white flex items-center gap-3">
+                    <i class="fa-solid fa-trophy text-yellow-500 animate-bounce"></i> ⚽ QUINIELA MUNDIAL 2026
+                </h1>
+                <p id="last-updated" class="text-xs md:text-sm font-semibold tracking-widest text-slate-400 mt-1 font-sports uppercase">
+                    ACTUALIZADO: CARGANDO DATOS...
+                </p>
+            </div>
+            <div class="bg-slate-800 px-4 py-2 rounded-full border border-slate-700 text-xs font-bold text-yellow-400 font-sports tracking-wide">
+                <i class="fa-solid fa-crown mr-1"></i> VERSIÓN PREMIUM STADIUM
+            </div>
+        </header>
 
+        <div id="error-banner" class="hidden bg-red-900/90 border-2 border-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-4">
+            <i class="fa-solid fa-circle-exclamation text-3xl text-red-400"></i>
+            <div>
+                <p class="font-bold text-lg uppercase tracking-wide">⚠️ REVISIÓN DE ENLACE EN GITHUB</p>
+                <p class="text-sm text-red-200 mt-1" id="error-text">Ocurrió un error al cargar los datos.</p>
+            </div>
+        </div>
 
-    let ranking=[];
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 font-sports">
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🏆 Líder Actual</p>
+                    <p id="kpi-leader" class="text-xl md:text-2xl font-black text-yellow-400 mt-1">-</p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-medal"></i></div>
+            </div>
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">⚽ Jugados</p>
+                    <p id="kpi-played" class="text-2xl md:text-3xl font-black text-emerald-400 mt-1">0 <span class="text-xs text-slate-500 font-normal">/ 72</span></p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-square-poll-vertical"></i></div>
+            </div>
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🎯 Máx Aciertos</p>
+                    <p id="kpi-hits" class="text-2xl md:text-3xl font-black text-cyan-400 mt-1">0</p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-bullseye"></i></div>
+            </div>
+            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">👥 Part. Totales</p>
+                    <p id="kpi-participants" class="text-2xl md:text-3xl font-black text-purple-400 mt-1">0</p>
+                </div>
+                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-users"></i></div>
+            </div>
+        </section>
 
+        <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
+            <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
+                <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO OFICIAL DE GANADORES
+            </h2>
+            <div class="grid grid-cols-3 max-w-2xl mx-auto items-end pt-12 font-sports text-center">
+                <div class="flex flex-col items-center">
+                    <div id="podium-2-names" class="text-sm font-bold text-slate-300 mb-2 truncate max-w-full px-1">🥈 -</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-slate-400 h-24 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-2xl font-black text-slate-400">2°</span>
+                        <span class="text-xs font-bold text-slate-500">PLATA</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fa-solid fa-crown text-yellow-400 text-2xl animate-pulse mb-1"></i>
+                    <div id="podium-1-names" class="text-base font-extrabold text-yellow-400 mb-2 truncate max-w-full px-1">🥇 -</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-yellow-500 h-36 rounded-t-lg flex flex-col justify-center items-center shadow-2xl relative leader-flash">
+                        <span class="text-4xl font-black text-yellow-400">1°</span>
+                        <span class="text-xs font-bold text-yellow-500 tracking-widest">CAMPEÓN</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div id="podium-3-names" class="text-sm font-bold text-amber-600 mb-2 truncate max-w-full px-1">🥉 -</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-amber-700 h-16 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-xl font-black text-amber-600">3°</span>
+                        <span class="text-xs font-bold text-amber-700">BRONCE</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    participantes.forEach(p=>{
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
+                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4 flex items-center justify-between">
+                        <span><i class="fa-solid fa-list-ol text-emerald-500 mr-2"></i> RANKING EN TIEMPO REAL</span>
+                    </h3>
+                    <div id="ranking-container" class="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar"></div>
+                </div>
 
+                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
+                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-6">
+                        <i class="fa-solid fa-id-card text-yellow-500 mr-2"></i> TARJETAS FIFA WORLD CUP TOP 3
+                    </h3>
+                    <div id="fifa-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-center"></div>
+                </div>
+            </div>
 
-        let puntos=0;
-        let jugados=0;
+            <div class="space-y-6">
+                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
+                    <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-cyan-500"></i> 🏆 PROBABILIDAD DE CAMPEÓN
+                    </h3>
+                    <div id="prob-container" class="space-y-4"></div>
+                </div>
 
+                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
+                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-percent text-purple-500"></i> TOP PICKS & TENDENCIAS
+                    </h3>
+                    <select id="match-select" class="w-full bg-slate-800 border border-slate-700 text-white rounded px-3 py-2 font-sports text-sm outline-none focus:border-purple-500 mb-4"></select>
+                    <div id="match-picks-display" class="bg-slate-950 p-4 rounded-lg border border-slate-800 font-sports space-y-3"></div>
+                </div>
+            </div>
+        </div>
 
-        Object.keys(mapaResultados).forEach(partido=>{
+        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
+            <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4">
+                <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÓN HISTÓRICA DE CLASIFICACIÓN
+            </h3>
+            <div class="h-80 w-full"><canvas id="evolutionChart"></canvas></div>
+        </section>
 
+        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
+            <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2">
+                <i class="fa-solid fa-fire text-orange-500 mr-2"></i> MAPA DE CALOR DE PARTIDOS
+            </h3>
+            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-96">
+                <table class="w-full border-collapse text-left text-xs font-sports">
+                    <thead><tr id="heatmap-header" class="bg-slate-950 text-slate-400 uppercase tracking-wider sticky top-0 z-10 border-b border-slate-800"></tr></thead>
+                    <tbody id="heatmap-body" class="divide-y divide-slate-800"></tbody>
+                </table>
+            </div>
+        </section>
 
-            if(mapaResultados[partido]!=""){
+    </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Construye la URL base absoluta de tu repositorio ssmapas en GitHub Pages
+            const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+            let chartInstance = null;
 
-                jugados++;
+            // Función para interpretar el texto CSV
+            function procesarMatrizCSV(text) {
+                if (!text) return [];
+                if (text.charCodeAt(0) === 0xFEFF) { text = text.substr(1); } // Quitar el BOM invisible de Excel
+                return text.split(/\r?\n|\r/)
+                           .map(line => line.split(',').map(cell => cell.replace(/^["']|["']$/g, '').trim()))
+                           .filter(row => row.length > 0 && row[0] !== '');
+            }
 
+            // Función asistente "leerCSV" adaptativa que busca variaciones en nombres por si acaso
+            async function leerCSV(nombresPosibles) {
+                for (let nombre of nombresPosibles) {
+                    try {
+                        let response = await fetch(baseUrl + nombre + '?nocache=' + new Date().getTime());
+                        if (response.ok) {
+                            let text = await response.text();
+                            return { text: text, headers: response.headers };
+                        }
+                    } catch (e) {
+                        console.log(`Intento fallido para ${nombre}`);
+                    }
+                }
+                throw new Error(`No se pudo leer el archivo de opciones [${nombresPosibles.join(", ")}].`);
+            }
 
-                if(
-                    p[partido] &&
-                    p[partido].trim().toUpperCase()
-                    ==
-                    mapaResultados[partido]
-                ){
-                    puntos++;
+            async function actualizar() {
+                try {
+                    // Lee los archivos de forma segura probando combinaciones en singular, plural y mayúsculas
+                    const partidos = await leerCSV(["partidos.csv", "Partidos.csv"]);
+                    const resultados = await leerCSV(["resultado.csv", "Resultado.csv", "resultados.csv"]);
+                    const participantes = await leerCSV(["resultado_participantes.csv", "resultados_participantes.csv", "Resultado_participantes.csv"]);
+
+                    // Extraer fecha de actualización
+                    let d1 = new Date(partidos.headers.get('Last-Modified') || Date.now());
+                    let d2 = new Date(resultados.headers.get('Last-Modified') || Date.now());
+                    let d3 = new Date(participantes.headers.get('Last-Modified') || Date.now());
+                    let latestDate = new Date(Math.max(d1, d2, d3));
+                    
+                    const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+                    let day = latestDate.getDate().toString().padStart(2, '0');
+                    let month = months[latestDate.getMonth()];
+                    let year = latestDate.getFullYear();
+                    let hours = latestDate.getHours().toString().padStart(2, '0');
+                    let minutes = latestDate.getMinutes().toString().padStart(2, '0');
+                    document.getElementById("last-updated").textContent = `ACTUALIZADO: ${day} ${month} ${year} ${hours}:${minutes}`;
+
+                    // Procesar partidos
+                    let partidosRows = procesarMatrizCSV(partidos.text);
+                    let partidosMap = {};
+                    for(let i=1; i<partidosRows.length; i++) {
+                        let row = partidosRows[i];
+                        if(row.length < 2) continue;
+                        let num = parseInt(row[0]);
+                        let abbr = row[1] ? row[1].toUpperCase() : `P${num}`;
+                        if(!isNaN(num)) partidosMap[num] = abbr;
+                    }
+
+                    // Procesar resultados oficiales
+                    let resultadoRows = procesarMatrizCSV(resultados.text);
+                    let resultadosMap = {};
+                    for(let i=1; i<resultadoRows.length; i++) {
+                        let row = resultadoRows[i];
+                        if(row.length < 2) continue;
+                        let num = parseInt(row[0]);
+                        let res = row[1] ? row[1].toUpperCase() : '';
+                        if(!isNaN(num) && res) resultadosMap[num] = res;
+                    }
+                    let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
+                    let numPlayed = playedMatchIds.length;
+
+                    // Procesar participantes
+                    let participantesRows = procesarMatrizCSV(participantes.text);
+                    let pHeader = participantesRows[0];
+                    let participantsDataList = [];
+                    for(let i=1; i<participantesRows.length; i++) {
+                        let row = participantesRows[i];
+                        if(row.length < 2) continue;
+                        let name = row[0].toUpperCase();
+                        let preds = {};
+                        for(let j=1; j<row.length; j++) {
+                            let mNum = parseInt(pHeader[j]);
+                            if(!isNaN(mNum)) preds[mNum] = row[j] ? row[j].toUpperCase() : '';
+                        }
+                        participantsDataList.push({nombre: name, preds: preds});
+                    }
+
+                    // Calcular Historial de Clasificación
+                    let historyPoints = {};
+                    let historyRanks = {};
+                    participantsDataList.forEach(p => {
+                        historyPoints[p.nombre] = [0];
+                        historyRanks[p.nombre] = [1];
+                    });
+
+                    playedMatchIds.forEach(mId => {
+                        let actual = resultadosMap[mId];
+                        participantsDataList.forEach(p => {
+                            let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                            let isCorrect = (p.preds[mId] === actual);
+                            historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
+                        });
+
+                        let stepScores = participantsDataList.map(p => ({
+                            nombre: p.nombre,
+                            puntos: historyPoints[p.nombre][historyPoints[p.nombre].length - 1]
+                        })).sort((a,b) => b.puntos - a.puntos);
+
+                        let r = 1;
+                        stepScores.forEach((item, idx) => {
+                            if(idx > 0 && item.puntos < stepScores[idx-1].puntos) r = idx + 1;
+                            historyRanks[item.nombre].push(r);
+                        });
+                    });
+
+                    // Estadísticas Finales individuales
+                    let maxHitsGlobal = 0;
+                    let finalParticipants = participantsDataList.map(p => {
+                        let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                        if(pts > maxHitsGlobal) maxHitsGlobal = pts;
+
+                        let maxStreak = 0;
+                        let currStreak = 0;
+                        let heatmap = [];
+
+                        for(let m=1; m<=72; m++) {
+                            if(resultadosMap[m]) {
+                                if(p.preds[m] === resultadosMap[m]) {
+                                    currStreak++;
+                                    if(currStreak > maxStreak) maxStreak = currStreak;
+                                    heatmap.push('✅');
+                                } else {
+                                    currStreak = 0;
+                                    heatmap.push('❌');
+                                }
+                            } else {
+                                heatmap.push('');
+                            }
+                        }
+
+                        let trend = '●';
+                        let trendVal = 0;
+                        let rHistory = historyRanks[p.nombre];
+                        if(rHistory.length > 1) {
+                            let currR = rHistory[rHistory.length - 1];
+                            let prevR = rHistory[rHistory.length - 2];
+                            if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
+                            else if(currR > prevR) { trend = '▼'; trendVal = currR - prevR; }
+                        }
+
+                        return {
+                            nombre: p.nombre,
+                            puntos: pts,
+                            efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
+                            trend: trend,
+                            trendVal: trendVal,
+                            maxStreak: maxStreak,
+                            heatmap: heatmap,
+                            preds: p.preds
+                        };
+                    }).sort((a,b) => b.puntos - a.puntos);
+
+                    // Renderizar KPIs
+                    let topPts = finalParticipants[0].puntos;
+                    let leaders = finalParticipants.filter(p => p.puntos === topPts).map(p => p.nombre);
+                    document.getElementById("kpi-leader").textContent = leaders.join(" / ");
+                    document.getElementById("kpi-played").innerHTML = `${numPlayed} <span class="text-xs text-slate-500 font-normal">/ 72</span>`;
+                    document.getElementById("kpi-hits").textContent = maxHitsGlobal;
+                    document.getElementById("kpi-participants").textContent = finalParticipants.length;
+
+                    // Podio Oficial Densa Grupal
+                    let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
+                    let pos1 = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ");
+                    let pos2 = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "-";
+                    let pos3 = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => p.nombre).join(", ") : "-";
+                    
+                    document.getElementById("podium-1-names").textContent = pos1 || "-";
+                    document.getElementById("podium-2-names").textContent = pos2 || "-";
+                    document.getElementById("podium-3-names").textContent = pos3 || "-";
+
+                    // Renderizar Ranking
+                    let rankingContainer = document.getElementById("ranking-container");
+                    rankingContainer.innerHTML = "";
+                    let topScore = uniqueScores[0] || 1;
+                    
+                    finalParticipants.forEach((p, index) => {
+                        let pct = topScore > 0 ? (p.puntos / topScore) * 100 : 0;
+                        let arrowColor = p.trend === '▲' ? 'text-green-400' : p.trend === '▼' ? 'text-red-400' : 'text-slate-500';
+                        let arrowIcon = p.trend === '▲' ? 'fa-arrow-up' : p.trend === '▼' ? 'fa-arrow-down' : 'fa-minus';
+                        let leaderStyle = index === 0 ? 'border-l-4 border-yellow-500 bg-slate-900 shadow-yellow-500/10 shadow-lg' : 'bg-slate-900/60';
+                        
+                        let rowHtml = `
+                            <div class="flex items-center justify-between p-3 rounded-lg ${leaderStyle} border border-slate-800 transition hover:bg-slate-800/80">
+                                <div class="flex items-center gap-3 w-1/3">
+                                    <span class="text-sm font-bold w-6 text-slate-400">${index + 1}</span>
+                                    <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400' : 'text-slate-200'}">${p.nombre}</span>
+                                    <span class="${arrowColor} text-xs flex items-center font-bold">
+                                        <i class="fa-solid ${arrowIcon} mr-1 text-[10px]"></i>${p.trendVal > 0 ? p.trendVal : ''}
+                                    </span>
+                                </div>
+                                <div class="w-1/2 px-4 hidden sm:block">
+                                    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-400' : 'bg-gradient-to-r from-emerald-500 to-cyan-400'}" style="width: ${pct}%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-right font-sports font-bold text-slate-200 w-1/6">
+                                    <span class="text-lg text-white font-black">${p.puntos}</span> <span class="text-xs text-slate-500">PTS</span>
+                                </div>
+                            </div>
+                        `;
+                        rankingContainer.insertAdjacentHTML('beforeend', rowHtml);
+                    });
+
+                    // Renderizar Tarjetas FIFA
+                    let fifaContainer = document.getElementById("fifa-cards-container");
+                    fifaContainer.innerHTML = "";
+                    for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
+                        let p = finalParticipants[i];
+                        let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
+                        let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉";
+                        let trendDisplay = p.trend === '▲' ? `+${p.trendVal} POS` : p.trend === '▼' ? `-${p.trendVal} POS` : '= MANT';
+                        
+                        let cardHtml = `
+                            <div class="${cardClass} p-5 text-center font-sports text-slate-950 flex flex-col justify-between h-72">
+                                <div>
+                                    <div class="text-2xl">${medal}</div>
+                                    <div class="text-xl font-black uppercase tracking-wider mt-1 border-b border-black/20 pb-1">${p.nombre}</div>
+                                </div>
+                                <div class="my-auto space-y-2">
+                                    <div>
+                                        <span class="text-3xl font-black">${p.puntos}</span>
+                                        <span class="text-sm font-bold block -mt-1 uppercase tracking-tight">PUNTOS</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 text-xs font-bold bg-black/10 rounded p-2 text-left gap-y-1">
+                                        <div>EFECTIVIDAD:</div><div class="text-right">${p.efectividad}%</div>
+                                        <div>TENDENCIA:</div><div class="text-right">${trendDisplay}</div>
+                                    </div>
+                                </div>
+                                <div class="bg-black/90 text-yellow-400 rounded py-1 px-2 text-xs font-bold flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-fire text-orange-500"></i> ${p.maxStreak} ACIERTOS SEG.
+                                </div>
+                            </div>
+                        `;
+                        fifaContainer.insertAdjacentHTML('beforeend', cardHtml);
+                    }
+
+                    // Simulación Probabilidad (Monte Carlo)
+                    let winCounts = {};
+                    finalParticipants.forEach(p => winCounts[p.nombre] = 0);
+                    
+                    let remainingMatches = [];
+                    for(let m=1; m<=72; m++) {
+                        if(!resultadosMap[m]) remainingMatches.push(m);
+                    }
+
+                    let totalSims = remainingMatches.length > 0 ? 1000 : 1;
+                    if(remainingMatches.length > 0) {
+                        const outcomes = ['L', 'E', 'V'];
+                        for(let s=0; s<totalSims; s++) {
+                            let simScores = {};
+                            finalParticipants.forEach(p => simScores[p.nombre] = p.puntos);
+                            
+                            remainingMatches.forEach(mId => {
+                                let randRes = outcomes[Math.floor(Math.random()*3)];
+                                finalParticipants.forEach(p => {
+                                    if(p.preds[mId] === randRes) simScores[p.nombre]++;
+                                });
+                            });
+                            
+                            let maxS = -1;
+                            let winners = [];
+                            for(let name in simScores) {
+                                if(simScores[name] > maxS) { maxS = simScores[name]; winners = [name]; }
+                                else if(simScores[name] === maxS) { winners.push(name); }
+                            }
+                            winners.forEach(w => winCounts[w] += (1 / winners.length));
+                        }
+                    } else {
+                        let topPts = finalParticipants[0] ? finalParticipants[0].puntos : 0;
+                        let leaders = finalParticipants.filter(p => p.puntos === topPts);
+                        leaders.forEach(l => winCounts[l.nombre] = 1 / leaders.length);
+                    }
+
+                    let probabilities = finalParticipants.map(p => ({
+                        nombre: p.nombre,
+                        prob: (winCounts[p.nombre] / totalSims) * 100
+                    })).sort((a,b) => b.prob - a.prob);
+
+                    let probContainer = document.getElementById("prob-container");
+                    probContainer.innerHTML = "";
+                    let displayProbs = [];
+                    let otherSum = 0;
+                    
+                    probabilities.forEach((p, idx) => {
+                        if(idx < 3) displayProbs.push(p);
+                        else otherSum += p.prob;
+                    });
+                    if(probabilities.length > 3 && otherSum > 0) {
+                        displayProbs.push({nombre: "OTROS", prob: otherSum});
+                    }
+
+                    displayProbs.forEach(p => {
+                        let roundedProb = Math.round(p.prob);
+                        let barColor = p.nombre === 'OTROS' ? 'bg-slate-600' : 'bg-cyan-500';
+                        let probHtml = `
+                            <div>
+                                <div class="flex justify-between font-bold text-sm text-slate-300 mb-1">
+                                    <span>${p.nombre}</span>
+                                    <span class="text-cyan-400 font-black">${roundedProb}%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 rounded-full h-2">
+                                    <div class="${barColor} h-2 rounded-full transition-all duration-500" style="width: ${roundedProb}%"></div>
+                                </div>
+                            </div>
+                        `;
+                        probContainer.insertAdjacentHTML('beforeend', probHtml);
+                    });
+
+                    // Top Picks
+                    let topPicksData = {};
+                    for(let m=1; m<=72; m++) {
+                        let counts = {L:0, E:0, V:0};
+                        let total = 0;
+                        finalParticipants.forEach(p => {
+                            let pr = p.preds[m];
+                            if(counts[pr] !== undefined) { counts[pr]++; total++; }
+                        });
+                        let label = partidosMap[m] || `PARTIDO ${m}`;
+                        topPicksData[m] = {
+                            label: label,
+                            L: total > 0 ? Math.round((counts.L/total)*100) : 0,
+                            E: total > 0 ? Math.round((counts.E/total)*100) : 0,
+                            V: total > 0 ? Math.round((counts.V/total)*100) : 0,
+                            actual: resultadosMap[m] || null
+                        };
+                    }
+
+                    let matchSelect = document.getElementById("match-select");
+                    matchSelect.innerHTML = "";
+                    for(let m=1; m<=72; m++) {
+                        if(partidosMap[m]) {
+                            let statusText = topPicksData[m].actual ? `(FINAL: ${topPicksData[m].actual})` : `(PENDIENTE)`;
+                            let opt = document.createElement("option");
+                            opt.value = m;
+                            opt.textContent = `PARTIDO ${m}: ${topPicksData[m].label} ${statusText}`;
+                            matchSelect.appendChild(opt);
+                        }
+                    }
+
+                    let targetMatch = remainingMatches.length > 0 ? remainingMatches[0] : 1;
+                    matchSelect.value = targetMatch;
+
+                    function renderMatchPicks(mId) {
+                        let data = topPicksData[mId];
+                        let display = document.getElementById("match-picks-display");
+                        if(!data) return;
+                        
+                        let outcomeInfo = data.actual ? `<span class="bg-emerald-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded ml-2">REAL: ${data.actual}</span>` : `<span class="bg-slate-800 text-slate-400 font-bold text-xs px-2 py-0.5 rounded ml-2">PENDIENTE</span>`;
+                        
+                        display.innerHTML = `
+                            <div class="text-sm font-black text-white uppercase tracking-wider mb-3 flex items-center justify-between">
+                                <span>${data.label}</span> ${outcomeInfo}
+                            </div>
+                            <div class="space-y-2 text-xs font-bold text-slate-300">
+                                <div>
+                                    <div class="flex justify-between mb-1"><span>L (LOCAL)</span><span>${data.L}%</span></div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                                        <div class="bg-purple-500 h-2.5 rounded-full" style="width: ${data.L}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1"><span>E (EMPATE)</span><span>${data.E}%</span></div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                                        <div class="bg-amber-500 h-2.5 rounded-full" style="width: ${data.E}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1"><span>V (VISITANTE)</span><span>${data.V}%</span></div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                                        <div class="bg-blue-500 h-2.5 rounded-full" style="width: ${data.V}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    renderMatchPicks(targetMatch);
+                    matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
+
+                    // Mapa de Calor Tabla
+                    let heatmapHeader = document.getElementById("heatmap-header");
+                    let heatmapBody = document.getElementById("heatmap-body");
+                    heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">PARTICIPANTE</th>`;
+                    
+                    for(let m=1; m<=72; m++) {
+                        if(partidosMap[m]) {
+                            let abbr = partidosMap[m];
+                            heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-3 text-center min-w-[70px] border-l border-slate-900 font-bold">${abbr}</th>`);
+                        }
+                    }
+
+                    heatmapBody.innerHTML = "";
+                    finalParticipants.forEach(p => {
+                        let rowHtml = `<tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3 font-extrabold text-slate-200 bg-slate-900 sticky left-0 z-10 font-sports tracking-wide border-r border-slate-800 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">${p.nombre}</td>`;
+                        
+                        for(let m=1; m<=72; m++) {
+                            if(partidosMap[m]) {
+                                let cell = p.heatmap[m-1];
+                                let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/20' : cell === '❌' ? 'text-red-400 bg-red-950/20' : 'text-slate-600';
+                                let predText = p.preds[m] || '-';
+                                rowHtml += `<td class="p-2 text-center border-l border-slate-800 ${colorClass}">
+                                    <div class="font-black text-[11px]">${predText}</div>
+                                    <div class="text-[10px] mt-0.5">${cell}</div>
+                               td>`;
+                            }
+                        }
+                        rowHtml += `</tr>`;
+                        heatmapBody.insertAdjacentHTML('beforeend', rowHtml);
+                    });
+
+                    // Gráfica Histórica
+                    let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id])];
+                    let chartDatasets = finalParticipants.map((p, idx) => {
+                        let rHistory = historyRanks[p.nombre];
+                        const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899', '#84cc16'];
+                        let color = colors[idx % colors.length];
+                        return {
+                            label: p.nombre,
+                            data: rHistory,
+                            borderColor: color,
+                            backgroundColor: color + '11',
+                            borderWidth: idx === 0 ? 4 : 2,
+                            tension: 0.2,
+                            pointRadius: 3
+                        };
+                    });
+
+                    if(chartInstance) chartInstance.destroy();
+                    let ctx = document.getElementById('evolutionChart').getContext('2d');
+                    chartInstance = new Chart(ctx, {
+                        type: 'line',
+                        data: { labels: chartLabels, datasets: chartDatasets },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'Montserrat', size: 10 } } },
+                                y: {
+                                    reversed: true,
+                                    min: 1,
+                                    grid: { color: '#1e293b' },
+                                    ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold', size: 12 } }
+                                }
+                            },
+                            plugins: {
+                                legend: { position: 'top', labels: { color: '#f3f4f6', font: { family: 'Montserrat', weight: '600', size: 11 } } }
+                            }
+                        }
+                    });
+
+                } catch (err) {
+                    console.error("Error capturado:", err);
+                    document.getElementById("error-text").textContent = `Error: ${err.message}`;
+                    document.getElementById("error-banner").classList.remove("hidden");
                 }
             }
+
+            actualizar();
         });
-
-
-        ranking.push({
-            nombre:p.Nombre,
-            puntos,
-            porcentaje:
-            jugados>0
-            ? ((puntos/jugados)*100).toFixed(1)
-            : 0
-        });
-
-
-    });
-
-
-    
-ranking.sort((a,b)=>b.puntos-a.puntos || a.nombre.localeCompare(b.nombre));
-
-const puntosUnicos=[...new Set(ranking.map(x=>x.puntos))].sort((a,b)=>b-a);
-
-ranking.forEach(p=>{
-    p.posicion = puntosUnicos.indexOf(p.puntos)+1;
-});
-
-
-
-    document.getElementById("lider").innerText =
-    ranking[0]?.nombre?.toUpperCase() || "-";
-
-
-    document.getElementById("puntosLider").innerText =
-    ranking[0]?.puntos || 0;
-
-
-    document.getElementById("participantes").innerText =
-    ranking.length;
-
-
-    document.getElementById("partidosJugados").innerText =
-    Object.keys(mapaResultados).length;
-
-
-    
-let podio="";
-
-const primeros = ranking.filter(x=>x.posicion===1);
-const segundos = ranking.filter(x=>x.posicion===2);
-const terceros = ranking.filter(x=>x.posicion===3);
-
-const grupos=[
-    {lista:primeros,clase:"oro",titulo:"🥇 PRIMER LUGAR"},
-    {lista:segundos,clase:"plata",titulo:"🥈 SEGUNDO LUGAR"},
-    {lista:terceros,clase:"bronce",titulo:"🥉 TERCER LUGAR"}
-];
-
-grupos.forEach(g=>{
-    if(g.lista.length){
-        podio += `
-        <div class="puesto ${g.clase}">
-            <h2>${g.titulo}</h2>
-            ${g.lista.map(p=>`<div><strong>${p.nombre.toUpperCase()}</strong></div>`).join("")}
-            <br>
-            <strong>${g.lista[0].puntos} pts</strong>
-            <div>${g.lista[0].porcentaje}% acierto</div>
-        </div>`;
-    }
-});
-
-document.getElementById("podio").innerHTML=podio;
-
-
-
-    let filas="";
-
-
-    ranking.forEach((p,i)=>{
-
-
-        filas+=`
-        <tr>
-            <td>${p.posicion}</td>
-            <td>${String(p.nombre).toUpperCase()}</td>
-            <td>${p.puntos}</td>
-            <td>${p.porcentaje}%</td>
-        </tr>`;
-    });
-
-
-    document.querySelector("#tablaRanking tbody").innerHTML=filas;
-
-
-    if(window.miGrafica){
-        window.miGrafica.destroy();
-    }
-
-
-    const ctx =
-    document.getElementById("graficaRanking");
-
-
-    window.miGrafica = new Chart(ctx,{
-        type:'bar',
-        data:{
-            labels:ranking.map(x=>x.nombre.toUpperCase()),
-            datasets:[{
-                label:'Aciertos',
-                data:ranking.map(x=>x.puntos)
-            }]
-        },
-        options:{
-            responsive:true,
-            plugins:{
-                legend:{display:false}
-            }
-        }
-    });
-
-
-}
-
-
-actualizar();
-setInterval(actualizar,60000);
-
-
-</script>
-
-
+    </script>
 </body>
 </html>
