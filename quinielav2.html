@@ -166,13 +166,13 @@
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
                     <div>
                         <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
-                            <i class="fa-solid fa-chart-pie text-cyan-500"></i> PROBABILIDAD DE VICTORIA PARTICIPANTE
+                            <i class="fa-solid fa-chart-pie text-cyan-500"></i> PROBABILIDAD DE VICTORIA PARTICIPANTE (TOP 3)
                         </h3>
                         <div id="prob-container" class="space-y-3"></div>
                     </div>
                     <div>
                         <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
-                            <i class="fa-solid fa-square-poll-horizontal text-emerald-400"></i> PROBABILIDAD LÍDER DE SELECCIONES
+                            <i class="fa-solid fa-square-poll-horizontal text-emerald-400"></i> PROBABILIDAD LÍDER DE SELECCIONES (TOP 5)
                         </h3>
                         <div id="team-prob-container" class="space-y-3"></div>
                     </div>
@@ -311,7 +311,6 @@
 
             async function actualizar() {
                 try {
-                    // Ahora cargamos el archivo unificado Mundial2026.csv y la matriz de los participantes
                     const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv"]);
                     const participantes = await leerCSV(["resultado_participantes.csv", "resultados_participantes.csv", "Resultado_participantes.csv"]);
 
@@ -327,7 +326,7 @@
                     let minutes = latestDate.getMinutes().toString().padStart(2, '0');
                     document.getElementById("last-updated").textContent = `ACTUALIZADO: ${day} ${month} ${year} ${hours}:${minutes}`;
 
-                    // Procesar partidos y resultados desde un único archivo unificado
+                    // Procesar partidos unificados
                     let mundialRows = procesarMatrizCSV(mundial.text);
                     let partidosMap = {};
                     let estructuraPartidosOriginal = {};
@@ -340,7 +339,6 @@
                         let idxAbbr = header.indexOf("ABREVIATURA");
                         let idxRes = header.indexOf("RESULTADO");
                         
-                        // Fallback por si acaso cambian minúsculas
                         if (idxNo === -1) idxNo = 0;
                         if (idxAbbr === -1) idxAbbr = 2;
                         if (idxRes === -1) idxRes = 5;
@@ -356,8 +354,6 @@
                                 if (abbr.includes("VS")) {
                                     abbr.split("VS").forEach(e => poolTodasLasSelecciones.add(e.trim()));
                                 }
-                                
-                                // Extraer el resultado en vivo si la celda no está vacía
                                 if (row[idxRes]) {
                                     let res = row[idxRes].toUpperCase().trim();
                                     if (res === 'L' || res === 'E' || res === 'V') {
@@ -371,7 +367,7 @@
                     let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
                     let numPlayed = playedMatchIds.length;
 
-                    // Cálculo de Tabla de Selecciones Completa
+                    // Tabla de Selecciones Completa
                     let tablaEquipos = {};
                     poolTodasLasSelecciones.forEach(team => {
                         tablaEquipos[team] = { g: 0, e: 0, p: 0, pts: 0 };
@@ -384,9 +380,7 @@
                         if (infoEquipos && infoEquipos.includes("VS")) {
                             let bandos = infoEquipos.split("VS").map(e => e.trim());
                             if (bandos.length === 2) {
-                                let local = bandos[0];
-                                let visitante = bandos[1];
-                                
+                                let local = bandos[0]; let visitante = bandos[1];
                                 if (resReal === 'L') {
                                     tablaEquipos[local].g++;
                                     tablaEquipos[visitante].p++;
@@ -411,7 +405,7 @@
                     }
                     arregloEquiposOrdenado.sort((a,b) => b.pts - a.pts || b.g - a.g);
 
-                    // Asignar Podio de Selecciones
+                    // Podio de Selecciones
                     let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
                     let teamPos1 = arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[0]).map(eq => eq.nombre).join(", ");
                     let teamPos2 = uniqueTeamScores.length > 1 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[1]).map(eq => eq.nombre).join(", ") : "-";
@@ -421,7 +415,7 @@
                     document.getElementById("team-podium-2-names").textContent = teamPos2 || "-";
                     document.getElementById("team-podium-3-names").textContent = teamPos3 || "-";
 
-                    // Tarjetas FIFA para Selecciones
+                    // Tarjetas FIFA Selecciones
                     let teamFifaContainer = document.getElementById("team-fifa-cards-container");
                     teamFifaContainer.innerHTML = "";
                     for(let i=0; i<Math.min(3, arregloEquiposOrdenado.length); i++) {
@@ -431,7 +425,7 @@
                         let totalPartidos = eq.g + eq.e + eq.p;
                         let rendimiento = totalPartidos > 0 ? ((eq.pts / (totalPartidos * 3)) * 100).toFixed(0) : 0;
                         
-                        let teamCardHtml = `
+                        teamFifaContainer.insertAdjacentHTML('beforeend', `
                             <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-64">
                                 <div>
                                     <div class="text-xl">${medal}</div>
@@ -447,19 +441,16 @@
                                         <div>RENDIM:</div><div class="text-right">${rendimiento}%</div>
                                     </div>
                                 </div>
-                                <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[11px] font-bold">
-                                    FASE DE GRUPOS EN VIVO
-                                </div>
+                                <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[11px] font-bold">FASE DE GRUPOS EN VIVO</div>
                             </div>
-                        `;
-                        teamFifaContainer.insertAdjacentHTML('beforeend', teamCardHtml);
+                        `);
                     }
 
-                    // Tabla de Posiciones Completa
+                    // Renderizar tabla inferior completa
                     let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
                     teamsLeaderboardBody.innerHTML = "";
                     arregloEquiposOrdenado.forEach((eq, idx) => {
-                        let filaEqHtml = `
+                        teamsLeaderboardBody.insertAdjacentHTML('beforeend', `
                             <tr class="hover:bg-slate-800/30 transition">
                                 <td class="p-3 text-center font-bold text-slate-400">${idx + 1}°</td>
                                 <td class="p-3 font-extrabold text-white tracking-wide">${eq.nombre}</td>
@@ -468,8 +459,7 @@
                                 <td class="p-3 text-center text-slate-300">${eq.p}</td>
                                 <td class="p-3 text-center font-black text-emerald-400 text-base">${eq.pts}</td>
                             </tr>
-                        `;
-                        teamsLeaderboardBody.insertAdjacentHTML('beforeend', filaEqHtml);
+                        `);
                     });
 
                     // Procesar participantes
@@ -489,11 +479,9 @@
                     }
 
                     // Calcular Historial Participantes
-                    let historyPoints = {};
-                    let historyRanks = {};
+                    let historyPoints = {}; let historyRanks = {};
                     participantsDataList.forEach(p => {
-                        historyPoints[p.nombre] = [0];
-                        historyRanks[p.nombre] = [1];
+                        historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1];
                     });
 
                     playedMatchIds.forEach(mId => {
@@ -520,21 +508,17 @@
                     let finalParticipants = participantsDataList.map(p => {
                         let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
                         if(pts > maxHitsGlobal) maxHitsGlobal = pts;
-
                         let maxStreak = 0; let currStreak = 0; let heatmap = [];
 
                         for(let m=1; m<=72; m++) {
                             if(resultadosMap[m]) {
                                 if(p.preds[m] === resultadosMap[m]) {
-                                    currStreak++;
-                                    if(currStreak > maxStreak) maxStreak = currStreak;
+                                    currStreak++; if(currStreak > maxStreak) maxStreak = currStreak;
                                     heatmap.push('✅');
                                 } else {
                                     currStreak = 0; heatmap.push('❌');
                                 }
-                            } else {
-                                heatmap.push('');
-                            }
+                            } else { heatmap.push(''); }
                         }
 
                         let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
@@ -543,14 +527,13 @@
                             if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
                             else if(currR > prevR) { trend = '▼'; trendVal = currR - prevR; }
                         }
-
                         return {
                             nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
                             trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
                         };
                     }).sort((a,b) => b.puntos - a.puntos);
 
-                    // Renderizar KPIs
+                    // KPIs
                     let topPts = finalParticipants[0].puntos;
                     let leaders = finalParticipants.filter(p => p.puntos === topPts).map(p => p.nombre);
                     document.getElementById("kpi-leader").textContent = leaders.join(" / ");
@@ -558,35 +541,28 @@
                     document.getElementById("kpi-hits").textContent = maxHitsGlobal;
                     document.getElementById("kpi-participants").textContent = finalParticipants.length;
 
-                    // Podio Participantes
+                    // Podio Principal
                     let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
-                    let pos1 = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ");
-                    let pos2 = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "-";
-                    let pos3 = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => p.nombre).join(", ") : "-";
-                    
-                    document.getElementById("podium-1-names").textContent = pos1 || "-";
-                    document.getElementById("podium-2-names").textContent = pos2 || "-";
-                    document.getElementById("podium-3-names").textContent = pos3 || "-";
+                    document.getElementById("podium-1-names").textContent = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ") || "-";
+                    document.getElementById("podium-2-names").textContent = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "-";
+                    document.getElementById("podium-3-names").textContent = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => p.nombre).join(", ") : "-";
 
-                    // Ranking List
+                    // Render Ranking List
                     let rankingContainer = document.getElementById("ranking-container");
                     rankingContainer.innerHTML = "";
                     let topScore = uniqueScores[0] || 1;
-                    
                     finalParticipants.forEach((p, index) => {
                         let pct = topScore > 0 ? (p.puntos / topScore) * 100 : 0;
                         let arrowColor = p.trend === '▲' ? 'text-green-400' : p.trend === '▼' ? 'text-red-400' : 'text-slate-500';
                         let arrowIcon = p.trend === '▲' ? 'fa-arrow-up' : p.trend === '▼' ? 'fa-arrow-down' : 'fa-minus';
                         let leaderStyle = index === 0 ? 'border-l-4 border-yellow-500 bg-slate-900 shadow-yellow-500/10 shadow-lg' : 'bg-slate-900/60';
                         
-                        let rowHtml = `
+                        rankingContainer.insertAdjacentHTML('beforeend', `
                             <div class="flex items-center justify-between p-3 rounded-lg ${leaderStyle} border border-slate-800 transition hover:bg-slate-800/80">
                                 <div class="flex items-center gap-3 w-1/3">
                                     <span class="text-sm font-bold w-6 text-slate-400">${index + 1}</span>
                                     <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400' : 'text-slate-200'}">${p.nombre}</span>
-                                    <span class="${arrowColor} text-xs flex items-center font-bold">
-                                        <i class="fa-solid ${arrowIcon} mr-1 text-[10px]"></i>${p.trendVal > 0 ? p.trendVal : ''}
-                                    </span>
+                                    <span class="${arrowColor} text-xs flex items-center font-bold"><i class="fa-solid ${arrowIcon} mr-1 text-[10px]"></i>${p.trendVal > 0 ? p.trendVal : ''}</span>
                                 </div>
                                 <div class="w-1/2 px-4 hidden sm:block">
                                     <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
@@ -597,8 +573,7 @@
                                     <span class="text-lg text-white font-black">${p.puntos}</span> <span class="text-xs text-slate-500">PTS</span>
                                 </div>
                             </div>
-                        `;
-                        rankingContainer.insertAdjacentHTML('beforeend', rowHtml);
+                        `);
                     });
 
                     // Tarjetas FIFA Participantes
@@ -608,9 +583,7 @@
                         let p = finalParticipants[i];
                         let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
                         let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉";
-                        let trendDisplay = p.trend === '▲' ? `+${p.trendVal} POS` : p.trend === '▼' ? `-${p.trendVal} POS` : '= MANT';
-                        
-                        let cardHtml = `
+                        fifaContainer.insertAdjacentHTML('beforeend', `
                             <div class="${cardClass} p-5 text-center font-sports text-slate-950 flex flex-col justify-between h-72">
                                 <div>
                                     <div class="text-2xl">${medal}</div>
@@ -623,18 +596,15 @@
                                     </div>
                                     <div class="grid grid-cols-2 text-xs font-bold bg-black/10 rounded p-2 text-left gap-y-1">
                                         <div>EFECTIVIDAD:</div><div class="text-right">${p.efectividad}%</div>
-                                        <div>TENDENCIA:</div><div class="text-right">${trendDisplay}</div>
+                                        <div>TENDENCIA:</div><div class="text-right">${p.trend === '▲' ? `+${p.trendVal} POS` : p.trend === '▼' ? `-${p.trendVal} POS` : '= MANT'}</div>
                                     </div>
                                 </div>
-                                <div class="bg-black/90 text-yellow-400 rounded py-1 px-2 text-xs font-bold flex items-center justify-center gap-1">
-                                    <i class="fa-solid fa-fire text-orange-500"></i> ${p.maxStreak} ACIERTOS SEG.
-                                </div>
+                                <div class="bg-black/90 text-yellow-400 rounded py-1 px-2 text-xs font-bold flex items-center justify-center gap-1"><i class="fa-solid fa-fire text-orange-500"></i> ${p.maxStreak} ACIERTOS SEG.</div>
                             </div>
-                        `;
-                        fifaContainer.insertAdjacentHTML('beforeend', cardHtml);
+                        `);
                     }
 
-                    // Simulaciones Monte Carlo
+                    // SIMULACIONES DE MONTE CARLO INTEGRADAS
                     let winCounts = {}; let teamWinCounts = {};
                     finalParticipants.forEach(p => winCounts[p.nombre] = 0);
                     poolTodasLasSelecciones.forEach(team => teamWinCounts[team] = 0);
@@ -685,7 +655,7 @@
                         if (arregloEquiposOrdenado[0]) teamWinCounts[arregloEquiposOrdenado[0].nombre] = 1;
                     }
 
-                    // Render bars
+                    // Render bars de Participantes (Top 3)
                     let probabilities = finalParticipants.map(p => ({
                         nombre: p.nombre, prob: (winCounts[p.nombre] / totalSims) * 100
                     })).sort((a,b) => b.prob - a.prob);
@@ -696,39 +666,48 @@
                         let roundedProb = Math.round(p.prob);
                         probContainer.insertAdjacentHTML('beforeend', `
                             <div>
-                                <div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5">
-                                    <span>${p.nombre}</span><span class="text-cyan-400">${roundedProb}%</span>
-                                </div>
+                                <div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5"><span>${p.nombre}</span><span class="text-cyan-400">${roundedProb}%</span></div>
                                 <div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-cyan-500 h-1.5 rounded-full" style="width: ${roundedProb}%"></div></div>
                             </div>
                         `);
                     });
 
+                    // NUEVA LÓGICA CRUZADA: PROBABILIDADES DE SELECCIONES CON FILTRO DE DESEMPATE INTELIGENTE Y TOP 5
                     let teamProbabilities = arregloEquiposOrdenado.map(eq => ({
-                        nombre: eq.nombre, prob: (teamWinCounts[eq.nombre] / totalSims) * 100
-                    })).sort((a,b) => b.prob - a.prob);
+                        nombre: eq.nombre,
+                        prob: (teamWinCounts[eq.nombre] / totalSims) * 100,
+                        ptsReales: eq.pts, // Usados para desempate
+                        gReales: eq.g     // Segundo criterio de desempate real
+                    })).sort((a,b) => b.prob - a.prob || b.ptsReales - a.ptsReales || b.gReales - a.gReales);
 
                     let teamProbContainer = document.getElementById("team-prob-container");
                     teamProbContainer.innerHTML = "";
-                    teamProbabilities.slice(0, 3).forEach(tp => {
+                    
+                    // Filtrar empates masivos y mostrar el Top 5 con ventaja matemática/real
+                    let equiposMostrados = 0;
+                    for (let tp of teamProbabilities) {
                         let roundedTProb = Math.round(tp.prob);
+                        if (roundedTProb < 1 && equiposMostrados >= 5) continue; // Ocultar residuos irrelevantes
+                        if (equiposMostrados >= 5) break;
+
                         teamProbContainer.insertAdjacentHTML('beforeend', `
                             <div>
                                 <div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5">
-                                    <span>${tp.nombre}</span><span class="text-emerald-400">${roundedTProb}%</span>
+                                    <span>${tp.nombre} <span class="text-[9px] text-slate-500 font-normal">(${tp.ptsReales} PTS REALES)</span></span>
+                                    <span class="text-emerald-400">${roundedTProb}%</span>
                                 </div>
                                 <div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-emerald-500 h-1.5 rounded-full" style="width: ${roundedTProb}%"></div></div>
                             </div>
                         `);
-                    });
+                        equiposMostrados++;
+                    }
 
                     // Top Picks
                     let topPicksData = {};
                     for(let m=1; m<=72; m++) {
                         let counts = {L:0, E:0, V:0}; let total = 0;
                         finalParticipants.forEach(p => {
-                            let pr = p.preds[m];
-                            if(counts[pr] !== undefined) { counts[pr]++; total++; }
+                            let pr = p.preds[m]; if(counts[pr] !== undefined) { counts[pr]++; total++; }
                         });
                         let label = partidosMap[m] || `PARTIDO ${m}`;
                         topPicksData[m] = {
@@ -757,27 +736,19 @@
                         if(!data) return;
                         let outcomeInfo = data.actual ? `<span class="bg-emerald-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded ml-2">REAL: ${data.actual}</span>` : `<span class="bg-slate-800 text-slate-400 font-bold text-xs px-2 py-0.5 rounded ml-2">PENDIENTE</span>`;
                         display.innerHTML = `
-                            <div class="text-sm font-black text-white uppercase tracking-wider mb-3 flex items-center justify-between">
-                                <span>${data.label}</span> ${outcomeInfo}
-                            </div>
+                            <div class="text-sm font-black text-white uppercase tracking-wider mb-3 flex items-center justify-between"><span>${data.label}</span> ${outcomeInfo}</div>
                             <div class="space-y-2 text-xs font-bold text-slate-300">
                                 <div>
                                     <div class="flex justify-between mb-1"><span>L (LOCAL)</span><span>${data.L}%</span></div>
-                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
-                                        <div class="bg-purple-500 h-2.5 rounded-full" style="width: ${data.L}%"></div>
-                                    </div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800"><div class="bg-purple-500 h-2.5 rounded-full" style="width: ${data.L}%"></div></div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between mb-1"><span>E (EMPATE)</span><span>${data.E}%</span></div>
-                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
-                                        <div class="bg-amber-500 h-2.5 rounded-full" style="width: ${data.E}%"></div>
-                                    </div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800"><div class="bg-amber-500 h-2.5 rounded-full" style="width: ${data.E}%"></div></div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between mb-1"><span>V (VISITANTE)</span><span>${data.V}%</span></div>
-                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
-                                        <div class="bg-blue-500 h-2.5 rounded-full" style="width: ${data.V}%"></div>
-                                    </div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800"><div class="bg-blue-500 h-2.5 rounded-full" style="width: ${data.V}%"></div></div>
                                 </div>
                             </div>
                         `;
@@ -785,7 +756,7 @@
                     renderMatchPicks(targetMatch);
                     matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
 
-                    // Heatmap
+                    // Heatmap Table
                     let heatmapHeader = document.getElementById("heatmap-header");
                     let heatmapBody = document.getElementById("heatmap-body");
                     heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">PARTICIPANTE</th>`;
@@ -798,15 +769,13 @@
 
                     heatmapBody.innerHTML = "";
                     finalParticipants.forEach(p => {
-                        let rowHtml = `<tr class="hover:bg-slate-800/40 transition">
-                            <td class="p-3 font-extrabold text-slate-200 bg-slate-900 sticky left-0 z-10 font-sports tracking-wide border-r border-slate-800 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">${p.nombre}</td>`;
+                        let rowHtml = `<tr class="hover:bg-slate-800/40 transition"><td class="p-3 font-extrabold text-slate-200 bg-slate-900 sticky left-0 z-10 font-sports tracking-wide border-r border-slate-800 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">${p.nombre}</td>`;
                         for(let m=1; m<=72; m++) {
                             if(partidosMap[m]) {
                                 let cell = p.heatmap[m-1];
                                 let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/20' : cell === '❌' ? 'text-red-400 bg-red-950/20' : 'text-slate-600';
                                 rowHtml += `<td class="p-2 text-center border-l border-slate-800 ${colorClass}">
-                                    <div class="font-black text-[11px]">${p.preds[m] || '-'}</div>
-                                    <div class="text-[10px] mt-0.5">${cell}</div>
+                                    <div class="font-black text-[11px]">${p.preds[m] || '-'}</div><div class="text-[10px] mt-0.5">${cell}</div>
                                 </td>`;
                             }
                         }
@@ -814,7 +783,7 @@
                         heatmapBody.insertAdjacentHTML('beforeend', rowHtml);
                     });
 
-                    // Chart
+                    // Line Chart
                     let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id])];
                     let chartDatasets = finalParticipants.map((p, idx) => {
                         const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899', '#84cc16'];
