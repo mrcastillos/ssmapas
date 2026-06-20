@@ -180,6 +180,31 @@
             </div>
         </div>
 
+        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
+            <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-earth-americas text-emerald-400"></i> 🗺️ TABLA DE SELECCIONES LÍDERES (TOP 5)
+            </h3>
+            <div class="overflow-x-auto border border-slate-800 rounded-lg">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-950 text-slate-400 uppercase tracking-wider text-xs border-b border-slate-800">
+                            <th class="p-3 text-center w-16">POS</th>
+                            <th class="p-3">SELECCIÓN</th>
+                            <th class="p-3 text-center">G</th>
+                            <th class="p-3 text-center">E</th>
+                            <th class="p-3 text-center">P</th>
+                            <th class="p-3 text-center text-emerald-400 font-black">PTS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teams-leaderboard-body" class="divide-y divide-slate-800">
+                        <tr>
+                            <td colspan="6" class="p-4 text-center text-slate-500">Esperando procesamiento de partidos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4">
                 <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÓN HISTÓRICA DE CLASIFICACIÓN
@@ -199,6 +224,15 @@
             </div>
         </section>
 
+        <footer class="bg-slate-900/40 border-t border-slate-800 py-6 text-center rounded-lg space-y-2">
+            <p class="text-slate-400 text-sm font-semibold tracking-wide">
+                Quiniela Mundial 2026 Premium Dashboard &copy; Todos los derechos reservados.
+            </p>
+            <p class="text-yellow-500 font-sports font-bold tracking-widest uppercase text-xs flex items-center justify-center gap-2">
+                <i class="fa-solid fa-camera text-sm"></i> VISITA: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline transition">www.instagram.com/lente.abierto.mx</a>
+            </p>
+        </footer>
+
     </div>
 
     <script>
@@ -214,11 +248,9 @@
                            .filter(row => row.length > 0 && row[0] !== '');
             }
 
-            // Sistema adaptativo con fuerza bruta anti-caché mediante timestamps dinámicos (?nocache=)
             async function leerCSV(nombresPosibles) {
                 for (let nombre of nombresPosibles) {
                     try {
-                        // Genera un número único basado en milisegundos para romper la caché de GitHub de inmediato
                         let urlFuerzaBruta = baseUrl + nombre + '?nocache=' + new Date().getTime();
                         let response = await fetch(urlFuerzaBruta);
                         if (response.ok) {
@@ -254,12 +286,16 @@
                     // Procesar partidos
                     let partidosRows = procesarMatrizCSV(partidos.text);
                     let partidosMap = {};
+                    let estructuraPartidosOriginal = {}; // Para calcular posiciones de selecciones
                     for(let i=1; i<partidosRows.length; i++) {
                         let row = partidosRows[i];
                         if(row.length < 2) continue;
                         let num = parseInt(row[0]);
                         let abbr = row[1] ? row[1].toUpperCase() : `P${num}`;
-                        if(!isNaN(num)) partidosMap[num] = abbr;
+                        if(!isNaN(num)) {
+                            partidosMap[num] = abbr;
+                            estructuraPartidosOriginal[num] = abbr;
+                        }
                     }
 
                     // Procesar resultados oficiales
@@ -274,6 +310,71 @@
                     }
                     let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
                     let numPlayed = playedMatchIds.length;
+
+                    // LÓGICA AGREGADA: CÁLCULO DE TABLA DE SELECCIONES LÍDERES
+                    let tablaEquipos = {};
+                    playedMatchIds.forEach(mId => {
+                        let infoEquipos = estructuraPartidosOriginal[mId]; // Ej: "MEX VS RSA"
+                        let resReal = resultadosMap[mId]; // 'L', 'E' o 'V'
+                        
+                        if (infoEquipos && infoEquipos.includes("VS")) {
+                            let bandos = infoEquipos.split("VS").map(e => e.trim());
+                            if (bandos.length === 2) {
+                                let local = bandos[0];
+                                let visitante = bandos[1];
+                                
+                                if (!tablaEquipos[local]) tablaEquipos[local] = { g: 0, e: 0, p: 0, pts: 0 };
+                                if (!tablaEquipos[visitante]) tablaEquipos[visitante] = { g: 0, e: 0, p: 0, pts: 0 };
+                                
+                                if (resReal === 'L') {
+                                    tablaEquipos[local].g++; local.pts += 3;
+                                    tablaEquipos[visitante].p++;
+                                } else if (resReal === 'V') {
+                                    tablaEquipos[visitante].g++; visitante.pts += 3;
+                                    tablaEquipos[local].p++;
+                                } else if (resReal === 'E') {
+                                    tablaEquipos[local].e++; local.pts += 1;
+                                    tablaEquipos[visitante].e++; visitante.pts += 1;
+                                }
+                            }
+                        }
+                    });
+
+                    // Convertir objeto de equipos a arreglo ordenado
+                    let arregloEquiposOrdenado = [];
+                    for (let equipo in tablaEquipos) {
+                        let eData = tablaEquipos[equipo];
+                        let totalPts = (eData.g * 3) + eData.e; // Asegurar consistencia matemática
+                        arregloEquiposOrdenado.push({
+                            nombre: equipo,
+                            g: eData.g,
+                            e: eData.e,
+                            p: eData.p,
+                            pts: totalPts
+                        });
+                    }
+                    arregloEquiposOrdenado.sort((a,b) => b.pts - a.pts || b.g - a.g);
+
+                    // Renderizar Tabla de Equipos
+                    let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
+                    teamsLeaderboardBody.innerHTML = "";
+                    if (arregloEquiposOrdenado.length === 0) {
+                        teamsLeaderboardBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No hay partidos finalizados cargados en resultado.csv para evaluar países.</td></tr>`;
+                    } else {
+                        arregloEquiposOrdenado.slice(0, 5).forEach((eq, idx) => {
+                            let filaEqHtml = `
+                                <tr class="hover:bg-slate-800/30 transition">
+                                    <td class="p-3 text-center font-bold text-slate-400">${idx + 1}°</td>
+                                    <td class="p-3 font-extrabold text-white tracking-wide">${eq.nombre}</td>
+                                    <td class="p-3 text-center text-slate-300">${eq.g}</td>
+                                    <td class="p-3 text-center text-slate-300">${eq.e}</td>
+                                    <td class="p-3 text-center text-slate-300">${eq.p}</td>
+                                    <td class="p-3 text-center font-black text-emerald-400 text-base">${eq.pts}</td>
+                                </tr>
+                            `;
+                            teamsLeaderboardBody.insertAdjacentHTML('beforeend', filaEqHtml);
+                        });
+                    }
 
                     // Procesar participantes
                     let participantesRows = procesarMatrizCSV(participantes.text);
@@ -396,3 +497,284 @@
                         let leaderStyle = index === 0 ? 'border-l-4 border-yellow-500 bg-slate-900 shadow-yellow-500/10 shadow-lg' : 'bg-slate-900/60';
                         
                         let rowHtml = `
+                            <div class="flex items-center justify-between p-3 rounded-lg ${leaderStyle} border border-slate-800 transition hover:bg-slate-800/80">
+                                <div class="flex items-center gap-3 w-1/3">
+                                    <span class="text-sm font-bold w-6 text-slate-400">${index + 1}</span>
+                                    <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400' : 'text-slate-200'}">${p.nombre}</span>
+                                    <span class="${arrowColor} text-xs flex items-center font-bold">
+                                        <i class="fa-solid ${arrowIcon} mr-1 text-[10px]"></i>${p.trendVal > 0 ? p.trendVal : ''}
+                                    </span>
+                                </div>
+                                <div class="w-1/2 px-4 hidden sm:block">
+                                    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-400' : 'bg-gradient-to-r from-emerald-500 to-cyan-400'}" style="width: ${pct}%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-right font-sports font-bold text-slate-200 w-1/6">
+                                    <span class="text-lg text-white font-black">${p.puntos}</span> <span class="text-xs text-slate-500">PTS</span>
+                                </div>
+                            </div>
+                        `;
+                        rankingContainer.insertAdjacentHTML('beforeend', rowHtml);
+                    });
+
+                    // Renderizar Tarjetas FIFA
+                    let fifaContainer = document.getElementById("fifa-cards-container");
+                    fifaContainer.innerHTML = "";
+                    for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
+                        let p = finalParticipants[i];
+                        let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
+                        let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉";
+                        let trendDisplay = p.trend === '▲' ? `+${p.trendVal} POS` : p.trend === '▼' ? `-${p.trendVal} POS` : '= MANT';
+                        
+                        let cardHtml = `
+                            <div class="${cardClass} p-5 text-center font-sports text-slate-950 flex flex-col justify-between h-72">
+                                <div>
+                                    <div class="text-2xl">${medal}</div>
+                                    <div class="text-xl font-black uppercase tracking-wider mt-1 border-b border-black/20 pb-1">${p.nombre}</div>
+                                </div>
+                                <div class="my-auto space-y-2">
+                                    <div>
+                                        <span class="text-3xl font-black">${p.puntos}</span>
+                                        <span class="text-sm font-bold block -mt-1 uppercase tracking-tight">PUNTOS</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 text-xs font-bold bg-black/10 rounded p-2 text-left gap-y-1">
+                                        <div>EFECTIVIDAD:</div><div class="text-right">${p.efectividad}%</div>
+                                        <div>TENDENCIA:</div><div class="text-right">${trendDisplay}</div>
+                                    </div>
+                                </div>
+                                <div class="bg-black/90 text-yellow-400 rounded py-1 px-2 text-xs font-bold flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-fire text-orange-500"></i> ${p.maxStreak} ACIERTOS SEG.
+                                </div>
+                            </div>
+                        `;
+                        fifaContainer.insertAdjacentHTML('beforeend', cardHtml);
+                    }
+
+                    // Simulación Probabilidad (Monte Carlo)
+                    let winCounts = {};
+                    finalParticipants.forEach(p => winCounts[p.nombre] = 0);
+                    
+                    let remainingMatches = [];
+                    for(let m=1; m<=72; m++) {
+                        if(!resultadosMap[m]) remainingMatches.push(m);
+                    }
+
+                    let totalSims = remainingMatches.length > 0 ? 1000 : 1;
+                    if(remainingMatches.length > 0) {
+                        const outcomes = ['L', 'E', 'V'];
+                        for(let s=0; s<totalSims; s++) {
+                            let simScores = {};
+                            finalParticipants.forEach(p => simScores[p.nombre] = p.puntos);
+                            
+                            remainingMatches.forEach(mId => {
+                                let randRes = outcomes[Math.floor(Math.random()*3)];
+                                finalParticipants.forEach(p => {
+                                    if(p.preds[mId] === randRes) simScores[p.nombre]++;
+                                });
+                            });
+                            
+                            let maxS = -1;
+                            let winners = [];
+                            for(let name in simScores) {
+                                if(simScores[name] > maxS) { maxS = simScores[name]; winners = [name]; }
+                                else if(simScores[name] === maxS) { winners.push(name); }
+                            }
+                            winners.forEach(w => winCounts[w] += (1 / winners.length));
+                        }
+                    } else {
+                        let topPts = finalParticipants[0] ? finalParticipants[0].puntos : 0;
+                        let leaders = finalParticipants.filter(p => p.puntos === topPts);
+                        leaders.forEach(l => winCounts[l.nombre] = 1 / leaders.length);
+                    }
+
+                    let probabilities = finalParticipants.map(p => ({
+                        nombre: p.nombre,
+                        prob: (winCounts[p.nombre] / totalSims) * 100
+                    })).sort((a,b) => b.prob - a.prob);
+
+                    let probContainer = document.getElementById("prob-container");
+                    probContainer.innerHTML = "";
+                    let displayProbs = [];
+                    let otherSum = 0;
+                    
+                    probabilities.forEach((p, idx) => {
+                        if(idx < 3) displayProbs.push(p);
+                        else otherSum += p.prob;
+                    });
+                    if(probabilities.length > 3 && otherSum > 0) {
+                        displayProbs.push({nombre: "OTROS", prob: otherSum});
+                    }
+
+                    displayProbs.forEach(p => {
+                        let roundedProb = Math.round(p.prob);
+                        let barColor = p.nombre === 'OTROS' ? 'bg-slate-600' : 'bg-cyan-500';
+                        let probHtml = `
+                            <div>
+                                <div class="flex justify-between font-bold text-sm text-slate-300 mb-1">
+                                    <span>${p.nombre}</span>
+                                    <span class="text-cyan-400 font-black">${roundedProb}%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 rounded-full h-2">
+                                    <div class="${barColor} h-2 rounded-full transition-all duration-500" style="width: ${roundedProb}%"></div>
+                                </div>
+                            </div>
+                        `;
+                        probContainer.insertAdjacentHTML('beforeend', probHtml);
+                    });
+
+                    // Top Picks
+                    let topPicksData = {};
+                    for(let m=1; m<=72; m++) {
+                        let counts = {L:0, E:0, V:0};
+                        let total = 0;
+                        finalParticipants.forEach(p => {
+                            let pr = p.preds[m];
+                            if(counts[pr] !== undefined) { counts[pr]++; total++; }
+                        });
+                        let label = partidosMap[m] || `PARTIDO ${m}`;
+                        topPicksData[m] = {
+                            label: label,
+                            L: total > 0 ? Math.round((counts.L/total)*100) : 0,
+                            E: total > 0 ? Math.round((counts.E/total)*100) : 0,
+                            V: total > 0 ? Math.round((counts.V/total)*100) : 0,
+                            actual: resultadosMap[m] || null
+                        };
+                    }
+
+                    let matchSelect = document.getElementById("match-select");
+                    matchSelect.innerHTML = "";
+                    for(let m=1; m<=72; m++) {
+                        if(partidosMap[m]) {
+                            let statusText = topPicksData[m].actual ? `(FINAL: ${topPicksData[m].actual})` : `(PENDIENTE)`;
+                            let opt = document.createElement("option");
+                            opt.value = m;
+                            opt.textContent = `PARTIDO ${m}: ${topPicksData[m].label} ${statusText}`;
+                            matchSelect.appendChild(opt);
+                        }
+                    }
+
+                    let targetMatch = remainingMatches.length > 0 ? remainingMatches[0] : 1;
+                    matchSelect.value = targetMatch;
+
+                    function renderMatchPicks(mId) {
+                        let data = topPicksData[mId];
+                        let display = document.getElementById("match-picks-display");
+                        if(!data) return;
+                        
+                        let outcomeInfo = data.actual ? `<span class="bg-emerald-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded ml-2">REAL: ${data.actual}</span>` : `<span class="bg-slate-800 text-slate-400 font-bold text-xs px-2 py-0.5 rounded ml-2">PENDIENTE</span>`;
+                        
+                        display.innerHTML = `
+                            <div class="text-sm font-black text-white uppercase tracking-wider mb-3 flex items-center justify-between">
+                                <span>${data.label}</span> ${outcomeInfo}
+                            </div>
+                            <div class="space-y-2 text-xs font-bold text-slate-300">
+                                <div>
+                                    <div class="flex justify-between mb-1"><span>L (LOCAL)</span><span>${data.L}%</span></div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                                        <div class="bg-purple-500 h-2.5 rounded-full" style="width: ${data.L}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1"><span>E (EMPATE)</span><span>${data.E}%</span></div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                                        <div class="bg-amber-500 h-2.5 rounded-full" style="width: ${data.E}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1"><span>V (VISITANTE)</span><span>${data.V}%</span></div>
+                                    <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                                        <div class="bg-blue-500 h-2.5 rounded-full" style="width: ${data.V}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    renderMatchPicks(targetMatch);
+                    matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
+
+                    // Mapa de Calor Tabla
+                    let heatmapHeader = document.getElementById("heatmap-header");
+                    let heatmapBody = document.getElementById("heatmap-body");
+                    heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">PARTICIPANTE</th>`;
+                    
+                    for(let m=1; m<=72; m++) {
+                        if(partidosMap[m]) {
+                            let abbr = partidosMap[m];
+                            heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-3 text-center min-w-[70px] border-l border-slate-900 font-bold">${abbr}</th>`);
+                        }
+                    }
+
+                    heatmapBody.innerHTML = "";
+                    finalParticipants.forEach(p => {
+                        let rowHtml = `<tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3 font-extrabold text-slate-200 bg-slate-900 sticky left-0 z-10 font-sports tracking-wide border-r border-slate-800 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">${p.nombre}</td>`;
+                        
+                        for(let m=1; m<=72; m++) {
+                            if(partidosMap[m]) {
+                                let cell = p.heatmap[m-1];
+                                let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/20' : cell === '❌' ? 'text-red-400 bg-red-950/20' : 'text-slate-600';
+                                let predText = p.preds[m] || '-';
+                                rowHtml += `<td class="p-2 text-center border-l border-slate-800 ${colorClass}">
+                                    <div class="font-black text-[11px]">${predText}</div>
+                                    <div class="text-[10px] mt-0.5">${cell}</div>
+                                </td>`;
+                            }
+                        }
+                        rowHtml += `</tr>`;
+                        heatmapBody.insertAdjacentHTML('beforeend', rowHtml);
+                    });
+
+                    // Gráfica Histórica
+                    let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id])];
+                    let chartDatasets = finalParticipants.map((p, idx) => {
+                        let rHistory = historyRanks[p.nombre];
+                        const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899', '#84cc16'];
+                        let color = colors[idx % colors.length];
+                        return {
+                            label: p.nombre,
+                            data: rHistory,
+                            borderColor: color,
+                            backgroundColor: color + '11',
+                            borderWidth: idx === 0 ? 4 : 2,
+                            tension: 0.2,
+                            pointRadius: 3
+                        };
+                    });
+
+                    if(chartInstance) chartInstance.destroy();
+                    let ctx = document.getElementById('evolutionChart').getContext('2d');
+                    chartInstance = new Chart(ctx, {
+                        type: 'line',
+                        data: { labels: chartLabels, datasets: chartDatasets },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'Montserrat', size: 10 } } },
+                                y: {
+                                    reversed: true,
+                                    min: 1,
+                                    grid: { color: '#1e293b' },
+                                    ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold', size: 12 } }
+                                }
+                            },
+                            plugins: {
+                                legend: { position: 'top', labels: { color: '#f3f4f6', font: { family: 'Montserrat', weight: '600', size: 11 } } }
+                            }
+                        }
+                    });
+
+                } catch (err) {
+                    console.error(err);
+                    document.getElementById("error-text").textContent = err.message;
+                    document.getElementById("error-banner").classList.remove("hidden");
+                }
+            }
+
+            topPicksData = {}; // Evitar fugas globales
+            actualizar();
+        });
+    </script>
+</body>
+</html>
