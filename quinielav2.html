@@ -165,18 +165,27 @@
 
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
                     <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-6">
-                        <i class="fa-solid fa-id-card text-yellow-500 mr-2"></i> TARJETAS FIFA WORLD CUP TOP 3
+                        <i class="fa-solid fa-id-card text-yellow-500 mr-2"></i> TARJETAS FIFA WORLD CUP TOP 3 (PARTICIPANTES)
                     </h3>
                     <div id="fifa-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-center"></div>
                 </div>
             </div>
 
             <div class="space-y-6">
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
-                    <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-pie text-cyan-500"></i> 🏆 PROBABILIDAD DE CAMPEÓN
-                    </h3>
-                    <div id="prob-container" class="space-y-4"></div>
+                <!-- PANEL DOBLE DE PROBABILIDADES -->
+                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
+                    <div>
+                        <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
+                            <i class="fa-solid fa-chart-pie text-cyan-500"></i> PROBABILIDAD DE VICTORIA PARTICIPANTE
+                        </h3>
+                        <div id="prob-container" class="space-y-3"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
+                            <i class="fa-solid fa-square-poll-horizontal text-emerald-400"></i> PROBABILIDAD LÍDER DE SELECCIONES
+                        </h3>
+                        <div id="team-prob-container" class="space-y-3"></div>
+                    </div>
                 </div>
 
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
@@ -189,40 +198,47 @@
             </div>
         </div>
 
-        <!-- SECCIÓN COMPLETA: SELECCIONES CON SU PROPIO PODIO Y TABLA INFERIOR -->
+        <!-- SECCIÓN COMPLETA: SELECCIONES CON SU PROPIO PODIO, TARJETAS FIFA Y TABLA INFERIOR -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
             <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
                 <i class="fa-solid fa-earth-americas text-emerald-400"></i> 🗺️ RENDIMIENTO GENERAL DE SELECCIONES
             </h3>
             
-            <!-- PODIO DINÁMICO DE PAÍSES -->
-            <div class="bg-slate-950/40 rounded-xl p-4 border border-slate-900/60 shadow-inner">
-                <h4 class="text-xs font-bold tracking-widest text-center text-slate-400 uppercase mb-2">
-                    🎖️ TOP 3 SELECCIONES DEL TORNEO
-                </h4>
-                <div class="grid grid-cols-3 max-w-xl mx-auto items-end pt-10 text-center">
-                    <div class="flex flex-col items-center">
-                        <div id="team-podium-2-names" class="text-sm font-black text-slate-300 mb-2 truncate max-w-full px-1">🥈 -</div>
-                        <div class="w-full bg-slate-900 border-t-4 border-slate-400 h-20 rounded-t-lg flex flex-col justify-center items-center shadow-md">
-                            <span class="text-xl font-black text-slate-400">2°</span>
-                            <span class="text-[10px] font-bold text-slate-500 tracking-wider">PLATA</span>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                <!-- PODIO DE PAÍSES -->
+                <div class="bg-slate-950/40 rounded-xl p-5 border border-slate-900 shadow-inner lg:col-span-1 h-full flex flex-col justify-between">
+                    <h4 class="text-xs font-bold tracking-widest text-center text-slate-400 uppercase mb-4">
+                        🎖️ TOP 3 SELECCIONES EN EL PODIO
+                    </h4>
+                    <div class="grid grid-cols-3 mx-auto items-end pt-10 text-center w-full max-w-sm">
+                        <div class="flex flex-col items-center">
+                            <div id="team-podium-2-names" class="text-xs font-black text-slate-300 mb-2 truncate max-w-full px-1">🥈 -</div>
+                            <div class="w-full bg-slate-900 border-t-4 border-slate-400 h-16 rounded-t-lg flex flex-col justify-center items-center shadow-md">
+                                <span class="text-lg font-black text-slate-400">2°</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <i class="fa-solid fa-star text-yellow-400 text-sm animate-pulse mb-1"></i>
+                            <div id="team-podium-1-names" class="text-sm font-black text-yellow-400 mb-2 truncate max-w-full px-1">🥇 -</div>
+                            <div class="w-full bg-slate-900 border-t-4 border-yellow-500 h-24 rounded-t-lg flex flex-col justify-center items-center shadow-xl relative leader-flash">
+                                <span class="text-2xl font-black text-yellow-400">1°</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div id="team-podium-3-names" class="text-xs font-black text-amber-600 mb-2 truncate max-w-full px-1">🥉 -</div>
+                            <div class="w-full bg-slate-900 border-t-4 border-amber-700 h-12 rounded-t-lg flex flex-col justify-center items-center shadow-md">
+                                <span class="text-base font-black text-amber-600">3°</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center">
-                        <i class="fa-solid fa-star text-yellow-400 text-xl animate-pulse mb-1"></i>
-                        <div id="team-podium-1-names" class="text-base font-black text-yellow-400 mb-2 truncate max-w-full px-1">🥇 -</div>
-                        <div class="w-full bg-slate-900 border-t-4 border-yellow-500 h-30 rounded-t-lg flex flex-col justify-center items-center shadow-xl relative leader-flash">
-                            <span class="text-3xl font-black text-yellow-400">1°</span>
-                            <span class="text-[10px] font-bold text-yellow-500 tracking-widest">LÍDER</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div id="team-podium-3-names" class="text-sm font-black text-amber-600 mb-2 truncate max-w-full px-1">🥉 -</div>
-                        <div class="w-full bg-slate-900 border-t-4 border-amber-700 h-14 rounded-t-lg flex flex-col justify-center items-center shadow-md">
-                            <span class="text-lg font-black text-amber-600">3°</span>
-                            <span class="text-[10px] font-bold text-amber-700 tracking-wider">BRONCE</span>
-                        </div>
-                    </div>
+                </div>
+
+                <!-- TARJETAS FIFA PARA SELECCIONES -->
+                <div class="lg:col-span-2 space-y-2">
+                    <h4 class="text-xs font-bold tracking-widest text-slate-400 uppercase pl-1">
+                        🏆 TARJETAS FIFA WORLD CUP SELECCIONES
+                    </h4>
+                    <div id="team-fifa-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center"></div>
                 </div>
             </div>
 
@@ -333,6 +349,8 @@
                     let partidosRows = procesarMatrizCSV(partidos.text);
                     let partidosMap = {};
                     let estructuraPartidosOriginal = {};
+                    let poolTodasLasSelecciones = new Set();
+
                     for(let i=1; i<partidosRows.length; i++) {
                         let row = partidosRows[i];
                         if(row.length < 2) continue;
@@ -341,6 +359,9 @@
                         if(!isNaN(num)) {
                             partidosMap[num] = abbr;
                             estructuraPartidosOriginal[num] = abbr;
+                            if (abbr.includes("VS")) {
+                                abbr.split("VS").forEach(e => poolTodasLasSelecciones.add(e.trim()));
+                            }
                         }
                     }
 
@@ -359,6 +380,10 @@
 
                     // CÁLCULO DE TABLA DE SELECCIONES COMPLETA
                     let tablaEquipos = {};
+                    poolTodasLasSelecciones.forEach(team => {
+                        tablaEquipos[team] = { g: 0, e: 0, p: 0, pts: 0 };
+                    });
+
                     playedMatchIds.forEach(mId => {
                         let infoEquipos = estructuraPartidosOriginal[mId];
                         let resReal = resultadosMap[mId];
@@ -368,9 +393,6 @@
                             if (bandos.length === 2) {
                                 let local = bandos[0];
                                 let visitante = bandos[1];
-                                
-                                if (!tablaEquipos[local]) tablaEquipos[local] = { g: 0, e: 0, p: 0, pts: 0 };
-                                if (!tablaEquipos[visitante]) tablaEquipos[visitante] = { g: 0, e: 0, p: 0, pts: 0 };
                                 
                                 if (resReal === 'L') {
                                     tablaEquipos[local].g++; local.pts += 3;
@@ -400,7 +422,7 @@
                     }
                     arregloEquiposOrdenado.sort((a,b) => b.pts - a.pts || b.g - a.g);
 
-                    // PROCESAR E INYECTAR EL PODIO DE LAS SELECCIONES LÍDERES
+                    // ASIGNAR PODIO DE SELECCIONES
                     let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
                     let teamPos1 = arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[0]).map(eq => eq.nombre).join(", ");
                     let teamPos2 = uniqueTeamScores.length > 1 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[1]).map(eq => eq.nombre).join(", ") : "-";
@@ -410,26 +432,56 @@
                     document.getElementById("team-podium-2-names").textContent = teamPos2 || "-";
                     document.getElementById("team-podium-3-names").textContent = teamPos3 || "-";
 
+                    // TARJETAS FIFA PARA LAS SELECCIONES LÍDERES
+                    let teamFifaContainer = document.getElementById("team-fifa-cards-container");
+                    teamFifaContainer.innerHTML = "";
+                    for(let i=0; i<Math.min(3, arregloEquiposOrdenado.length); i++) {
+                        let eq = arregloEquiposOrdenado[i];
+                        let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
+                        let medal = i === 0 ? "🏆" : i === 1 ? "🥈" : "🥉";
+                        let totalPartidos = eq.g + eq.e + eq.p;
+                        let rendimiento = totalPartidos > 0 ? ((eq.pts / (totalPartidos * 3)) * 100).toFixed(0) : 0;
+                        
+                        let teamCardHtml = `
+                            <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-64">
+                                <div>
+                                    <div class="text-xl">${medal}</div>
+                                    <div class="text-lg font-black uppercase tracking-wider mt-1 border-b border-black/20 pb-0.5">${eq.nombre}</div>
+                                </div>
+                                <div class="my-auto space-y-1">
+                                    <div>
+                                        <span class="text-3xl font-black">${eq.pts}</span>
+                                        <span class="text-xs font-bold block -mt-1 uppercase tracking-tight">PUNTOS</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 text-[11px] font-bold bg-black/10 rounded p-1.5 text-left gap-y-0.5">
+                                        <div>VICTORIAS:</div><div class="text-right">${eq.g}</div>
+                                        <div>RENDIM:</div><div class="text-right">${rendimiento}%</div>
+                                    </div>
+                                </div>
+                                <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[11px] font-bold">
+                                    FALA REGULAR RENDIMIENTO
+                                </div>
+                            </div>
+                        `;
+                        teamFifaContainer.insertAdjacentHTML('beforeend', teamCardHtml);
+                    }
+
                     // Renderizar Lista Completa de Equipos en la tabla
                     let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
                     teamsLeaderboardBody.innerHTML = "";
-                    if (arregloEquiposOrdenado.length === 0) {
-                        teamsLeaderboardBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No hay partidos finalizados cargados en resultado.csv para evaluar países.</td></tr>`;
-                    } else {
-                        arregloEquiposOrdenado.forEach((eq, idx) => {
-                            let filaEqHtml = `
-                                <tr class="hover:bg-slate-800/30 transition">
-                                    <td class="p-3 text-center font-bold text-slate-400">${idx + 1}°</td>
-                                    <td class="p-3 font-extrabold text-white tracking-wide">${eq.nombre}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.g}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.e}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.p}</td>
-                                    <td class="p-3 text-center font-black text-emerald-400 text-base">${eq.pts}</td>
-                                </tr>
-                            `;
-                            teamsLeaderboardBody.insertAdjacentHTML('beforeend', filaEqHtml);
-                        });
-                    }
+                    arregloEquiposOrdenado.forEach((eq, idx) => {
+                        let filaEqHtml = `
+                            <tr class="hover:bg-slate-800/30 transition">
+                                <td class="p-3 text-center font-bold text-slate-400">${idx + 1}°</td>
+                                <td class="p-3 font-extrabold text-white tracking-wide">${eq.nombre}</td>
+                                <td class="p-3 text-center text-slate-300">${eq.g}</td>
+                                <td class="p-3 text-center text-slate-300">${eq.e}</td>
+                                <td class="p-3 text-center text-slate-300">${eq.p}</td>
+                                <td class="p-3 text-center font-black text-emerald-400 text-base">${eq.pts}</td>
+                            </tr>
+                        `;
+                        teamsLeaderboardBody.insertAdjacentHTML('beforeend', filaEqHtml);
+                    });
 
                     // Procesar participantes
                     let participantesRows = procesarMatrizCSV(participantes.text);
@@ -447,7 +499,7 @@
                         participantsDataList.push({nombre: name, preds: preds});
                     }
 
-                    // Calcular Historial
+                    // Calcular Historial Participantes
                     let historyPoints = {};
                     let historyRanks = {};
                     participantsDataList.forEach(p => {
@@ -475,7 +527,7 @@
                         });
                     });
 
-                    // Estadísticas Finales
+                    // Estadísticas Finales Participantes
                     let maxHitsGlobal = 0;
                     let finalParticipants = participantsDataList.map(p => {
                         let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
@@ -573,7 +625,7 @@
                         rankingContainer.insertAdjacentHTML('beforeend', rowHtml);
                     });
 
-                    // Renderizar Tarjetas FIFA
+                    // Renderizar Tarjetas FIFA Participantes
                     let fifaContainer = document.getElementById("fifa-cards-container");
                     fifaContainer.innerHTML = "";
                     for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
@@ -606,13 +658,16 @@
                         fifaContainer.insertAdjacentHTML('beforeend', cardHtml);
                     }
 
-                    // Simulación Probabilidad (Monte Carlo)
+                    // SIMULACIÓN INTEGRADA DE MONTE CARLO (PARTICIPANTES + SELECCIONES)
                     let winCounts = {};
+                    let teamWinCounts = {};
+                    
                     finalParticipants.forEach(p => winCounts[p.nombre] = 0);
+                    poolTodasLasSelecciones.forEach(team => teamWinCounts[team] = 0);
                     
                     let remainingMatches = [];
                     for(let m=1; m<=72; m++) {
-                        if(!resultadosMap[m]) remainingMatches.push(m);
+                        if(!resultadosMap[m] && estructuraPartidosOriginal[m]) remainingMatches.push(m);
                     }
 
                     let totalSims = remainingMatches.length > 0 ? 1000 : 1;
@@ -620,62 +675,85 @@
                         const outcomes = ['L', 'E', 'V'];
                         for(let s=0; s<totalSims; s++) {
                             let simScores = {};
+                            let simTeamScores = {};
+                            
                             finalParticipants.forEach(p => simScores[p.nombre] = p.puntos);
+                            poolTodasLasSelecciones.forEach(team => simTeamScores[team] = tablaEquipos[team].pts);
                             
                             remainingMatches.forEach(mId => {
                                 let randRes = outcomes[Math.floor(Math.random()*3)];
+                                // Simular participante
                                 finalParticipants.forEach(p => {
                                     if(p.preds[mId] === randRes) simScores[p.nombre]++;
                                 });
+                                // Simular Selección
+                                let bandos = estructuraPartidosOriginal[mId].split("VS").map(e => e.trim());
+                                if (bandos.length === 2) {
+                                    let loc = bandos[0]; let vis = bandos[1];
+                                    if (randRes === 'L') simTeamScores[loc] += 3;
+                                    else if (randRes === 'V') simTeamScores[vis] += 3;
+                                    else { simTeamScores[loc] += 1; simTeamScores[vis] += 1; }
+                                }
                             });
                             
-                            let maxS = -1;
-                            let winners = [];
+                            // Ganador simulación participante
+                            let maxS = -1; let winners = [];
                             for(let name in simScores) {
                                 if(simScores[name] > maxS) { maxS = simScores[name]; winners = [name]; }
                                 else if(simScores[name] === maxS) { winners.push(name); }
                             }
                             winners.forEach(w => winCounts[w] += (1 / winners.length));
+
+                            // Ganador simulación Selección
+                            let maxTS = -1; let teamWinners = [];
+                            for(let tName in simTeamScores) {
+                                if(simTeamScores[tName] > maxTS) { maxTS = simTeamScores[tName]; teamWinners = [tName]; }
+                                else if(simTeamScores[tName] === maxTS) { teamWinners.push(tName); }
+                            }
+                            teamWinners.forEach(tw => teamWinCounts[tw] += (1 / teamWinners.length));
                         }
                     } else {
-                        let topPts = finalParticipants[0] ? finalParticipants[0].puntos : 0;
-                        let leaders = finalParticipants.filter(p => p.puntos === topPts);
-                        leaders.forEach(l => winCounts[l.nombre] = 1 / leaders.length);
+                        // Si ya terminó todo
+                        if (finalParticipants[0]) winCounts[finalParticipants[0].nombre] = 1;
+                        if (arregloEquiposOrdenado[0]) teamWinCounts[arregloEquiposOrdenado[0].nombre] = 1;
                     }
 
+                    // Render Probabilidades Participantes
                     let probabilities = finalParticipants.map(p => ({
-                        nombre: p.nombre,
-                        prob: (winCounts[p.nombre] / totalSims) * 100
+                        nombre: p.nombre, prob: (winCounts[p.nombre] / totalSims) * 100
                     })).sort((a,b) => b.prob - a.prob);
 
                     let probContainer = document.getElementById("prob-container");
                     probContainer.innerHTML = "";
-                    let displayProbs = [];
-                    let otherSum = 0;
-                    
-                    probabilities.forEach((p, idx) => {
-                        if(idx < 3) displayProbs.push(p);
-                        else otherSum += p.prob;
-                    });
-                    if(probabilities.length > 3 && otherSum > 0) {
-                        displayProbs.push({nombre: "OTROS", prob: otherSum});
-                    }
-
-                    displayProbs.forEach(p => {
+                    probabilities.slice(0, 3).forEach(p => {
                         let roundedProb = Math.round(p.prob);
-                        let barColor = p.nombre === 'OTROS' ? 'bg-slate-600' : 'bg-cyan-500';
-                        let probHtml = `
+                        probContainer.insertAdjacentHTML('beforeend', `
                             <div>
-                                <div class="flex justify-between font-bold text-sm text-slate-300 mb-1">
-                                    <span>${p.nombre}</span>
-                                    <span class="text-cyan-400 font-black">${roundedProb}%</span>
+                                <div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5">
+                                    <span>${p.nombre}</span><span class="text-cyan-400">${roundedProb}%</span>
                                 </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2">
-                                    <div class="${barColor} h-2 rounded-full transition-all duration-500" style="width: ${roundedProb}%"></div>
-                                </div>
+                                <div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-cyan-500 h-1.5 rounded-full" style="width: ${roundedProb}%"></div></div>
                             </div>
-                        `;
-                        probContainer.insertAdjacentHTML('beforeend', probHtml);
+                        `);
+                    });
+
+                    // Render Probabilidades Selecciones
+                    let teamProbabilities = arregloEquiposOrdenado.map(eq => ({
+                        nombre: eq.nombre, prob: (teamWinCounts[eq.nombre] / totalSims) * 100
+                    })).sort((a,b) => b.prob - a.prob);
+
+                    let teamProbContainer = document.getElementById("team-prob-container");
+                    teamProbContainer.innerHTML = "";
+                    teamProbabilities.slice(0, 3).forEach(tp => {
+                        let roundedTProb = Math.round(tp.prob);
+                        teamProbContainer.insertAdjacentHTML('beforeend', `
+                            <div>
+                                <div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5">
+                                    <span>${tp.nombre}</span><span class="text-emerald-400">${roundedTProb}%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-emerald-500 h-1.5 rounded-full" style="width: ${roundedTProb}%"></div></div>
+                            </div>
+                        `);
                     });
 
                     // Top Picks
