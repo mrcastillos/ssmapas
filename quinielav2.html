@@ -122,7 +122,7 @@
             </div>
         </section>
 
-        <!-- PODIO GANADORES -->
+        <!-- PODIO GANADORES (PARTICIPANTES) -->
         <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
                 <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO OFICIAL DE GANADORES
@@ -189,12 +189,45 @@
             </div>
         </div>
 
-        <!-- SECCIÓN: TABLA DE SELECCIONES LÍDERES COMPLETA -->
-        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
-            <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-earth-americas text-emerald-400"></i> 🗺️ TABLA GENERAL DE SELECCIONES LÍDERES
+        <!-- SECCIÓN COMPLETA: SELECCIONES CON SU PROPIO PODIO Y TABLA INFERIOR -->
+        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
+            <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
+                <i class="fa-solid fa-earth-americas text-emerald-400"></i> 🗺️ RENDIMIENTO GENERAL DE SELECCIONES
             </h3>
-            <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[450px] custom-scrollbar">
+            
+            <!-- PODIO DINÁMICO DE PAÍSES -->
+            <div class="bg-slate-950/40 rounded-xl p-4 border border-slate-900/60 shadow-inner">
+                <h4 class="text-xs font-bold tracking-widest text-center text-slate-400 uppercase mb-2">
+                    🎖️ TOP 3 SELECCIONES DEL TORNEO
+                </h4>
+                <div class="grid grid-cols-3 max-w-xl mx-auto items-end pt-10 text-center">
+                    <div class="flex flex-col items-center">
+                        <div id="team-podium-2-names" class="text-sm font-black text-slate-300 mb-2 truncate max-w-full px-1">🥈 -</div>
+                        <div class="w-full bg-slate-900 border-t-4 border-slate-400 h-20 rounded-t-lg flex flex-col justify-center items-center shadow-md">
+                            <span class="text-xl font-black text-slate-400">2°</span>
+                            <span class="text-[10px] font-bold text-slate-500 tracking-wider">PLATA</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <i class="fa-solid fa-star text-yellow-400 text-xl animate-pulse mb-1"></i>
+                        <div id="team-podium-1-names" class="text-base font-black text-yellow-400 mb-2 truncate max-w-full px-1">🥇 -</div>
+                        <div class="w-full bg-slate-900 border-t-4 border-yellow-500 h-30 rounded-t-lg flex flex-col justify-center items-center shadow-xl relative leader-flash">
+                            <span class="text-3xl font-black text-yellow-400">1°</span>
+                            <span class="text-[10px] font-bold text-yellow-500 tracking-widest">LÍDER</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div id="team-podium-3-names" class="text-sm font-black text-amber-600 mb-2 truncate max-w-full px-1">🥉 -</div>
+                        <div class="w-full bg-slate-900 border-t-4 border-amber-700 h-14 rounded-t-lg flex flex-col justify-center items-center shadow-md">
+                            <span class="text-lg font-black text-amber-600">3°</span>
+                            <span class="text-[10px] font-bold text-amber-700 tracking-wider">BRONCE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLA GENERAL DE ABAJO -->
+            <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[380px] custom-scrollbar">
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
                         <tr class="bg-slate-950 text-slate-400 uppercase tracking-wider text-xs border-b border-slate-800 sticky top-0 z-10">
@@ -367,13 +400,22 @@
                     }
                     arregloEquiposOrdenado.sort((a,b) => b.pts - a.pts || b.g - a.g);
 
-                    // Renderizar Lista Completa de Equipos
+                    // PROCESAR E INYECTAR EL PODIO DE LAS SELECCIONES LÍDERES
+                    let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
+                    let teamPos1 = arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[0]).map(eq => eq.nombre).join(", ");
+                    let teamPos2 = uniqueTeamScores.length > 1 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[1]).map(eq => eq.nombre).join(", ") : "-";
+                    let teamPos3 = uniqueTeamScores.length > 2 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[2]).map(eq => eq.nombre).join(", ") : "-";
+
+                    document.getElementById("team-podium-1-names").textContent = teamPos1 || "-";
+                    document.getElementById("team-podium-2-names").textContent = teamPos2 || "-";
+                    document.getElementById("team-podium-3-names").textContent = teamPos3 || "-";
+
+                    // Renderizar Lista Completa de Equipos en la tabla
                     let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
                     teamsLeaderboardBody.innerHTML = "";
                     if (arregloEquiposOrdenado.length === 0) {
                         teamsLeaderboardBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No hay partidos finalizados cargados en resultado.csv para evaluar países.</td></tr>`;
                     } else {
-                        // El método .slice(0, 5) fue removido para listar la tabla al completo
                         arregloEquiposOrdenado.forEach((eq, idx) => {
                             let filaEqHtml = `
                                 <tr class="hover:bg-slate-800/30 transition">
@@ -488,7 +530,7 @@
                     document.getElementById("kpi-hits").textContent = maxHitsGlobal;
                     document.getElementById("kpi-participants").textContent = finalParticipants.length;
 
-                    // Podio Oficial
+                    // Podio Oficial Participantes
                     let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
                     let pos1 = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ");
                     let pos2 = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "-";
