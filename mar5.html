@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -239,18 +239,22 @@
             <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[380px] custom-scrollbar">
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
-                        <tr class="bg-slate-950 text-slate-400 uppercase tracking-wider text-xs border-b border-slate-800 sticky top-0 z-10">
+                        <tr class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800 sticky top-0 z-10 font-bold">
                             <th class="p-3 text-center w-16 bg-slate-950">POS</th>
                             <th class="p-3 bg-slate-950">SELECCIÓN</th>
+                            <th class="p-3 text-center bg-slate-950">PJ</th>
                             <th class="p-3 text-center bg-slate-950">G</th>
                             <th class="p-3 text-center bg-slate-950">E</th>
                             <th class="p-3 text-center bg-slate-950">P</th>
+                            <th class="p-3 text-center bg-slate-950">GF</th>
+                            <th class="p-3 text-center bg-slate-950">GC</th>
+                            <th class="p-3 text-center bg-slate-950">DG</th>
                             <th class="p-3 text-center text-emerald-400 font-black bg-slate-950">PTS</th>
                         </tr>
                     </thead>
-                    <tbody id="teams-leaderboard-body" class="divide-y divide-slate-800">
+                    <tbody id="teams-leaderboard-body" class="divide-y divide-slate-800 text-xs">
                         <tr>
-                            <td colspan="6" class="p-4 text-center text-slate-500">Esperando procesamiento de partidos...</td>
+                            <td colspan="10" class="p-4 text-center text-slate-500">Esperando procesamiento de partidos...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -259,10 +263,10 @@
 
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
             <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-4 flex items-center gap-2 border-b border-slate-800 pb-3">
-                <i class="fa-solid fa-sitemap text-yellow-500"></i> 🏆 PROYECCIÓN DEL CUADRO ELIMINATORIO EN VIVO
+                <i class="fa-solid fa-sitemap text-yellow-500"></i> 🏆 SIMULACIÓN DEL CUADRO ELIMINATORIO EN VIVO
             </h3>
             <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider">
-                🔮 <span class="text-emerald-400 font-bold">¡SISTEMA ACTIVO!</span> Esta llave calcula las clasificaciones matemáticas actuales de los grupos e integra las probabilidades de Monte Carlo para pintar los cruces estimados hacia el partido 72.
+                🔮 <span class="text-emerald-400 font-bold">¡MOTOR DE GOLES ACTIVO!</span> Esta sección procesa los goles reales de tu archivo para ordenar los grupos y proyectar de manera matemática las llaves finales mediante Monte Carlo.
             </p>
             
             <div class="overflow-x-auto custom-scrollbar pb-4">
@@ -270,7 +274,7 @@
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1">16VOS DE FINAL</h5>
                         <div id="bracket-16vos" class="space-y-3 max-h-[440px] overflow-y-auto custom-scrollbar pr-1">
-                            <p class="text-xs text-slate-600 py-4">Procesando datos del torneo...</p>
+                            <p class="text-xs text-slate-600 py-4">Calculando combinaciones...</p>
                         </div>
                     </div>
                     <div>
@@ -372,7 +376,7 @@
                     const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
                     document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2, '0')} ${months[latestDate.getMonth()]} ${latestDate.getFullYear()} ${latestDate.getHours().toString().padStart(2, '0')}:${latestDate.getMinutes().toString().padStart(2, '0')}`;
 
-                    // Procesar partidos unificados con GOLES
+                    // Procesar partidos con lógica exclusiva de GOLES locales y visitantes
                     let mundialRows = procesarMatrizCSV(mundial.text);
                     let partidosMap = {};
                     let estructuraPartidosOriginal = {};
@@ -403,8 +407,8 @@
                             if(!isNaN(num)) {
                                 let abbr = row[idxAbbr] ? row[idxAbbr].toUpperCase() : `P${num}`;
                                 let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : 'FASE DE GRUPOS';
-                                let gL = row[idxGl];
-                                let gV = row[idxGv];
+                                let gL = row[idxGl] !== undefined ? row[idxGl].trim() : '';
+                                let gV = row[idxGv] !== undefined ? row[idxGv].trim() : '';
                                 
                                 partidosMap[num] = abbr;
                                 estructuraPartidosOriginal[num] = abbr;
@@ -413,9 +417,9 @@
                                     abbr.split("VS").forEach(e => poolTodasLasSelecciones.add(e.trim()));
                                 }
 
-                                // Determinar resultado L, E, V basándose en goles reales enteros
+                                // La quiniela opera basándose al 100% en los goles capturados matemáticamente
                                 let resCalculado = '';
-                                if (gL !== undefined && gL !== '' && gV !== undefined && gV !== '') {
+                                if (gL !== '' && gV !== '') {
                                     let nL = parseInt(gL); let nV = parseInt(gV);
                                     if (!isNaN(nL) && !isNaN(nV)) {
                                         resCalculado = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
@@ -425,7 +429,6 @@
 
                                 datosPartidosGoles.push({ num: num, label: abbr, fase: fase, gL: gL, gV: gV, res: resCalculado });
 
-                                // Separar llaves de playoffs
                                 for (let fKey in eliminatoriasPorFase) {
                                     if (fase.includes(fKey)) {
                                         eliminatoriasPorFase[fKey].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
@@ -438,7 +441,7 @@
                     let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
                     let numPlayed = playedMatchIds.length;
 
-                    // RENDERIZAR CONECTORES DEL BRACKET ELIMINATORIO (CORREGIDO COMPLETAMENTE)
+                    // RENDERIZAR CONECTORES DEL BRACKET ELIMINATORIO 
                     const mapeoContenedores = {
                         "16VOS": "bracket-16vos", "OCTAVOS": "bracket-octavos",
                         "CUARTOS": "bracket-cuartos", "SEMIFINAL": "bracket-semis",
@@ -479,22 +482,38 @@
                         }
                     }
 
-                    // Tabla de Selecciones Completa
+                    // Tabla Unificada de Selecciones Completa con Goles, Diferencia y PJ
                     let tablaEquipos = {};
                     poolTodasLasSelecciones.forEach(team => {
-                        tablaEquipos[team] = { g: 0, e: 0, p: 0, pts: 0 };
+                        tablaEquipos[team] = { pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, dg: 0, pts: 0 };
                     });
 
-                    playedMatchIds.forEach(mId => {
-                        let infoEquipos = estructuraPartidosOriginal[mId];
-                        let resReal = resultadosMap[mId];
-                        if (infoEquipos && infoEquipos.includes("VS")) {
-                            let bandos = infoEquipos.split("VS").map(e => e.trim());
+                    datosPartidosGoles.forEach(p => {
+                        if (p.gL !== '' && p.gV !== '' && p.label.includes("VS")) {
+                            let bandos = p.label.split("VS").map(e => e.trim());
                             if (bandos.length === 2) {
                                 let local = bandos[0]; let visitante = bandos[1];
-                                if (resReal === 'L') { tablaEquipos[local].g++; tablaEquipos[visitante].p++; }
-                                else if (resReal === 'V') { tablaEquipos[visitante].g++; tablaEquipos[local].p++; }
-                                else if (resReal === 'E') { tablaEquipos[local].e++; tablaEquipos[visitante].e++; }
+                                let nL = parseInt(p.gL); let nV = parseInt(p.gV);
+                                
+                                if (!isNaN(nL) && !isNaN(nV)) {
+                                    tablaEquipos[local].pj++;
+                                    tablaEquipos[visitante].pj++;
+                                    tablaEquipos[local].gf += nL;
+                                    tablaEquipos[local].gc += nV;
+                                    tablaEquipos[visitante].gf += nV;
+                                    tablaEquipos[visitante].gc += nL;
+
+                                    if (p.res === 'L') {
+                                        tablaEquipos[local].g++;
+                                        tablaEquipos[visitante].p++;
+                                    } else if (p.res === 'V') {
+                                        tablaEquipos[visitante].g++;
+                                        tablaEquipos[local].p++;
+                                    } else if (p.res === 'E') {
+                                        tablaEquipos[local].e++;
+                                        tablaEquipos[visitante].e++;
+                                    }
+                                }
                             }
                         }
                     });
@@ -502,12 +521,16 @@
                     let arregloEquiposOrdenado = [];
                     for (let equipo in tablaEquipos) {
                         let eData = tablaEquipos[equipo];
-                        let totalPts = (eData.g * 3) + eData.e;
-                        arregloEquiposOrdenado.push({ nombre: equipo, g: eData.g, e: eData.e, p: eData.p, pts: totalPts });
+                        eData.dg = eData.gf - eData.gc;
+                        eData.pts = (eData.g * 3) + eData.e;
+                        arregloEquiposOrdenado.push({ 
+                            nombre: equipo, pj: eData.pj, g: eData.g, e: eData.e, p: eData.p, gf: eData.gf, gc: eData.gc, dg: eData.dg, pts: eData.pts 
+                        });
                     }
-                    arregloEquiposOrdenado.sort((a,b) => b.pts - a.pts || b.g - a.g);
+                    // Criterio oficial FIFA: Puntos -> Diferencia de Goles -> Goles anotados
+                    arregloEquiposOrdenado.sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
 
-                    // Podios Selecciones
+                    // Podios e inyección FIFA Selecciones
                     let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
                     document.getElementById("team-podium-1-names").textContent = arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[0]).map(eq => eq.nombre).join(", ") || "-";
                     document.getElementById("team-podium-2-names").textContent = uniqueTeamScores.length > 1 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[1]).map(eq => eq.nombre).join(", ") : "-";
@@ -518,32 +541,40 @@
                     for(let i=0; i<Math.min(3, arregloEquiposOrdenado.length); i++) {
                         let eq = arregloEquiposOrdenado[i];
                         let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
-                        let totalPartidos = eq.g + eq.e + eq.p;
-                        let rendimiento = totalPartidos > 0 ? ((eq.pts / (totalPartidos * 3)) * 100).toFixed(0) : 0;
+                        let rendimiento = eq.pj > 0 ? ((eq.pts / (eq.pj * 3)) * 100).toFixed(0) : 0;
                         teamFifaContainer.insertAdjacentHTML('beforeend', `
                             <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-64">
                                 <div><div class="text-xl">${i===0?'🏆':i===1?'🥈':'🥉'}</div><div class="text-lg font-black uppercase tracking-wider mt-1 border-b border-black/20 pb-0.5">${eq.nombre}</div></div>
                                 <div class="my-auto space-y-1">
                                     <div><span class="text-3xl font-black">${eq.pts}</span><span class="text-xs font-bold block -mt-1 uppercase tracking-tight">PUNTOS</span></div>
-                                    <div class="grid grid-cols-2 text-[11px] font-bold bg-black/10 rounded p-1.5 text-left gap-y-0.5"><div>VICTORIAS:</div><div class="text-right">${eq.g}</div><div>RENDIM:</div><div class="text-right">${rendimiento}%</div></div>
+                                    <div class="grid grid-cols-2 text-[10px] font-bold bg-black/10 rounded p-1.5 text-left gap-y-0.5">
+                                        <div>PARTIDOS:</div><div class="text-right">${eq.pj}</div>
+                                        <div>DIF. GOLES:</div><div class="text-right">${eq.dg > 0 ? '+' + eq.dg : eq.dg}</div>
+                                        <div>RENDIM:</div><div class="text-right">${rendimiento}%</div>
+                                    </div>
                                 </div>
-                                <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[11px] font-bold">FASE DE GRUPOS EN VIVO</div>
+                                <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[11px] font-bold">PREDICTIVO LIVE</div>
                             </div>
                         `);
                     }
 
-                    // Renderizar tabla inferior de selecciones
+                    // Renderizar tabla inferior detallada con todas las columnas solicitadas
                     let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
                     teamsLeaderboardBody.innerHTML = "";
                     arregloEquiposOrdenado.forEach((eq, idx) => {
+                        let difTexto = eq.dg > 0 ? `+${eq.dg}` : eq.dg;
                         teamsLeaderboardBody.insertAdjacentHTML('beforeend', `
                             <tr class="hover:bg-slate-800/30 transition">
                                 <td class="p-3 text-center font-bold text-slate-400">${idx + 1}°</td>
                                 <td class="p-3 font-extrabold text-white tracking-wide">${eq.nombre}</td>
+                                <td class="p-3 text-center text-slate-300">${eq.pj}</td>
                                 <td class="p-3 text-center text-slate-300">${eq.g}</td>
                                 <td class="p-3 text-center text-slate-300">${eq.e}</td>
                                 <td class="p-3 text-center text-slate-300">${eq.p}</td>
-                                <td class="p-3 text-center font-black text-emerald-400 text-base">${eq.pts}</td>
+                                <td class="p-3 text-center text-slate-300">${eq.gf}</td>
+                                <td class="p-3 text-center text-slate-300">${eq.gc}</td>
+                                <td class="p-3 text-center font-semibold ${eq.dg > 0 ? 'text-emerald-400' : eq.dg < 0 ? 'text-red-400' : 'text-slate-400'}">${difTexto}</td>
+                                <td class="p-3 text-center font-black text-emerald-400 text-base bg-slate-900/40">${eq.pts}</td>
                             </tr>
                         `);
                     });
@@ -585,7 +616,7 @@
                         });
                     });
 
-                    //  Estadísticas Finales Participantes
+                    // Estadísticas Finales Participantes
                     let maxHitsGlobal = 0;
                     let finalParticipants = participantsDataList.map(p => {
                         let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
@@ -618,7 +649,7 @@
                     document.getElementById("kpi-hits").textContent = maxHitsGlobal;
                     document.getElementById("kpi-participants").textContent = finalParticipants.length;
 
-                    // Podio Principal
+                    // Podio Principal Participantes
                     let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
                     document.getElementById("podium-1-names").textContent = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ") || "-";
                     document.getElementById("podium-2-names").textContent = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "-";
@@ -667,7 +698,7 @@
                         `);
                     }
 
-                    // Simulaciones Monte Carlo
+                    // Simulaciones Monte Carlo Predictivas
                     let winCounts = {}; let teamWinCounts = {};
                     finalParticipants.forEach(p => winCounts[p.nombre] = 0);
                     poolTodasLasSelecciones.forEach(team => teamWinCounts[team] = 0);
@@ -716,7 +747,7 @@
                         if (arregloEquiposOrdenado[0]) teamWinCounts[arregloEquiposOrdenado[0].nombre] = 1;
                     }
 
-                    // Bars
+                    // Render Bars Probabilidad
                     let probabilities = finalParticipants.map(p => ({ nombre: p.nombre, prob: (winCounts[p.nombre] / totalSims) * 100 })).sort((a,b) => b.prob - a.prob);
                     let probContainer = document.getElementById("prob-container");
                     probContainer.innerHTML = "";
@@ -725,7 +756,7 @@
                         probContainer.insertAdjacentHTML('beforeend', `<div><div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5"><span>${p.nombre}</span><span class="text-cyan-400">${roundedProb}%</span></div><div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-cyan-500 h-1.5 rounded-full" style="width: ${roundedProb}%"></div></div></div>`);
                     });
 
-                    let teamProbabilities = arregloEquiposOrdenado.map(eq => ({ nombre: eq.nombre, prob: (teamWinCounts[eq.nombre] / totalSims) * 100, ptsReales: eq.pts, gReales: eq.g })).sort((a,b) => b.prob - a.prob || b.ptsReales - a.ptsReales || b.gReales - a.gReales);
+                    let teamProbabilities = arregloEquiposOrdenado.map(eq => ({ nombre: eq.nombre, prob: (teamWinCounts[eq.nombre] / totalSims) * 100, ptsReales: eq.pts, dgReales: eq.dg })).sort((a,b) => b.prob - a.prob || b.ptsReales - a.ptsReales || b.dgReales - a.dgReales);
                     let teamProbContainer = document.getElementById("team-prob-container");
                     teamProbContainer.innerHTML = "";
                     let equiposMostrados = 0;
@@ -758,7 +789,7 @@
                     renderMatchPicks(matchSelect.value);
                     matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
 
-                    // Heatmap
+                    // Heatmap Table
                     let heatmapHeader = document.getElementById("heatmap-header");
                     let heatmapBody = document.getElementById("heatmap-body");
                     heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">PARTICIPANTE</th>`;
@@ -770,7 +801,7 @@
                         heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
                     });
 
-                    // Chart
+                    // Line Chart
                     let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id])];
                     let chartDatasets = finalParticipants.map((p, idx) => {
                         const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899', '#84cc16'];
