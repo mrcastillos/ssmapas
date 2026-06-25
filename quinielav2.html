@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUINIELA MUNDIAL 2026</title>
+    <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,9 +26,9 @@
         <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
-                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronización por ID Único de Partido (WC2026-XXX)...</p>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronización por ID Estricto Activa...</p>
             </div>
-            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 CONEXIÓN BLINDADA</div>
+            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 CONEXIÓN BLINDADA TOTAL</div>
         </header>
 
         <!-- KPIS GLOBALES -->
@@ -108,7 +108,7 @@
         <!-- MAPA DE CALOR COMPLETO -->
         <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
             <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
-                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Control de Aciertos por Partido (Fase de Grupos)
+                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Control de Aciertos por Partido (Partidos 1 al 72)
             </h3>
             <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-96">
                 <table class="w-full text-left border-collapse text-xs font-sports">
@@ -135,9 +135,7 @@
             function procesarMatrizCSV(text) {
                 if (!text) return [];
                 if (text.charCodeAt(0) === 0xFEFF) { text = text.substr(1); }
-                return text.split(/\r?\n|\r/)
-                           .map(line => line.split(',').map(cell => cell.replace(/^["']|["']$/g, '').trim()))
-                           .filter(row => row.length > 0 && row[0] !== '');
+                return text.split(/\r?\n|\r/).map(line => line.split(',').map(cell => cell.replace(/^["']|["']$/g, '').trim())).filter(row => row.length > 0 && row[0] !== '');
             }
 
             async function leerCSV(nombre) {
@@ -165,8 +163,8 @@
 
                 let mundialRows = procesarMatrizCSV(mundial.text);
                 let partidosMap = {};
-                let resultadosMap = {};
-                let idListOrdenada = [];
+                let resultadosMap = {}; 
+                let idListOrdenada = []; 
                 let playedMatchIds = [];
 
                 if (mundialRows.length > 0) {
@@ -183,12 +181,12 @@
 
                     for(let i=1; i<mundialRows.length; i++) {
                         let row = mundialRows[i];
-                        if(row.length < idxRes || !row[idxIdPartido]) continue;
+                        if(!row[idxIdPartido]) continue;
                         
                         let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : '';
                         if (!fase.includes("GRUPO")) continue; 
 
-                        let idPartido = row[idxIdPartido].toUpperCase().trim();
+                        let idPartido = row[idxIdPartido].trim().toUpperCase(); 
                         let abbr = row[idxAbbr] || idPartido;
                         let resEscrito = row[idxRes] ? row[idxRes].toUpperCase().trim() : '';
 
@@ -205,7 +203,7 @@
                 let numPlayed = playedMatchIds.length;
 
                 let participantesRows = procesarMatrizCSV(participantes.text);
-                let pHeaderClean = participantesRows[0].map(h => h.toUpperCase().trim());
+                let pHeaderClean = participantesRows[0].map(h => h.trim().toUpperCase());
                 let idxNombrePart = pHeaderClean.indexOf("NOMBRE");
                 if(idxNombrePart === -1) idxNombrePart = 0; 
 
@@ -213,15 +211,15 @@
                 for(let i=1; i<participantesRows.length; i++) {
                     let row = participantesRows[i];
                     if(row.length < 2 || !row[idxNombrePart]) continue;
-                    
-                    // VALIDACIÓN ESTRICTA TEXTUAL DEL NOMBRE COMPLETO
                     let name = row[idxNombrePart].toUpperCase().trim();
                     let preds = {};
+                    
+                    // Vinculación estricta literal por ID (ej. "WC2026-001")
                     for(let j=0; j<row.length; j++) {
                         if(j === idxNombrePart) continue;
-                        let idKey = pHeaderClean[j]; 
-                        if(idKey.startsWith("WC2026-") || !isNaN(parseInt(idKey))) {
-                            preds[idKey] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
+                        let colHeader = pHeaderClean[j];
+                        if(colHeader) {
+                            preds[colHeader] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
                         }
                     }
                     listData.push({nombre: name, preds: preds});
@@ -230,16 +228,11 @@
                 let historyPoints = {}; let historyRanks = {};
                 listData.forEach(p => { historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1]; });
 
-                playedMatchIds.forEach((idKey, stepIdx) => {
-                    let actual = resultadosMap[idKey];
-                    
+                playedMatchIds.forEach(idPartido => {
+                    let actual = resultadosMap[idPartido];
                     listData.forEach(p => {
                         let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                        
-                        // Buscamos la predicción ya sea por la clave de ID o por su número de columna indexada
-                        let pred = p.preds[idKey] || p.preds[stepIdx + 1] || '';
-                        let isCorrect = (pred === actual);
-                        
+                        let isCorrect = (p.preds[idPartido] === actual);
                         historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
                     });
 
@@ -257,45 +250,24 @@
                 let maxHitsGlobal = 0;
                 let finalParticipants = listData.map(p => {
                     let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                    
-                    // INYECTAMOS PARCHE DE RECTIFICACIÓN DIRECTA DESDE LA CAPTURA PARA EDUARDO S. Y MARTIN
-                    if (p.nombre === "EDUARDO S." || p.nombre === "EDUARDOS") pts = 35;
-                    if (p.nombre === "MARTIN") pts = 33;
-                    if (p.nombre === "PEDRO") pts = 34;
-                    if (p.nombre === "VICTORIA") pts = 34;
-                    if (p.nombre === "SALVADOR") pts = 34;
-                    if (p.nombre === "ALFONSO") pts = 33;
-                    if (p.nombre === "OMAR") pts = 33;
-                    if (p.nombre === "ISRAEL") pts = 32;
-                    if (p.nombre === "JAFET") pts = 32;
-                    if (p.nombre === "EMILIANO") pts = 31;
-                    if (p.nombre === "DIDIER") pts = 31;
-                    if (p.nombre === "LILIANA") pts = 31;
-                    if (p.nombre === "ULISES") pts = 30;
-                    if (p.nombre === "ADELINA") pts = 29;
-                    if (p.nombre === "LAURA") pts = 27;
-                    if (p.nombre === "EDUARDO L." || p.nombre === "EDUARDOL") pts = 27;
-                    if (p.nombre === "SOFI") pts = 24;
-                    if (p.nombre === "ANGELITA") pts = 24;
-
                     if(pts > maxHitsGlobal) maxHitsGlobal = pts;
 
                     let maxStreak = 0; let currStreak = 0; let heatmap = [];
                     
-                    playedMatchIds.forEach((idKey, stepIdx) => {
-                        let pred = p.preds[idKey] || p.preds[stepIdx + 1] || '';
-                        if(pred === resultadosMap[idKey]) {
-                            currStreak++;
-                            if(currStreak > maxStreak) maxStreak = currStreak;
-                            heatmap.push('✅');
+                    idListOrdenada.forEach(idPartido => {
+                        if(resultadosMap[idPartido]) {
+                            if(p.preds[idPartido] === resultadosMap[idPartido]) {
+                                currStreak++;
+                                if(currStreak > maxStreak) maxStreak = currStreak;
+                                heatmap.push('✅');
+                            } else {
+                                currStreak = 0;
+                                heatmap.push('❌');
+                            }
                         } else {
-                            currStreak = 0;
-                            heatmap.push('❌');
+                            heatmap.push('—'); 
                         }
                     });
-
-                    // Completar el heatmap con guiones para los partidos pendientes
-                    for(let k = numPlayed; k < 72; k++) { heatmap.push('—'); }
 
                     let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
                     if(rHistory.length > 1) {
@@ -306,7 +278,7 @@
 
                     return {
                         nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
-                        trend: trend, trendVal: trendVal, maxStreak: maxStreak > 0 ? maxStreak : 3, heatmap: heatmap, preds: p.preds
+                        trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
                     };
                 }).sort((a,b) => b.puntos - a.puntos);
 
@@ -365,24 +337,26 @@
                 let heatmapBody = document.getElementById("heatmap-body");
                 heatmapHeader.innerHTML = `<th class="p-2.5 bg-slate-950 font-black text-slate-400 sticky left-0 z-20">PARTICIPANTE</th>`;
                 
-                idListOrdenada.forEach(idKey => {
-                    heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-2.5 text-center border-l border-slate-900 font-bold min-w-[65px]">${partidosMap[idKey]}</th>`);
+                idListOrdenada.forEach(idPartido => {
+                    heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-2.5 text-center border-l border-slate-800 font-bold min-w-[65px]">${partidosMap[idPartido]}</th>`);
                 });
 
                 heatmapBody.innerHTML = "";
                 finalParticipants.forEach(p => {
                     let rowHtml = `<tr><td class="p-2.5 font-extrabold text-slate-300 bg-slate-900 sticky left-0 z-10 border-r border-slate-800 font-sports">${p.nombre}</td>`;
-                    idListOrdenada.forEach((idKey, idx) => {
-                        let cell = p.heatmap[idx];
+                    idListOrdenada.forEach(idPartido => {
+                        let actual = resultadosMap[idPartido];
+                        let cell = '—';
+                        if (actual) {
+                            cell = (p.preds[idPartido] === actual) ? '✅' : '❌';
+                        }
                         let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/10' : cell === '❌' ? 'text-red-400 bg-red-950/10' : 'text-slate-600 bg-slate-950/10';
-                        
-                        let pred = p.preds[idKey] || p.preds[idx + 1] || '-';
-                        rowHtml += `<td class="p-2 text-center border-l border-slate-800/40 ${colorClass}"><div class="font-bold text-[10px]">${pred}</div><div class="text-[9px] opacity-70">${cell}</div></td>`;
+                        rowHtml += `<td class="p-2 text-center border-l border-slate-800/40 ${colorClass}"><div class="font-bold text-[10px]">${p.preds[idPartido] || '-'}</div><div class="text-[9px] opacity-70">${cell}</div></td>`;
                     });
                     heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
                 });
 
-                let chartLabels = ['INICIO', ...playedMatchIds.map(idKey => partidosMap[idKey])];
+                let chartLabels = ['INICIO', ...playedMatchIds.map(idPartido => partidosMap[idPartido])];
                 let chartDatasets = finalParticipants.slice(0, 5).map((p, idx) => {
                     const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e'];
                     let color = colors[idx % colors.length];
