@@ -292,7 +292,7 @@
 
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4">
-                <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÍA HISTÓRICA DE CLASIFICACIÓN
+                <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÓN HISTÓRICA DE CLASIFICACIÓN
             </h3>
             <div class="h-80 w-full"><canvas id="evolutionChart"></canvas></div>
         </section>
@@ -412,7 +412,6 @@
                                 }
 
                                 let resCalculado = '';
-                                // BLINDAJE: Solo procesar goles válidos numéricos y verificar que el partido sea <= 72 para grupos
                                 if (gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
                                     let nL = parseInt(gL); let nV = parseInt(gV);
                                     resCalculado = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
@@ -434,9 +433,8 @@
                     }
 
                     let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
-                    let numPlayed = playedMatchIds.length; // Arreglado: Mostrará exactamente 48 si hay 48 con goles cargados en grupos
+                    let numPlayed = playedMatchIds.length;
 
-                    // Procesamiento de Tabla de Posiciones por Criterios FIFA
                     let tablaEquipos = {};
                     poolTodasLasSelecciones.forEach(team => {
                         tablaEquipos[team] = { nombre: team, grupo: mapasGrupoEquipos[team] || 'S/G', pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, dg: 0, pts: 0 };
@@ -494,7 +492,8 @@
 
                     let arregloEquiposOrdenado = [...listaEquiposProcesados].sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
 
-                    // Renderizar Tabla General de Posiciones Inferior
+                    let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
+
                     let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
                     teamsLeaderboardBody.innerHTML = "";
                     arregloEquiposOrdenado.forEach((eq, idx) => {
@@ -516,14 +515,20 @@
                         `);
                     });
 
-                    // Inyección Visual de los Brackets Predictivos
+                    // --- GENERACIÓN DEL ÁRBOL ELIMINATORIO CORREGIDA CON EL NOMBRE CORRECTO DE VARIABLE ---
                     let ganadoresSimuladosMap = {};
+                    const brContainers = {
+                        "DICISEISAVOS": "bracket-16vos", "OCTAVOS": "bracket-octavos", "CUARTOS": "bracket-cuartos",
+                        "SEMIFINAL": "bracket-semis", "3ER LUGAR": "bracket-tercer", "FINAL MUNDIAL 2026": "bracket-final"
+                    };
+
                     ["bracket-16vos", "bracket-octavos", "bracket-cuartos", "bracket-semis", "bracket-tercer", "bracket-final"].forEach(id => {
-                        document.getElementById(id).innerHTML = "";
+                        let el = document.getElementById(id);
+                        if(el) el.innerHTML = "";
                     });
 
                     for (let fKey in eliminatoriasPorFase) {
-                        let contenedorId = contenedores[fKey];
+                        let contenedorId = brContainers[fKey];
                         let contenedor = document.getElementById(contenedorId);
                         if (contenedor && eliminatoriasPorFase[fKey].length > 0) {
                             
@@ -603,37 +608,9 @@
 
                     ["bracket-16vos", "bracket-octavos", "bracket-cuartos", "bracket-semis", "bracket-tercer", "bracket-final"].forEach(id => {
                         let div = document.getElementById(id);
-                        if(div.innerHTML.trim() === "") div.innerHTML = `<p class="text-xs text-slate-600 py-4 font-sports uppercase tracking-wider">—</p>`;
+                        if(div && div.innerHTML.trim() === "") div.innerHTML = `<p class="text-xs text-slate-600 py-4 font-sports uppercase tracking-wider">—</p>`;
                     });
 
-                    // Inyección de Podios de Países en las tarjetas de arriba
-                    document.getElementById("team-podium-1-names").textContent = arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[0]).map(eq => eq.nombre).join(", ") || "—";
-                    document.getElementById("team-podium-2-names").textContent = uniqueTeamScores.length > 1 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[1]).map(eq => eq.nombre).join(", ") : "—";
-                    document.getElementById("team-podium-3-names").textContent = uniqueTeamScores.length > 2 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[2]).map(eq => eq.nombre).join(", ") : "—";
-
-                    let teamFifaContainer = document.getElementById("team-fifa-cards-container");
-                    teamFifaContainer.innerHTML = "";
-                    for(let i=0; i<Math.min(3, arregloEquiposOrdenado.length); i++) {
-                        let eq = arregloEquiposOrdenado[i];
-                        let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
-                        let rendimiento = eq.pj > 0 ? ((eq.pts / (eq.pj * 3)) * 100).toFixed(0) : 0;
-                        teamFifaContainer.insertAdjacentHTML('beforeend', `
-                            <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-64">
-                                <div><div class="text-xl">${i===0?'🏆':i===1?'🥈':'🥉'}</div><div class="text-lg font-black uppercase tracking-wider mt-1 border-b border-black/20 pb-0.5">${eq.nombre}</div></div>
-                                <div class="my-auto space-y-1">
-                                    <div><span class="text-3xl font-black">${eq.pts}</span><span class="text-xs font-bold block -mt-1 uppercase tracking-tight">PUNTOS</span></div>
-                                    <div class="grid grid-cols-2 text-[10px] font-bold bg-black/10 rounded p-1.5 text-left gap-y-0.5">
-                                        <div>GRUPO:</div><div class="text-right">${eq.grupo}</div>
-                                        <div>DIF. GOLES:</div><div class="text-right">${eq.dg > 0 ? '+' + eq.dg : eq.dg}</div>
-                                        <div>RENDIM:</div><div class="text-right">${rendimiento}%</div>
-                                    </div>
-                                </div>
-                                <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[11px] font-bold">PREDICTIVO LIVE</div>
-                            </div>
-                        `);
-                    }
-
-                    // Procesar participantes para la Quiniela
                     let participantesRows = procesarMatrizCSV(participantes.text);
                     let pHeader = participantesRows[0];
                     let participantsDataList = [];
@@ -698,6 +675,7 @@
                         let leaders = finalParticipants.filter(p => p.puntos === topPts).map(p => p.nombre);
                         document.getElementById("kpi-leader").textContent = leaders.join(" / ");
                     }
+                    document.getElementById("kpi-played").innerHTML = `${numPlayed} <span class="text-xs text-slate-500 font-normal">/ 72</span>`;
                     document.getElementById("kpi-hits").textContent = maxHitsGlobal;
                     document.getElementById("kpi-participants").textContent = finalParticipants.length;
 
@@ -747,11 +725,56 @@
                         `);
                     }
 
-                    // Simulación Monte Carlo
                     let winCounts = {}; let teamWinCounts = {};
                     finalParticipants.forEach(p => winCounts[p.nombre] = 0);
                     arregloEquiposOrdenado.forEach(eq => teamWinCounts[eq.nombre] = 0);
                     
+                    let remainingMatches = [];
+                    for(let m=1; m<=72; m++) {
+                        if(!resultadosMap[m] && estructuraPartidosOriginal[m]) remainingMatches.push(m);
+                    }
+
+                    let totalSims = remainingMatches.length > 0 ? 1000 : 1;
+                    if(remainingMatches.length > 0) {
+                        const outcomes = ['L', 'E', 'V'];
+                        for(let s=0; s<totalSims; s++) {
+                            let simScores = {}; let simTeamScores = {};
+                            finalParticipants.forEach(p => simScores[p.nombre] = p.puntos);
+                            arregloEquiposOrdenado.forEach(eq => simTeamScores[eq.nombre] = eq.pts);
+                            
+                            remainingMatches.forEach(mId => {
+                                let randRes = outcomes[Math.floor(Math.random()*3)];
+                                finalParticipants.forEach(p => { if(p.preds[mId] === randRes) simScores[p.nombre]++; });
+                                let bandos = estructuraPartidosOriginal[mId].split("VS").map(e => e.trim());
+                                if (bandos.length === 2) {
+                                    let loc = bandos[0]; let vis = bandos[1];
+                                    if(loc !== '?' && vis !== '?') {
+                                        if (randRes === 'L') simTeamScores[loc] = (simTeamScores[loc]||0) + 3;
+                                        else if (randRes === 'V') simTeamScores[vis] = (simTeamScores[vis]||0) + 3;
+                                        else { simTeamScores[loc] = (simTeamScores[loc]||0) + 1; simTeamScores[vis] = (simTeamScores[vis]||0) + 1; }
+                                    }
+                                }
+                            });
+                            
+                            let maxS = -1; let winners = [];
+                            for(let name in simScores) {
+                                if(simScores[name] > maxS) { maxS = simScores[name]; winners = [name]; }
+                                else if(simScores[name] === maxS) { winners.push(name); }
+                            }
+                            winners.forEach(w => winCounts[w] += (1 / winners.length));
+
+                            let maxTS = -1; let teamWinners = [];
+                            for(let tName in simTeamScores) {
+                                if(simTeamScores[tName] > maxTS) { maxTS = simTeamScores[tName]; teamWinners = [tName]; }
+                                else if(simTeamScores[tName] === maxTS) { teamWinners.push(tName); }
+                            }
+                            teamWinners.forEach(tw => { if(teamWinCounts[tw] !== undefined) teamWinCounts[tw] += (1 / teamWinners.length); });
+                        }
+                    } else {
+                        if (finalParticipants[0]) winCounts[finalParticipants[0].nombre] = 1;
+                        if (arregloEquiposOrdenado[0]) teamWinCounts[arregloEquiposOrdenado[0].nombre] = 1;
+                    }
+
                     let probabilities = finalParticipants.map(p => ({ nombre: p.nombre, prob: (winCounts[p.nombre] / totalSims) * 100 })).sort((a,b) => b.prob - a.prob);
                     let probContainer = document.getElementById("prob-container");
                     probContainer.innerHTML = "";
@@ -772,7 +795,6 @@
                         equiposMostrados++;
                     }
 
-                    // Top Picks
                     let topPicksData = {};
                     for(let m=1; m<=72; m++) {
                         let counts = {L:0, E:0, V:0}; let total = 0;
@@ -793,7 +815,6 @@
                     renderMatchPicks(matchSelect.value);
                     matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
 
-                    // Heatmap
                     let heatmapHeader = document.getElementById("heatmap-header");
                     let heatmapBody = document.getElementById("heatmap-body");
                     heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">PARTICIPANTE</th>`;
@@ -805,7 +826,6 @@
                         heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
                     });
 
-                    // Evolution Chart
                     let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id])];
                     let chartDatasets = finalParticipants.map((p, idx) => {
                         const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899', '#84cc16'];
