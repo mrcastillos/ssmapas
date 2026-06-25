@@ -19,6 +19,7 @@
 <body class="p-4 md:p-6 bg-slate-950">
     <div class="max-w-6xl mx-auto space-y-6">
         
+        <!-- ENCABEZADO -->
         <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
@@ -27,6 +28,7 @@
             <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 PREMIUM STADIUM</div>
         </header>
 
+        <!-- CONTADORES PRINCIPALES -->
         <section class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sports">
             <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
                 <div><p class="text-xs text-slate-400 uppercase">Líder Actual</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">-</p></div>
@@ -46,6 +48,7 @@
             </div>
         </section>
 
+        <!-- RANKING GENERAL -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
                 <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
@@ -54,6 +57,7 @@
                 <div id="ranking-container" class="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar"></div>
             </div>
 
+            <!-- TARJETA DEL LÍDER -->
             <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
                 <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2 mb-4">
                     <i class="fa-solid fa-id-card text-yellow-500 mr-1"></i> Tarjeta FIFA Líder
@@ -62,6 +66,7 @@
             </div>
         </section>
 
+        <!-- MAPA DE CALOR -->
         <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
             <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
                 <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Historial de Aciertos por Partido
@@ -74,6 +79,7 @@
             </div>
         </section>
 
+        <!-- PIE DE PÁGINA -->
         <footer class="bg-slate-900/40 py-4 text-center rounded-lg border border-slate-900">
             <p class="text-yellow-500 font-sports font-bold tracking-widest text-xs uppercase">
                 📷 Galería Oficial: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline">@lente.abierto.mx</a>
@@ -142,7 +148,6 @@
 
                         if(gL !== undefined && gV !== undefined && gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
                             let nL = parseInt(gL); let nV = parseInt(gV);
-                            // Cálculo directo e inmune a errores de formato
                             let res = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
                             resultadosMap[num] = res;
                             playedMatchIds.push(num);
@@ -152,21 +157,25 @@
 
                 let numPlayed = playedMatchIds.length;
                 let participantesRows = procesarMatrizCSV(participantes.text);
-                let pHeader = participantesRows[0];
+                let pHeader = participantesRows[0].map(h => h.toUpperCase().trim());
+                
+                // Buscamos el índice de la columna del nombre sin importar si viene como 'nombre' o 'NOMBRE'
+                let idxNombrePart = pHeader.indexOf("NOMBRE");
+                if(idxNombrePart === -1) idxNombrePart = 0; 
+
                 let listData = [];
 
                 for(let i=1; i<participantesRows.length; i++) {
                     let row = participantesRows[i];
                     if(row.length < 2) continue;
-                    let name = row[0].toUpperCase();
+                    let name = row[idxNombrePart].toUpperCase();
                     let preds = {};
-                    for(let j=1; j<row.length; j++) {
-                        let mNum = parseInt(pHeader[j]);
+                    for(let j=0; j<row.length; j++) {
+                        if(j === idxNombrePart) continue;
+                        let mNum = parseInt(participantesRows[0][j]); // Usamos la cabecera original para el número de partido
                         if(!isNaN(mNum)) {
                             let valRaw = row[j] ? row[j].toUpperCase().trim() : '';
-                            // Si guardaste el resultado completo o la inicial, extraemos solo la letra clave limpia
-                            let letraPred = valRaw.charAt(0); 
-                            preds[mNum] = letraPred;
+                            preds[mNum] = valRaw.charAt(0); 
                         }
                     }
                     listData.push({nombre: name, preds: preds});
