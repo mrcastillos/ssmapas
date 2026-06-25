@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+        .font-sports { font-family: 'Rajdhani', sans-serif; }
+        .fifa-card { background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%); border: 3px solid #f3e0a3; position: relative; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+        .fifa-card-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #4b5563 100%); border: 3px solid #f3f4f6; }
+        .fifa-card-bronze { background: linear-gradient(135deg, #ca8a04 0%, #a16207 50%, #78350f 100%); border: 3px solid #fef08a; }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #111827; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    </style>
+</head>
+<body class="p-4 md:p-6 bg-slate-950">
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <!-- ENCABEZADO -->
+        <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronización Total en Tiempo Real Activa...</p>
+            </div>
+            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 PREMIUM STADIUM</div>
+        </header>
+
+        <!-- KPIS GLOBALES -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sports">
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Líder de la Porra</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">-</p></div>
+                <i class="fa-solid fa-medal text-slate-700 text-xl"></i>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Partidos Evaluados</p><p id="kpi-played" class="text-xl font-black text-emerald-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-square-poll-vertical text-slate-700 text-xl"></i>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Máximo Score</p><p id="kpi-hits" class="text-xl font-black text-cyan-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-bullseye text-slate-700 text-xl"></i>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Participantes</p><p id="kpi-participants" class="text-xl font-black text-purple-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-users text-slate-700 text-xl"></i>
+            </div>
+        </section>
+
+        <!-- PODIO COLECTIVO CON AGRUPACIÓN -->
+        <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
+            <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
+                <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO GENERAL DE GANADORES
+            </h2>
+            <div class="grid grid-cols-3 max-w-3xl mx-auto items-end pt-12 font-sports text-center gap-4">
+                <div class="flex flex-col items-center">
+                    <div id="podium-2-names" class="text-xs font-bold text-slate-300 mb-2 break-words max-w-full px-1">🥈 —</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-slate-400 min-h-[70px] p-2 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-xl font-black text-slate-400">2°</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fa-solid fa-crown text-yellow-400 text-xl mb-1 animate-pulse"></i>
+                    <div id="podium-1-names" class="text-sm font-extrabold text-yellow-400 mb-2 break-words max-w-full px-1">🥇 —</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-yellow-500 min-h-[100px] p-2 rounded-t-lg flex flex-col justify-center items-center shadow-2xl">
+                        <span class="text-3xl font-black text-yellow-400">1°</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div id="podium-3-names" class="text-xs font-bold text-amber-600 mb-2 break-words max-w-full px-1">🥉 —</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-amber-700 min-h-[50px] p-2 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-lg font-black text-amber-600">3°</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL CENTRAL -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-list-ol text-emerald-500 mr-1"></i> Tabla de Posiciones de la Porra
+                </h3>
+                <div id="ranking-container" class="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar"></div>
+            </div>
+
+            <!-- TARJETAS FIFA TOP 3 -->
+            <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-id-card text-yellow-500 mr-1"></i> Tarjetas FIFA Destacados
+                </h3>
+                <div id="fifa-cards-container" class="flex flex-col gap-4 items-center justify-center overflow-y-auto max-h-[420px] pr-1 custom-scrollbar"></div>
+            </div>
+        </section>
+
+        <!-- EVOLUCIÓN HISTÓRICA -->
+        <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
+            <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-4">
+                <i class="fa-solid fa-chart-line text-amber-500 mr-1"></i> Línea de Rendimiento Histórico (Top 5)
+            </h3>
+            <div class="h-64 w-full"><canvas id="evolutionChart"></canvas></div>
+        </section>
+
+        <!-- MAPA DE CALOR COMPLETO -->
+        <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
+            <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
+                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Control de Aciertos por Partido
+            </h3>
+            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-96">
+                <table class="w-full text-left border-collapse text-xs font-sports">
+                    <thead><tr id="heatmap-header" class="bg-slate-950 text-slate-400 uppercase tracking-wider sticky top-0 z-10 border-b border-slate-800"></tr></thead>
+                    <tbody id="heatmap-body" class="divide-y divide-slate-800 bg-slate-900/40"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PIE DE PÁGINA -->
+        <footer class="bg-slate-900/40 py-4 text-center rounded-lg border border-slate-900">
+            <p class="text-yellow-500 font-sports font-bold tracking-widest text-xs uppercase">
+                📷 Galería Oficial: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline">@lente.abierto.mx</a>
+            </p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+            let chartInstance = null;
+
+            function procesarMatrizCSV(text) {
+                if (!text) return [];
+                if (text.charCodeAt(0) === 0xFEFF) { text = text.substr(1); }
+                return text.split(/\r?\n|\r/).map(line => line.split(',').map(cell => cell.replace(/^["']|["']$/g, '').trim())).filter(row => row.length > 0 && row[0] !== '');
+            }
+
+            async function leerCSV(nombre) {
+                try {
+                    // SE AGREGA CACHÉ BUSTER ABSOLUTO POR TIEMPO PARA FORZAR LECTURA DE DATOS NUEVOS
+                    let response = await fetch(baseUrl + nombre + '?v=' + new Date().getTime());
+                    if (response.ok) {
+                        let text = await response.text();
+                        return { text: text, headers: response.headers };
+                    }
+                } catch (e) { console.error("Error cargando " + nombre); }
+                return null;
+            }
+
+            async function actualizar() {
+                const mundial = await leerCSV("Mundial2026.csv") || await leerCSV("mundial2026.csv");
+                const participantes = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv");
+
+                if (!mundial || !participantes) return;
+
+                let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
+                let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
+                let latestDate = new Date(Math.max(d1, d2));
+                
+                document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2,'0')}/${(latestDate.getMonth()+1).toString().padStart(2,'0')} ${latestDate.getHours().toString().padStart(2,'0')}:${latestDate.getMinutes().toString().padStart(2,'0')}`;
+
+                let mundialRows = procesarMatrizCSV(mundial.text);
+                let partidosMap = {};
+                let resultadosMap = {}; 
+                let idListOrdenada = []; 
+                let playedMatchIds = [];
+
+                if (mundialRows.length > 0) {
+                    let headerMundial = mundialRows[0].map(h => h.toUpperCase().trim());
+                    let idxIdPartido = headerMundial.indexOf("ID_PARTIDO");
+                    let idxAbbr = headerMundial.indexOf("ABREVIATURA");
+                    let idxRes = headerMundial.indexOf("RESULTADO");
+
+                    if (idxIdPartido === -1) idxIdPartido = 1;
+                    if (idxAbbr === -1) idxAbbr = 2;
+                    if (idxRes === -1) idxRes = 5;
+
+                    for(let i=1; i<mundialRows.length; i++) {
+                        let row = mundialRows[i];
+                        if(!row[idxIdPartido]) continue;
+                        
+                        let idPartido = row[idxIdPartido].trim().toUpperCase(); 
+                        let abbr = row[idxAbbr] || idPartido;
+                        let resEscrito = row[idxRes] ? row[idxRes].toUpperCase().trim() : '';
+
+                        partidosMap[idPartido] = abbr;
+                        idListOrdenada.push(idPartido);
+
+                        if (resEscrito === 'L' || resEscrito === 'V' || resEscrito === 'E') {
+                            resultadosMap[idPartido] = resEscrito;
+                            playedMatchIds.push(idPartido);
+                        }
+                    }
+                }
+
+                let numPlayed = playedMatchIds.length;
+
+                let participantesRows = procesarMatrizCSV(participantes.text);
+                let pHeaderClean = participantesRows[0].map(h => h.trim().toUpperCase());
+                let idxNombrePart = pHeaderClean.indexOf("NOMBRE");
+                if(idxNombrePart === -1) idxNombrePart = 0; 
+
+                let listData = [];
+                for(let i=1; i<participantesRows.length; i++) {
+                    let row = participantesRows[i];
+                    if(row.length < 2 || !row[idxNombrePart]) continue;
+                    let name = row[idxNombrePart].toUpperCase().trim();
+                    let preds = {};
+                    
+                    for(let j=0; j<row.length; j++) {
+                        if(j === idxNombrePart) continue;
+                        let colHeader = pHeaderClean[j];
+                        if(colHeader) {
+                            preds[colHeader] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
+                        }
+                    }
+                    listData.push({nombre: name, preds: preds});
+                }
+
+                let historyPoints = {}; let historyRanks = {};
+                listData.forEach(p => { historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1]; });
+
+                playedMatchIds.forEach(idPartido => {
+                    let actual = resultadosMap[idPartido];
+                    listData.forEach(p => {
+                        let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                        let isCorrect = (p.preds[idPartido] === actual);
+                        historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
+                    });
+
+                    let stepScores = listData.map(p => ({
+                        nombre: p.nombre, puntos: historyPoints[p.nombre][historyPoints[p.nombre].length - 1]
+                    })).sort((a,b) => b.puntos - a.puntos);
+
+                    let r = 1;
+                    stepScores.forEach((item, idx) => {
+                        if(idx > 0 && item.puntos < stepScores[idx-1].puntos) r = idx + 1;
+                        historyRanks[item.nombre].push(r);
+                    });
+                });
+
+                let maxHitsGlobal = 0;
+                let finalParticipants = listData.map(p => {
+                    let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                    if(pts > maxHitsGlobal) maxHitsGlobal = pts;
+
+                    let maxStreak = 0; let currStreak = 0; let heatmap = [];
+                    
+                    idListOrdenada.forEach(idPartido => {
+                        if(resultadosMap[idPartido]) {
+                            if(p.preds[idPartido] === resultadosMap[idPartido]) {
+                                currStreak++;
+                                if(currStreak > maxStreak) maxStreak = currStreak;
+                                heatmap.push('✅');
+                            } else {
+                                currStreak = 0;
+                                heatmap.push('❌');
+                            }
+                        } else {
+                            heatmap.push('—'); 
+                        }
+                    });
+
+                    let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
+                    if(rHistory.length > 1) {
+                        let currR = rHistory[rHistory.length - 1]; let prevR = rHistory[rHistory.length - 2];
+                        if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
+                        else if(currR > prevR) { trend = '▼'; trendVal = currR - prevR; }
+                    }
+
+                    return {
+                        nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
+                        trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
+                    };
+                }).sort((a,b) => b.puntos - a.puntos);
+
+                if(finalParticipants.length > 0) document.getElementById("kpi-leader").textContent = finalParticipants[0].nombre;
+                document.getElementById("kpi-played").textContent = numPlayed;
+                document.getElementById("kpi-hits").textContent = maxHitsGlobal;
+                document.getElementById("kpi-participants").textContent = finalParticipants.length;
+
+                let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
+                document.getElementById("podium-1-names").innerHTML = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => `<span class="block">${p.nombre}</span>`).join("") || "—";
+                document.getElementById("podium-2-names").innerHTML = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => `<span class="block">${p.nombre}</span>`).join("") : "—";
+                document.getElementById("podium-3-names").innerHTML = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => `<span class="block">${p.nombre}</span>`).join("") : "—";
+
+                let rankingContainer = document.getElementById("ranking-container");
+                rankingContainer.innerHTML = "";
+                let maxPts = uniqueScores[0] || 1;
+                
+                finalParticipants.forEach((p, index) => {
+                    let pct = (p.puntos / maxPts) * 100;
+                    let arrowColor = p.trend === '▲' ? 'text-green-400' : p.trend === '▼' ? 'text-red-400' : 'text-slate-500';
+                    let arrowIcon = p.trend === '▲' ? 'fa-arrow-up' : p.trend === '▼' ? 'fa-arrow-down' : 'fa-minus';
+
+                    rankingContainer.insertAdjacentHTML('beforeend', `
+                        <div class="flex items-center justify-between p-2.5 rounded bg-slate-900/60 border border-slate-800 hover:bg-slate-800/40 transition">
+                            <div class="flex items-center gap-3 w-1/2">
+                                <span class="text-xs font-bold text-slate-500 w-4">${index + 1}</span>
+                                <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400 text-sm' : 'text-slate-200'}">${p.nombre}</span>
+                                <span class="${arrowColor} text-[10px] flex items-center font-bold"><i class="fa-solid ${arrowIcon} mr-0.5"></i>${p.trendVal > 0 ? p.trendVal : ''}</span>
+                            </div>
+                            <div class="w-1/3 px-2 hidden sm:block">
+                                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden"><div class="h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-400" style="width: ${pct}%"></div></div>
+                            </div>
+                            <div class="text-right font-sports font-bold text-slate-300 w-1/4"><span class="text-base text-white font-black">${p.puntos}</span> <span class="text-[10px] text-slate-500">PTS</span></div>
+                        </div>`);
+                });
+
+                let fifaContainer = document.getElementById("fifa-cards-container");
+                fifaContainer.innerHTML = "";
+                for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
+                    let p = finalParticipants[i];
+                    let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
+                    fifaContainer.insertAdjacentHTML('beforeend', `
+                        <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-48 w-44">
+                            <div class="text-sm font-black uppercase tracking-wider border-b border-black/10 pb-0.5">${p.nombre}</div>
+                            <div>
+                                <span class="text-3xl font-black block">${p.puntos}</span>
+                                <span class="text-[9px] font-bold text-slate-800 block -mt-1">ACIERTOS</span>
+                            </div>
+                            <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[9px] font-bold">
+                                🔥 RACHA: ${p.maxStreak} | ${p.efectividad}% EF.
+                            </div>
+                        </div>`);
+                }
+
+                let heatmapHeader = document.getElementById("heatmap-header");
+                let heatmapBody = document.getElementById("heatmap-body");
+                heatmapHeader.innerHTML = `<th class="p-2.5 bg-slate-950 font-black text-slate-400 sticky left-0 z-20">PARTICIPANTE</th>`;
+                
+                idListOrdenada.forEach(idPartido => {
+                    heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-2.5 text-center border-l border-slate-800 font-bold min-w-[65px]">${partidosMap[idPartido]}</th>`);
+                });
+
+                heatmapBody.innerHTML = "";
+                finalParticipants.forEach(p => {
+                    let rowHtml = `<tr><td class="p-2.5 font-extrabold text-slate-300 bg-slate-900 sticky left-0 z-10 border-r border-slate-800 font-sports">${p.nombre}</td>`;
+                    idListOrdenada.forEach(idPartido => {
+                        let actual = resultadosMap[idPartido];
+                        let cell = '—';
+                        if (actual) {
+                            cell = (p.preds[idPartido] === actual) ? '✅' : '❌';
+                        }
+                        let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/10' : cell === '❌' ? 'text-red-400 bg-red-950/10' : 'text-slate-600 bg-slate-950/10';
+                        rowHtml += `<td class="p-2 text-center border-l border-slate-800/40 ${colorClass}"><div class="font-bold text-[10px]">${p.preds[idPartido] || '-'}</div><div class="text-[9px] opacity-70">${cell}</div></td>`;
+                    });
+                    heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
+                });
+
+                let chartLabels = ['INICIO', ...playedMatchIds.map(idPartido => partidosMap[idPartido])];
+                let chartDatasets = finalParticipants.slice(0, 5).map((p, idx) => {
+                    const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e'];
+                    let color = colors[idx % colors.length];
+                    return { label: p.nombre, data: historyRanks[p.nombre], borderColor: color, backgroundColor: 'transparent', borderWidth: idx === 0 ? 3 : 1.5, tension: 0.1, pointRadius: 1 };
+                });
+                if(chartInstance) chartInstance.destroy();
+                chartInstance = new Chart(document.getElementById('evolutionChart').getContext('2d'), { type: 'line', data: { labels: chartLabels, datasets: chartDatasets }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { reversed: true, min: 1, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold' } } } }, plugins: { legend: { labels: { color: '#f3f4f6', font: { size: 10 } } } } } });
+            }
+            actualizar();
+        });
+    </script>
+</body>
+</html>
