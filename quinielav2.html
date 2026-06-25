@@ -26,9 +26,9 @@
         <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
-                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronización por ID Estricto Activa...</p>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronización Total Multifase Activa...</p>
             </div>
-            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 CONEXIÓN BLINDADA TOTAL</div>
+            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 PREMIUM STADIUM</div>
         </header>
 
         <!-- KPIS GLOBALES -->
@@ -38,7 +38,7 @@
                 <i class="fa-solid fa-medal text-slate-700 text-xl"></i>
             </div>
             <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                <div><p class="text-xs text-slate-400 uppercase">Partidos Jugados</p><p id="kpi-played" class="text-xl font-black text-emerald-400 mt-0.5">0 / 72</p></div>
+                <div><p class="text-xs text-slate-400 uppercase">Partidos Evaluados</p><p id="kpi-played" class="text-xl font-black text-emerald-400 mt-0.5">0</p></div>
                 <i class="fa-solid fa-square-poll-vertical text-slate-700 text-xl"></i>
             </div>
             <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
@@ -108,7 +108,7 @@
         <!-- MAPA DE CALOR COMPLETO -->
         <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
             <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
-                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Control de Aciertos por Partido (Partidos 1 al 72)
+                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Control de Aciertos por Partido (Sincronizado Completo)
             </h3>
             <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-96">
                 <table class="w-full text-left border-collapse text-xs font-sports">
@@ -172,20 +172,15 @@
                     let idxIdPartido = headerMundial.indexOf("ID_PARTIDO");
                     let idxAbbr = headerMundial.indexOf("ABREVIATURA");
                     let idxRes = headerMundial.indexOf("RESULTADO");
-                    let idxFase = headerMundial.indexOf("FASE");
 
                     if (idxIdPartido === -1) idxIdPartido = 1;
                     if (idxAbbr === -1) idxAbbr = 2;
                     if (idxRes === -1) idxRes = 5;
-                    if (idxFase === -1) idxFase = 4;
 
                     for(let i=1; i<mundialRows.length; i++) {
                         let row = mundialRows[i];
                         if(!row[idxIdPartido]) continue;
                         
-                        let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : '';
-                        if (!fase.includes("GRUPO")) continue; 
-
                         let idPartido = row[idxIdPartido].trim().toUpperCase(); 
                         let abbr = row[idxAbbr] || idPartido;
                         let resEscrito = row[idxRes] ? row[idxRes].toUpperCase().trim() : '';
@@ -214,7 +209,6 @@
                     let name = row[idxNombrePart].toUpperCase().trim();
                     let preds = {};
                     
-                    // Vinculación estricta literal por ID (ej. "WC2026-001")
                     for(let j=0; j<row.length; j++) {
                         if(j === idxNombrePart) continue;
                         let colHeader = pHeaderClean[j];
@@ -283,7 +277,7 @@
                 }).sort((a,b) => b.puntos - a.puntos);
 
                 if(finalParticipants.length > 0) document.getElementById("kpi-leader").textContent = finalParticipants[0].nombre;
-                document.getElementById("kpi-played").textContent = `${numPlayed} / 72`;
+                document.getElementById("kpi-played").textContent = numPlayed;
                 document.getElementById("kpi-hits").textContent = maxHitsGlobal;
                 document.getElementById("kpi-participants").textContent = finalParticipants.length;
 
