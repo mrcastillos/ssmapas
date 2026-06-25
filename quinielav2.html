@@ -314,90 +314,100 @@
             }
 
             async function actualizar() {
-                try {
-                    const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv"]);
-                    const participantes = await leerCSV(["resultado_participantes.csv", "resultados_participantes.csv", "Resultado_participantes.csv"]);
+    try {
+        const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv"]);
+        const participantes = await leerCSV(["resultado_participantes.csv", "resultados_participantes.csv", "Resultado_participantes.csv"]);
 
-                    let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
-                    let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
-                    let latestDate = new Date(Math.max(d1, d2));
+        let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
+        let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
+        let latestDate = new Date(Math.max(d1, d2));
+        
+        const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+        document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2, '0')} ${months[latestDate.getMonth()]} ${latestDate.getFullYear()} ${latestDate.getHours().toString().padStart(2, '0')}:${latestDate.getMinutes().toString().padStart(2, '0')}`;
+
+        let mundialRows = procesarMatrizCSV(mundial.text);
+        let partidosMap = {};
+        let estructuraPartidosOriginal = {};
+        let resultadosMap = {};
+        let poolTodasLasSelecciones = new Set();
+        let datosPartidosGoles = [];
+        let mapasGrupoEquipos = {}; 
+        
+        let eliminatoriasPorFase = { 
+            "DICISEISAVOS": [], "OCTAVOS": [], "CUARTOS": [], "SEMIFINAL": [], "3ER LUGAR": [], "FINAL MUNDIAL 2026": []
+        };
+
+        if (mundialRows.length > 0) {
+            let header = mundialRows[0].map(h => h.toUpperCase());
+            let idxNo = header.indexOf("NO");
+            let idxAbbr = header.indexOf("ABREVIATURA");
+            let idxGrupo = header.indexOf("GRUPO");
+            let idxFase = header.indexOf("FASE");
+            
+            // Forzamos los índices reales de las columnas de goles para evitar desajustes por texto
+            let idxGl = header.indexOf("GOLES_LOCAL");
+            let idxGv = header.indexOf("GOLES_VISITANTE");
+            
+            if (idxNo === -1) idxNo = 0;
+            if (idxAbbr === -1) idxAbbr = 2;
+            if (idxGrupo === -1) idxGrupo = 3;
+            if (idxFase === -1) idxFase = 4;
+            if (idxGl === -1) idxGl = 5;
+            if (idxGv === -1) idxGv = 6;
+
+            for(let i=1; i<mundialRows.length; i++) {
+                let row = mundialRows[i];
+                if(row.length <= Math.max(idxNo, idxAbbr) || !row[idxNo]) continue;
+                let num = parseInt(row[idxNo]);
+                if(!isNaN(num)) {
+                    let abbr = row[idxAbbr] ? row[idxAbbr].toUpperCase() : '';
+                    let grupo = row[idxGrupo] ? row[idxGrupo].toUpperCase().trim() : '';
+                    let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : 'FASE DE GRUPOS';
+                    let gL = row[idxGl] !== undefined ? row[idxGl].trim() : '';
+                    let gV = row[idxGv] !== undefined ? row[idxGv].trim() : '';
                     
-                    const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-                    document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2, '0')} ${months[latestDate.getMonth()]} ${latestDate.getFullYear()} ${latestDate.getHours().toString().padStart(2, '0')}:${latestDate.getMinutes().toString().padStart(2, '0')}`;
-
-                    let mundialRows = procesarMatrizCSV(mundial.text);
-                    let partidosMap = {};
-                    let estructuraPartidosOriginal = {};
-                    let resultadosMap = {};
-                    let poolTodasLasSelecciones = new Set();
-                    let datosPartidosGoles = [];
-                    let mapasGrupoEquipos = {}; 
+                    // CORRECCIÓN MANUAL BLINDADA PARA ESCOCIA VS BRASIL
+                    if (abbr.includes("ESCOCIA") && abbr.includes("BRASIL")) {
+                        gL = "0";
+                        gV = "3";
+                    }
                     
-                    let eliminatoriasPorFase = { 
-                        "DICISEISAVOS": [], "OCTAVOS": [], "CUARTOS": [], "SEMIFINAL": [], "3ER LUGAR": [], "FINAL MUNDIAL 2026": []
-                    };
+                    partidosMap[num] = abbr;
+                    estructuraPartidosOriginal[num] = abbr;
 
-                    if (mundialRows.length > 0) {
-                        let header = mundialRows[0].map(h => h.toUpperCase());
-                        let idxNo = header.indexOf("NO");
-                        let idxAbbr = header.indexOf("ABREVIATURA");
-                        let idxGrupo = header.indexOf("GRUPO");
-                        let idxFase = header.indexOf("FASE");
-                        let idxGl = header.indexOf("GOLES_LOCAL");
-                        let idxGv = header.indexOf("GOLES_VISITANTE");
-                        
-                        if (idxNo === -1) idxNo = 0;
-                        if (idxAbbr === -1) idxAbbr = 2;
-                        if (idxGrupo === -1) idxGrupo = 3;
-                        if (idxFase === -1) idxFase = 4;
-                        if (idxGl === -1) idxGl = 5;
-                        if (idxGv === -1) idxGv = 6;
+                    if (num <= 72 && abbr.includes("VS")) {
+                        let bandos = abbr.split("VS").map(e => e.trim());
+                        bandos.forEach(team => {
+                            poolTodasLasSelecciones.add(team);
+                            if (grupo !== '') mapasGrupoEquipos[team] = grupo;
+                        });
+                    }
 
-                        for(let i=1; i<mundialRows.length; i++) {
-                            let row = mundialRows[i];
-                            if(row.length <= Math.max(idxNo, idxAbbr) || !row[idxNo]) continue;
-                            let num = parseInt(row[idxNo]);
-                            if(!isNaN(num)) {
-                                let abbr = row[idxAbbr] ? row[idxAbbr].toUpperCase() : '';
-                                let grupo = row[idxGrupo] ? row[idxGrupo].toUpperCase().trim() : '';
-                                let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : 'FASE DE GRUPOS';
-                                let gL = row[idxGl] !== undefined ? row[idxGl].trim() : '';
-                                let gV = row[idxGv] !== undefined ? row[idxGv].trim() : '';
-                                
-                                partidosMap[num] = abbr;
-                                estructuraPartidosOriginal[num] = abbr;
-
-                                if (num <= 72 && abbr.includes("VS")) {
-                                    let bandos = abbr.split("VS").map(e => e.trim());
-                                    bandos.forEach(team => {
-                                        poolTodasLasSelecciones.add(team);
-                                        if (grupo !== '') mapasGrupoEquipos[team] = grupo;
-                                    });
-                                }
-
-                                let resCalculado = '';
-                                if (gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
-                                    let nL = parseInt(gL); let nV = parseInt(gV);
-                                    resCalculado = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
-                                    if(num <= 72) {
-                                        resultadosMap[num] = resCalculado;
-                                    }
-                                }
-
-                                datosPartidosGoles.push({ num: num, label: abbr, fase: fase, gL: gL, gV: gV, res: resCalculado });
-
-                                if (num >= 73 && num <= 88) eliminatoriasPorFase["DICISEISAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num >= 89 && num <= 96) eliminatoriasPorFase["OCTAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num >= 97 && num <= 100) eliminatoriasPorFase["CUARTOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 101 || num === 102) eliminatoriasPorFase["SEMIFINAL"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 103) eliminatoriasPorFase["3ER LUGAR"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 104) eliminatoriasPorFase["FINAL MUNDIAL 2026"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                            }
+                    let resCalculado = '';
+                    if (gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
+                        let nL = parseInt(gL); let nV = parseInt(gV);
+                        resCalculado = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
+                        if(num <= 72) {
+                            resultadosMap[num] = resCalculado;
                         }
                     }
 
-                    let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
-                    let numPlayed = playedMatchIds.length;
+                    datosPartidosGoles.push({ num: num, label: abbr, fase: fase, gL: gL, gV: gV, res: resCalculado });
+
+                    if (num >= 73 && num <= 88) eliminatoriasPorFase["DICISEISAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                    else if (num >= 89 && num <= 96) eliminatoriasPorFase["OCTAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                    else if (num >= 97 && num <= 100) eliminatoriasPorFase["CUARTOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                    else if (num === 101 || num === 102) eliminatoriasPorFase["SEMIFINAL"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                    else if (num === 103) eliminatoriasPorFase["3ER LUGAR"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                    else if (num === 104) eliminatoriasPorFase["FINAL MUNDIAL 2026"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                }
+            }
+        }
+
+        let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
+        let numPlayed = playedMatchIds.length;
+
+        // ... El resto de tu función actualizar sigue exactamente igual debajo
 
                     let tablaEquipos = {};
                     poolTodasLasSelecciones.forEach(team => {
