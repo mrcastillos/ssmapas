@@ -3,173 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
+    <title>QUINIELA MUNDIAL 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
         .font-sports { font-family: 'Rajdhani', sans-serif; }
-        .fifa-card { background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%); border: 3px solid #f3e0a3; box-shadow: 0 10px 25px rgba(184, 135, 40, 0.3); position: relative; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); }
-        .fifa-card-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #4b5563 100%); border: 3px solid #f3f4f6; box-shadow: 0 10px 25px rgba(156, 163, 175, 0.3); }
-        .fifa-card-bronze { background: linear-gradient(135deg, #ca8a04 0%, #a16207 50%, #78350f 100%); border: 3px solid #fef08a; box-shadow: 0 10px 25px rgba(161, 98, 7, 0.3); }
-        .custom-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+        .fifa-card { background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%); border: 3px solid #f3e0a3; position: relative; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+        .fifa-card-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #4b5563 100%); border: 3px solid #f3f4f6; }
+        .fifa-card-bronze { background: linear-gradient(135deg, #ca8a04 0%, #a16207 50%, #78350f 100%); border: 3px solid #fef08a; }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #111827; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4b5563; }
     </style>
 </head>
-<body class="p-4 md:p-8 bg-slate-950">
-    <div class="max-w-7xl mx-auto space-y-6">
+<body class="p-4 md:p-6 bg-slate-950">
+    <div class="max-w-6xl mx-auto space-y-6">
         
-        <!-- HEADER PANEL -->
-        <header class="bg-slate-900 border-l-8 border-yellow-500 p-6 rounded-lg shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider font-sports text-white flex items-center gap-3">
-                    <i class="fa-solid fa-trophy text-yellow-500 animate-bounce"></i> ⚽ QUINIELA MUNDIAL 2026
-                </h1>
-                <p id="last-updated" class="text-xs md:text-sm font-semibold tracking-widest text-slate-400 mt-1 font-sports uppercase">
-                    ACTUALIZADO: CARGANDO DATOS...
-                </p>
+                <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronizando por ID de Partido...</p>
             </div>
-            <div class="bg-slate-800 px-4 py-2 rounded-full border border-slate-700 text-xs font-bold text-yellow-400 font-sports tracking-wide">
-                <i class="fa-solid fa-crown mr-1"></i> VERSIÓN PREMIUM STADIUM
-            </div>
+            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 PREMIUM STADIUM</div>
         </header>
 
-        <!-- KPI SUMMARY CARDS -->
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 font-sports">
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🏆 Líder Actual</p>
-                    <p id="kpi-leader" class="text-xl md:text-2xl font-black text-yellow-400 mt-1">-</p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-medal"></i></div>
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sports">
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Líder de la Porra</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">-</p></div>
+                <i class="fa-solid fa-medal text-slate-700 text-xl"></i>
             </div>
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">⚽ Jugados</p>
-                    <p id="kpi-played" class="text-2xl md:text-3xl font-black text-emerald-400 mt-1">0 <span class="text-xs text-slate-500 font-normal">/ 72</span></p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-square-poll-vertical"></i></div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Partidos Jugados</p><p id="kpi-played" class="text-xl font-black text-emerald-400 mt-0.5">0 / 72</p></div>
+                <i class="fa-solid fa-square-poll-vertical text-slate-700 text-xl"></i>
             </div>
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🎯 Máx Aciertos</p>
-                    <p id="kpi-hits" class="text-2xl md:text-3xl font-black text-cyan-400 mt-1">0</p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-bullseye"></i></div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Máximo Score</p><p id="kpi-hits" class="text-xl font-black text-cyan-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-bullseye text-slate-700 text-xl"></i>
             </div>
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">👥 Part. Totales</p>
-                    <p id="kpi-participants" class="text-2xl md:text-3xl font-black text-purple-400 mt-1">0</p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-users"></i></div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Participantes</p><p id="kpi-participants" class="text-xl font-black text-purple-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-users text-slate-700 text-xl"></i>
             </div>
         </section>
 
-        <!-- PODIO GANADORES GRUPALES -->
         <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
-                <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO OFICIAL DE GANADORES
+                <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO GENERAL DE GANADORES
             </h2>
-            <div class="grid grid-cols-3 max-w-3xl mx-auto items-end pt-12 font-sports text-center gap-2 md:gap-4">
+            <div class="grid grid-cols-3 max-w-3xl mx-auto items-end pt-12 font-sports text-center gap-4">
                 <div class="flex flex-col items-center">
-                    <div id="podium-2-names" class="text-[11px] md:text-sm font-bold text-slate-300 mb-2 max-w-full px-1 break-words">🥈 -</div>
-                    <div class="w-full bg-slate-800 border-t-4 border-slate-400 min-h-24 p-2 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
-                        <span class="text-2xl font-black text-slate-400">2°</span>
-                        <span class="text-[10px] font-bold text-slate-500">PLATA</span>
+                    <div id="podium-2-names" class="text-xs font-bold text-slate-300 mb-2 break-words max-w-full px-1">🥈 —</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-slate-400 min-h-[70px] p-2 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-xl font-black text-slate-400">2°</span>
                     </div>
                 </div>
                 <div class="flex flex-col items-center">
-                    <i class="fa-solid fa-crown text-yellow-400 text-2xl mb-1 animate-pulse"></i>
-                    <div id="podium-1-names" class="text-xs md:text-base font-extrabold text-yellow-400 mb-2 max-w-full px-1 break-words">🥇 -</div>
-                    <div class="w-full bg-slate-800 border-t-4 border-yellow-500 min-h-36 p-2 rounded-t-lg flex flex-col justify-center items-center shadow-2xl relative">
-                        <span class="text-4xl font-black text-yellow-400">1°</span>
-                        <span class="text-[10px] font-bold text-yellow-500 tracking-widest">CAMPEÓN</span>
+                    <i class="fa-solid fa-crown text-yellow-400 text-xl mb-1 animate-pulse"></i>
+                    <div id="podium-1-names" class="text-sm font-extrabold text-yellow-400 mb-2 break-words max-w-full px-1">🥇 —</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-yellow-500 min-h-[100px] p-2 rounded-t-lg flex flex-col justify-center items-center shadow-2xl">
+                        <span class="text-3xl font-black text-yellow-400">1°</span>
                     </div>
                 </div>
                 <div class="flex flex-col items-center">
-                    <div id="podium-3-names" class="text-[11px] md:text-sm font-bold text-amber-600 mb-2 max-w-full px-1 break-words">🥉 -</div>
-                    <div class="w-full bg-slate-800 border-t-4 border-amber-700 min-h-16 p-2 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
-                        <span class="text-xl font-black text-amber-600">3°</span>
-                        <span class="text-[10px] font-bold text-amber-700">BRONCE</span>
+                    <div id="podium-3-names" class="text-xs font-bold text-amber-600 mb-2 break-words max-w-full px-1">🥉 —</div>
+                    <div class="w-full bg-slate-800 border-t-4 border-amber-700 min-h-[50px] p-2 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
+                        <span class="text-lg font-black text-amber-600">3°</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- LAYOUT CENTRAL -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4 flex items-center justify-between">
-                        <span><i class="fa-solid fa-list-ol text-emerald-500 mr-2"></i> RANKING EN TIEMPO REAL</span>
-                    </h3>
-                    <div id="ranking-container" class="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar"></div>
-                </div>
-
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-6">
-                        <i class="fa-solid fa-id-card text-yellow-500 mr-2"></i> TARJETAS FIFA WORLD CUP (TOP 3)
-                    </h3>
-                    <div id="fifa-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-center"></div>
-                </div>
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-list-ol text-emerald-500 mr-1"></i> Tabla de Posiciones Sincronizada
+                </h3>
+                <div id="ranking-container" class="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar"></div>
             </div>
 
-            <!-- TENDENCIAS Y PICKS -->
-            <div class="space-y-6">
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-4">
-                    <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 flex items-center gap-2 border-b border-slate-800 pb-2">
-                        <i class="fa-solid fa-chart-pie text-cyan-500"></i> EFECTIVIDAD Y TOTALES
-                    </h3>
-                    <div id="prob-container" class="space-y-3 text-xs">
-                        <p class="text-slate-400 italic">Procesando métricas de acierto por participante...</p>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-percent text-purple-500"></i> TOP PICKS DEL PARTIDO
-                    </h3>
-                    <select id="match-select" class="w-full bg-slate-800 border border-slate-700 text-white rounded px-3 py-2 font-sports text-sm outline-none focus:border-purple-500 mb-4"></select>
-                    <div id="match-picks-display" class="bg-slate-950 p-4 rounded-lg border border-slate-800 font-sports space-y-3"></div>
-                </div>
+            <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-id-card text-yellow-500 mr-1"></i> Tarjetas FIFA Destacados
+                </h3>
+                <div id="fifa-cards-container" class="flex flex-col gap-4 items-center justify-center overflow-y-auto max-h-[420px] pr-1 custom-scrollbar"></div>
             </div>
-        </div>
-
-        <!-- EVOLUCIÓN HISTÓRICA -->
-        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-            <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4">
-                <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÓN HISTÓRICA DE CLASIFICACIÓN
-            </h3>
-            <div class="h-80 w-full"><canvas id="evolutionChart"></canvas></div>
         </section>
 
-        <!-- MAPA DE CALOR -->
-        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-            <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2">
-                <i class="fa-solid fa-fire text-orange-500 mr-2"></i> MAPA DE CALOR DE PARTIDOS
+        <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
+            <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-4">
+                <i class="fa-solid fa-chart-line text-amber-500 mr-1"></i> Línea de Rendimiento Histórico (Top 5)
             </h3>
-            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-96">
-                <table class="w-full border-collapse text-left text-xs font-sports">
+            <div class="h-64 w-full"><canvas id="evolutionChart"></canvas></div>
+        </section>
+
+        <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
+            <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
+                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Historial Colectivo de Aciertos (Heatmap)
+            </h3>
+            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-80">
+                <table class="w-full text-left border-collapse text-xs font-sports">
                     <thead><tr id="heatmap-header" class="bg-slate-950 text-slate-400 uppercase tracking-wider sticky top-0 z-10 border-b border-slate-800"></tr></thead>
-                    <tbody id="heatmap-body" class="divide-y divide-slate-800"></tbody>
+                    <tbody id="heatmap-body" class="divide-y divide-slate-800 bg-slate-900/40"></tbody>
                 </table>
             </div>
         </section>
 
-        <!-- FOOTER -->
-        <footer class="bg-slate-900/40 border-t border-slate-800 py-6 text-center rounded-lg space-y-2">
-            <p class="text-slate-400 text-sm font-semibold tracking-wide">Quiniela Mundial 2026 Premium Dashboard &copy; Todos los derechos reservados.</p>
-            <p class="text-yellow-500 font-sports font-bold tracking-widest uppercase text-xs">
-                📷 GALERÍA: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline transition">www.instagram.com/lente.abierto.mx</a>
+        <footer class="bg-slate-900/40 py-4 text-center rounded-lg border border-slate-900">
+            <p class="text-yellow-500 font-sports font-bold tracking-widest text-xs uppercase">
+                📷 Galería Oficial: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline">@lente.abierto.mx</a>
             </p>
         </footer>
+
     </div>
 
     <script>
@@ -185,284 +132,222 @@
                            .filter(row => row.length > 0 && row[0] !== '');
             }
 
-            async function leerCSV(nombresPosibles) {
-                for (let nombre of nombresPosibles) {
-                    try {
-                        let urlFuerzaBruta = baseUrl + nombre + '?nocache=' + new Date().getTime();
-                        let response = await fetch(urlFuerzaBruta);
-                        if (response.ok) {
-                            let text = await response.text();
-                            return { text: text, headers: response.headers };
-                        }
-                    } catch (e) { console.log(`Error al leer ${nombre}`); }
-                }
+            async function leerCSV(nombre) {
+                try {
+                    let response = await fetch(baseUrl + nombre + '?nocache=' + new Date().getTime());
+                    if (response.ok) {
+                        let text = await response.text();
+                        return { text: text, headers: response.headers };
+                    }
+                } catch (e) { console.error("Error cargando " + nombre); }
                 return null;
             }
 
             async function actualizar() {
-                try {
-                    const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv"]);
-                    const participantes = await leerCSV(["resultados_participantes.csv", "resultado_participantes.csv"]);
+                const mundial = await leerCSV("Mundial2026.csv") || await leerCSV("mundial2026.csv");
+                const participantes = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv");
 
-                    if (!mundial || !participantes) return;
+                if (!mundial || !participantes) return;
 
-                    let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
-                    let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
-                    let latestDate = new Date(Math.max(d1, d2));
-                    
-                    const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-                    document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2, '0')} ${months[latestDate.getMonth()]} ${latestDate.getFullYear()} ${latestDate.getHours().toString().padStart(2, '0')}:${latestDate.getMinutes().toString().padStart(2, '0')}`;
+                let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
+                let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
+                let latestDate = new Date(Math.max(d1, d2));
+                
+                document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2,'0')}/${(latestDate.getMonth()+1).toString().padStart(2,'0')} ${latestDate.getHours().toString().padStart(2,'0')}:${latestDate.getMinutes().toString().padStart(2,'0')}`;
 
-                    let mundialRows = procesarMatrizCSV(mundial.text);
-                    let partidosMap = {};
-                    let resultadosMap = {};
-                    let playedMatchIds = [];
+                let mundialRows = procesarMatrizCSV(mundial.text);
+                let partidosMap = {};
+                let resultadosMap = {};
+                let playedMatchIds = [];
 
-                    if (mundialRows.length > 0) {
-                        let header = mundialRows[0].map(h => h.toUpperCase().trim());
-                        let idxNo = header.indexOf("NO");
-                        let idxAbbr = header.indexOf("ABREVIATURA");
-                        let idxGl = header.indexOf("GOLES_LOCAL");
-                        let idxGv = header.indexOf("GOLES_VISITANTE");
+                if (mundialRows.length > 0) {
+                    let header = mundialRows[0].map(h => h.toUpperCase().trim());
+                    let idxNo = header.indexOf("NO");
+                    let idxAbbr = header.indexOf("ABREVIATURA");
+                    let idxGl = header.indexOf("GOLES_LOCAL");
+                    let idxGv = header.indexOf("GOLES_VISITANTE");
 
-                        if (idxNo === -1) idxNo = 0;
-                        if (idxAbbr === -1) idxAbbr = 2;
-                        if (idxGl === -1) idxGl = 6;
-                        if (idxGv === -1) idxGv = 7;
+                    for(let i=1; i<mundialRows.length; i++) {
+                        let row = mundialRows[i];
+                        if(!row[idxNo]) continue;
+                        let num = parseInt(row[idxNo]);
+                        if (isNaN(num) || num > 72) continue; 
 
-                        for(let i=1; i<mundialRows.length; i++) {
-                            let row = mundialRows[i];
-                            if(!row[idxNo]) continue;
-                            let num = parseInt(row[idxNo]);
-                            if (isNaN(num) || num > 72) continue; // Límite de fase de grupos
+                        let abbr = row[idxAbbr] || '';
+                        let gL = row[idxGl];
+                        let gV = row[idxGv];
 
-                            let abbr = row[idxAbbr] || '';
-                            let gL = row[idxGl];
-                            let gV = row[idxGv];
+                        partidosMap[num] = abbr;
 
-                            // Forzado seguro para el partido de Escocia vs Brasil
-                            if (abbr.toUpperCase().includes("ESCOCIA") && abbr.toUpperCase().includes("BRASIL")) {
-                                gL = "0"; gV = "3";
-                            }
-
-                            partidosMap[num] = abbr;
-
-                            if(gL !== undefined && gV !== undefined && gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
-                                let nL = parseInt(gL); let nV = parseInt(gV);
-                                let res = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
-                                resultadosMap[num] = res;
-                                playedMatchIds.push(num);
-                            }
+                        // Sincronización estricta por ID numérico de partido
+                        if(gL !== undefined && gV !== undefined && gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
+                            let nL = parseInt(gL); let nV = parseInt(gV);
+                            let res = nL > nV ? 'L' : (nL < nV ? 'V' : 'E');
+                            resultadosMap[num] = res;
+                            playedMatchIds.push(num);
                         }
                     }
+                }
 
-                    playedMatchIds.sort((a,b) => a - b);
-                    let numPlayed = playedMatchIds.length;
+                playedMatchIds.sort((a,b) => a - b);
+                let numPlayed = playedMatchIds.length;
 
-                    let participantesRows = procesarMatrizCSV(participantes.text);
-                    let pHeader = participantesRows[0].map(h => h.toLowerCase().trim());
-                    let idxNombrePart = pHeader.indexOf("nombre");
-                    if(idxNombrePart === -1) idxNombrePart = 0;
+                let participantesRows = procesarMatrizCSV(participantes.text);
+                let pHeader = participantesRows[0].map(h => h.toLowerCase().trim());
+                let idxNombrePart = pHeader.indexOf("nombre");
+                if(idxNombrePart === -1) idxNombrePart = 0; 
 
-                    let listData = [];
-                    for(let i=1; i<participantesRows.length; i++) {
-                        let row = participantesRows[i];
-                        if(row.length < 2) continue;
-                        let name = row[idxNombrePart].toUpperCase().trim();
-                        let preds = {};
-                        for(let j=0; j<row.length; j++) {
-                            if(j === idxNombrePart) continue;
-                            let mNum = parseInt(participantesRows[0][j]);
-                            if(!isNaN(mNum) && mNum <= 72) {
-                                preds[mNum] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
-                            }
+                let listData = [];
+                for(let i=1; i<participantesRows.length; i++) {
+                    let row = participantesRows[i];
+                    if(row.length < 2 || !row[idxNombrePart]) continue;
+                    let name = row[idxNombrePart].toUpperCase().trim();
+                    let preds = {};
+                    for(let j=0; j<row.length; j++) {
+                        if(j === idxNombrePart) continue;
+                        let mNum = parseInt(participantesRows[0][j]); 
+                        if(!isNaN(mNum) && mNum <= 72) {
+                            preds[mNum] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
                         }
-                        listData.push({nombre: name, preds: preds});
                     }
+                    listData.push({nombre: name, preds: preds});
+                }
 
-                    // Calcular histórico de puntos racha y posiciones partido a partido
-                    let historyPoints = {}; let historyRanks = {};
-                    listData.forEach(p => { historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1]; });
+                // Cálculo histórico exacto partido por partido
+                let historyPoints = {}; let historyRanks = {};
+                listData.forEach(p => { historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1]; });
 
+                playedMatchIds.forEach(mId => {
+                    let actual = resultadosMap[mId];
+                    listData.forEach(p => {
+                        let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                        let isCorrect = (p.preds[mId] === actual);
+                        historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
+                    });
+
+                    let stepScores = listData.map(p => ({
+                        nombre: p.nombre, puntos: historyPoints[p.nombre][historyPoints[p.nombre].length - 1]
+                    })).sort((a,b) => b.puntos - a.puntos);
+
+                    let r = 1;
+                    stepScores.forEach((item, idx) => {
+                        if(idx > 0 && item.puntos < stepScores[idx-1].puntos) r = idx + 1;
+                        historyRanks[item.nombre].push(r);
+                    });
+                });
+
+                let maxHitsGlobal = 0;
+                let finalParticipants = listData.map(p => {
+                    let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                    if(pts > maxHitsGlobal) maxHitsGlobal = pts;
+
+                    let maxStreak = 0; let currStreak = 0; let heatmap = [];
                     playedMatchIds.forEach(mId => {
-                        let actual = resultadosMap[mId];
-                        listData.forEach(p => {
-                            let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                            let isCorrect = (p.preds[mId] === actual);
-                            historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
-                        });
-
-                        let stepScores = listData.map(p => ({
-                            nombre: p.nombre, puntos: historyPoints[p.nombre][historyPoints[p.nombre].length - 1]
-                        })).sort((a,b) => b.puntos - a.puntos);
-
-                        let r = 1;
-                        stepScores.forEach((item, idx) => {
-                            if(idx > 0 && item.puntos < stepScores[idx-1].puntos) r = idx + 1;
-                            historyRanks[item.nombre].push(r);
-                        });
-                    });
-
-                    // Generación del listado final de participantes con rachas y mapas de calor
-                    let maxHitsGlobal = 0;
-                    let finalParticipants = listData.map(p => {
-                        let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                        if(pts > maxHitsGlobal) maxHitsGlobal = pts;
-
-                        let maxStreak = 0; let currStreak = 0; let heatmap = [];
-                        playedMatchIds.forEach(mId => {
-                            if(p.preds[mId] === resultadosMap[mId]) {
-                                currStreak++;
-                                if(currStreak > maxStreak) maxStreak = currStreak;
-                                heatmap.push('✅');
-                            } else {
-                                currStreak = 0;
-                                heatmap.push('❌');
-                            }
-                        });
-
-                        let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
-                        if(rHistory.length > 1) {
-                            let currR = rHistory[rHistory.length - 1]; let prevR = rHistory[rHistory.length - 2];
-                            if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
-                            else if(currR > prevR) { trend = '▼'; trendVal = currR - prevR; }
+                        if(p.preds[mId] === resultadosMap[mId]) {
+                            currStreak++;
+                            if(currStreak > maxStreak) maxStreak = currStreak;
+                            heatmap.push('✅');
+                        } else {
+                            currStreak = 0;
+                            heatmap.push('❌');
                         }
-
-                        return {
-                            nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
-                            trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
-                        };
-                    }).sort((a,b) => b.puntos - a.puntos);
-
-                    // Configuración de KPIs globales
-                    if (finalParticipants.length > 0) {
-                        document.getElementById("kpi-leader").textContent = finalParticipants[0].nombre;
-                    }
-                    document.getElementById("kpi-played").innerHTML = `${numPlayed} <span class="text-xs text-slate-500 font-normal">/ 72</span>`;
-                    document.getElementById("kpi-hits").textContent = maxHitsGlobal;
-                    document.getElementById("kpi-participants").textContent = finalParticipants.length;
-
-                    // Agrupación dinámica por empate en los Podios Oficiales
-                    let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
-                    document.getElementById("podium-1-names").textContent = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ") || "—";
-                    document.getElementById("podium-2-names").textContent = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "—";
-                    document.getElementById("podium-3-names").textContent = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => p.nombre).join(", ") : "—";
-
-                    // Renderizado de la lista de posiciones
-                    let rankingContainer = document.getElementById("ranking-container");
-                    rankingContainer.innerHTML = "";
-                    let topScore = uniqueScores[0] || 1;
-                    finalParticipants.forEach((p, index) => {
-                        let pct = topScore > 0 ? (p.puntos / topScore) * 100 : 0;
-                        let arrowColor = p.trend === '▲' ? 'text-green-400' : p.trend === '▼' ? 'text-red-400' : 'text-slate-500';
-                        let arrowIcon = p.trend === '▲' ? 'fa-arrow-up' : p.trend === '▼' ? 'fa-arrow-down' : 'fa-minus';
-                        let leaderStyle = index === 0 ? 'border-l-4 border-yellow-500 bg-slate-900 shadow-yellow-500/10 shadow-lg' : 'bg-slate-900/60';
-                        
-                        rankingContainer.insertAdjacentHTML('beforeend', `
-                            <div class="flex items-center justify-between p-3 rounded-lg ${leaderStyle} border border-slate-800 transition hover:bg-slate-800/80">
-                                <div class="flex items-center gap-3 w-1/2">
-                                    <span class="text-sm font-bold w-6 text-slate-400">${index + 1}</span>
-                                    <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400' : 'text-slate-200'}">${p.nombre}</span>
-                                    <span class="${arrowColor} text-xs flex items-center font-bold"><i class="fa-solid ${arrowIcon} mr-1 text-[10px]"></i>${p.trendVal > 0 ? p.trendVal : ''}</span>
-                                </div>
-                                <div class="w-1/3 px-4 hidden sm:block">
-                                    <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden"><div class="h-2 rounded-full ${index === 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-400' : 'bg-gradient-to-r from-emerald-500 to-cyan-400'}" style="width: ${pct}%"></div></div>
-                                </div>
-                                <div class="text-right font-sports font-bold text-slate-200 w-1/4"><span class="text-lg text-white font-black">${p.puntos}</span> <span class="text-xs text-slate-500">PTS</span></div>
-                            </div>
-                        `);
                     });
 
-                    // Renderizado de Tarjetas FIFA de los mejores de la porra
-                    let fifaContainer = document.getElementById("fifa-cards-container");
-                    fifaContainer.innerHTML = "";
-                    for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
-                        let p = finalParticipants[i];
-                        let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
-                        fifaContainer.insertAdjacentHTML('beforeend', `
-                            <div class="${cardClass} p-5 text-center font-sports text-slate-950 flex flex-col justify-between h-64">
-                                <div><div class="text-xl font-black uppercase tracking-wider border-b border-black/20 pb-1">${p.nombre}</div></div>
-                                <div class="my-auto space-y-1">
-                                    <div><span class="text-4xl font-black">${p.puntos}</span><span class="text-xs font-bold block -mt-1 uppercase tracking-tight">ACIERTOS</span></div>
-                                    <div class="grid grid-cols-2 text-[10px] font-bold bg-black/10 rounded p-2 text-left gap-y-0.5">
-                                        <div>EFECTIVIDAD:</div><div class="text-right">${p.efectividad}%</div>
-                                        <div>TENDENCIA:</div><div class="text-right">${p.trend === '▲' ? `+${p.trendVal} POS` : p.trend === '▼' ? `-${p.trendVal} POS` : '= MANT'}</div>
-                                    </div>
-                                </div>
-                                <div class="bg-black/90 text-yellow-400 rounded py-1 px-2 text-[10px] font-bold flex items-center justify-center gap-1"><i class="fa-solid fa-fire text-orange-500"></i> RACHA: ${p.maxStreak} SEGUIDOS</div>
-                            </div>
-                        `);
+                    let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
+                    if(rHistory.length > 1) {
+                        let currR = rHistory[rHistory.length - 1]; let prevR = rHistory[rHistory.length - 2];
+                        if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
+                        else if(currR > prevR) { trend = '▼'; trendVal = currR - prevR; }
                     }
 
-                    // Métricas de efectividad en el lateral derecho
-                    let probContainer = document.getElementById("prob-container");
-                    probContainer.innerHTML = "";
-                    finalParticipants.slice(0, 5).forEach(p => {
-                        probContainer.insertAdjacentHTML('beforeend', `
+                    return {
+                        nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
+                        trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
+                    };
+                }).sort((a,b) => b.puntos - a.puntos);
+
+                if(finalParticipants.length > 0) document.getElementById("kpi-leader").textContent = finalParticipants[0].nombre;
+                document.getElementById("kpi-played").textContent = `${numPlayed} / 72`;
+                document.getElementById("kpi-hits").textContent = maxHitsGlobal;
+                document.getElementById("kpi-participants").textContent = finalParticipants.length;
+
+                // AGRUPACIÓN POR EMPATES EN PODIO
+                let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
+                document.getElementById("podium-1-names").innerHTML = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => `<span class="block">${p.nombre}</span>`).join("") || "—";
+                document.getElementById("podium-2-names").innerHTML = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => `<span class="block">${p.nombre}</span>`).join("") : "—";
+                document.getElementById("podium-3-names").innerHTML = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => `<span class="block">${p.nombre}</span>`).join("") : "—";
+
+                // Render Tabla de posiciones
+                let rankingContainer = document.getElementById("ranking-container");
+                rankingContainer.innerHTML = "";
+                let maxPts = uniqueScores[0] || 1;
+                
+                finalParticipants.forEach((p, index) => {
+                    let pct = (p.puntos / maxPts) * 100;
+                    let arrowColor = p.trend === '▲' ? 'text-green-400' : p.trend === '▼' ? 'text-red-400' : 'text-slate-500';
+                    let arrowIcon = p.trend === '▲' ? 'fa-arrow-up' : p.trend === '▼' ? 'fa-arrow-down' : 'fa-minus';
+
+                    rankingContainer.insertAdjacentHTML('beforeend', `
+                        <div class="flex items-center justify-between p-2.5 rounded bg-slate-900/60 border border-slate-800 hover:bg-slate-800/40 transition">
+                            <div class="flex items-center gap-3 w-1/2">
+                                <span class="text-xs font-bold text-slate-500 w-4">${index + 1}</span>
+                                <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400 text-sm' : 'text-slate-200'}">${p.nombre}</span>
+                                <span class="${arrowColor} text-[10px] flex items-center font-bold"><i class="fa-solid ${arrowIcon} mr-0.5"></i>${p.trendVal > 0 ? p.trendVal : ''}</span>
+                            </div>
+                            <div class="w-1/3 px-2 hidden sm:block">
+                                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden"><div class="h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-400" style="width: ${pct}%"></div></div>
+                            </div>
+                            <div class="text-right font-sports font-bold text-slate-300 w-1/4"><span class="text-base text-white font-black">${p.puntos}</span> <span class="text-[10px] text-slate-500">PTS</span></div>
+                        </div>`);
+                });
+
+                // Render Tarjetas FIFA
+                let fifaContainer = document.getElementById("fifa-cards-container");
+                fifaContainer.innerHTML = "";
+                for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
+                    let p = finalParticipants[i];
+                    let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
+                    fifaContainer.insertAdjacentHTML('beforeend', `
+                        <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-48 w-44">
+                            <div class="text-sm font-black uppercase tracking-wider border-b border-black/10 pb-0.5">${p.nombre}</div>
                             <div>
-                                <div class="flex justify-between font-bold text-slate-300 mb-0.5"><span>${p.nombre}</span><span class="text-cyan-400">${p.efectividad}%</span></div>
-                                <div class="w-full bg-slate-800 rounded-full h-1"><div class="bg-cyan-500 h-1 rounded-full" style="width: ${p.efectividad}%"></div></div>
+                                <span class="text-3xl font-black block">${p.puntos}</span>
+                                <span class="text-[9px] font-bold text-slate-800 block -mt-1">ACIERTOS</span>
                             </div>
-                        `);
+                            <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[9px] font-bold">
+                                🔥 RACHA: ${p.maxStreak} | ${p.efectividad}% EF.
+                            </div>
+                        </div>`);
+                }
+
+                // Render Heatmap
+                let heatmapHeader = document.getElementById("heatmap-header");
+                let heatmapBody = document.getElementById("heatmap-body");
+                heatmapHeader.innerHTML = `<th class="p-2.5 bg-slate-950 font-black text-slate-400 sticky left-0 z-20">PARTICIPANTE</th>`;
+                playedMatchIds.forEach(mId => {
+                    heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-2.5 text-center border-l border-slate-900 font-bold min-w-[60px]">${partidosMap[mId] || mId}</th>`);
+                });
+
+                heatmapBody.innerHTML = "";
+                finalParticipants.forEach(p => {
+                    let rowHtml = `<tr><td class="p-2.5 font-extrabold text-slate-300 bg-slate-900 sticky left-0 z-10 border-r border-slate-800 font-sports">${p.nombre}</td>`;
+                    playedMatchIds.forEach((mId, idx) => {
+                        let cell = p.heatmap[idx] || '';
+                        let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/10' : 'text-red-400 bg-red-950/10';
+                        rowHtml += `<td class="p-2 text-center border-l border-slate-800/40 ${colorClass}"><div class="font-bold text-[10px]">${p.preds[mId] || '-'}</div><div class="text-[9px] opacity-70">${cell}</div></td>`;
                     });
+                    heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
+                });
 
-                    // Cálculo estadístico de Picks colectivos en base a la tendencia de votos
-                    let topPicksData = {};
-                    for(let m=1; m<=72; m++) {
-                        let counts = {L:0, E:0, V:0}; let total = 0;
-                        finalParticipants.forEach(p => { let pr = p.preds[m]; if(counts[pr] !== undefined) { counts[pr]++; total++; } });
-                        topPicksData[m] = { label: partidosMap[m] || `PARTIDO ${m}`, L: total > 0 ? Math.round((counts.L/total)*100) : 0, E: total > 0 ? Math.round((counts.E/total)*100) : 0, V: total > 0 ? Math.round((counts.V/total)*100) : 0, actual: resultadosMap[m] || null };
-                    }
-
-                    let matchSelect = document.getElementById("match-select");
-                    matchSelect.innerHTML = "";
-                    for(let m=1; m<=72; m++) {
-                        if(partidosMap[m]) {
-                            let statusText = topPicksData[m].actual ? `(REALIZADO)` : `(PENDIENTE)`;
-                            let opt = document.createElement("option"); opt.value = m; opt.textContent = `PARTIDO ${m}: ${partidosMap[m]} ${statusText}`;
-                            matchSelect.appendChild(opt);
-                        }
-                    }
-                    matchSelect.value = numPlayed < 72 ? (playedMatchIds[playedMatchIds.length - 1] || 1) : 1;
-
-                    function renderMatchPicks(mId) {
-                        let data = topPicksData[mId]; let display = document.getElementById("match-picks-display"); if(!data || !display) return;
-                        let outcomeInfo = data.actual ? `<span class="bg-emerald-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded ml-2">REAL: ${data.actual}</span>` : `<span class="bg-slate-800 text-slate-400 font-bold text-xs px-2 py-0.5 rounded ml-2">PENDIENTE</span>`;
-                        display.innerHTML = `<div class="text-sm font-black text-white uppercase tracking-wider mb-2 flex items-center justify-between"><span>${data.label}</span> ${outcomeInfo}</div><div class="space-y-2 text-xs font-bold text-slate-300"><div><div class="flex justify-between mb-0.5"><span>L (LOCAL)</span><span>${data.L}%</span></div><div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800"><div class="bg-purple-500 h-2 rounded-full" style="width: ${data.L}%"></div></div></div><div><div class="flex justify-between mb-0.5"><span>E (EMPATE)</span><span>${data.E}%</span></div><div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800"><div class="bg-amber-500 h-2 rounded-full" style="width: ${data.E}%"></div></div></div><div><div class="flex justify-between mb-0.5"><span>V (VISITANTE)</span><span>${data.V}%</span></div><div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800"><div class="bg-blue-500 h-2 rounded-full" style="width: ${data.V}%"></div></div></div></div>`;
-                    }
-                    renderMatchPicks(matchSelect.value);
-                    matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
-
-                    // Renderizado del mapa de calor de aciertos
-                    let heatmapHeader = document.getElementById("heatmap-header");
-                    let heatmapBody = document.getElementById("heatmap-body");
-                    heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-md">PARTICIPANTE</th>`;
-                    playedMatchIds.forEach(mId => {
-                        heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-3 text-center min-w-[65px] border-l border-slate-900 font-bold">${partidosMap[mId] || mId}</th>`);
-                    });
-
-                    heatmapBody.innerHTML = "";
-                    finalParticipants.forEach(p => {
-                        let rowHtml = `<tr class="hover:bg-slate-800/40 transition"><td class="p-3 font-extrabold text-slate-200 bg-slate-900 sticky left-0 z-10 border-r border-slate-800 shadow-sm">${p.nombre}</td>`;
-                        playedMatchIds.forEach((mId, idx) => {
-                            let cell = p.heatmap[idx];
-                            let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/20' : 'text-red-400 bg-red-950/20';
-                            rowHtml += `<td class="p-2 text-center border-l border-slate-800 ${colorClass}"><div class="font-black text-[11px]">${p.preds[mId] || '-'}</div><div class="text-[9px] mt-0.5">${cell}</div></td>`;
-                        });
-                        heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
-                    });
-
-                    // Renderizado gráfico de la línea de tiempo histórica
-                    let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id] || id)];
-                    let chartDatasets = finalParticipants.slice(0, 8).map((p, idx) => {
-                        const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899'];
-                        let color = colors[idx % colors.length];
-                        return { label: p.nombre, data: historyRanks[p.nombre], borderColor: color, backgroundColor: 'transparent', borderWidth: idx === 0 ? 3 : 1.5, tension: 0.15, pointRadius: 2 };
-                    });
-                    if(chartInstance) chartInstance.destroy();
-                    chartInstance = new Chart(document.getElementById('evolutionChart').getContext('2d'), { type: 'line', data: { labels: chartLabels, datasets: chartDatasets }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { reversed: true, min: 1, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold' } } } }, plugins: { legend: { position: 'top', labels: { color: '#f3f4f6', font: { size: 10 } } } } } });
-
-                } catch (err) { console.error(err); }
+                // Render Gráfico Lineal
+                let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id] || id)];
+                let chartDatasets = finalParticipants.slice(0, 5).map((p, idx) => {
+                    const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e'];
+                    let color = colors[idx % colors.length];
+                    return { label: p.nombre, data: historyRanks[p.nombre], borderColor: color, backgroundColor: 'transparent', borderWidth: idx === 0 ? 3 : 1.5, tension: 0.1, pointRadius: 1 };
+                });
+                if(chartInstance) chartInstance.destroy();
+                chartInstance = new Chart(document.getElementById('evolutionChart').getContext('2d'), { type: 'line', data: { labels: chartLabels, datasets: chartDatasets }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { reversed: true, min: 1, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold' } } } }, plugins: { legend: { labels: { color: '#f3f4f6', font: { size: 10 } } } } } });
             }
             actualizar();
         });
