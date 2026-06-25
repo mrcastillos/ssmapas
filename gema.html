@@ -3,295 +3,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Óptica Gema - Novedades</title>
-    <!-- Iconos de FontAwesome para que se vea súper profesional -->
+    <title>Óptica Gema - Luxury Experience</title>
+    <!-- Iconos de FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #0056b3; /* Ajusta al azul exacto de tu logo */
-            --accent-color: #00c49f;
-            --dark-color: #222222;
-            --light-bg: #f8f9fa;
+            --bg-dark: #0a0b0d;
+            --card-dark: #121418;
+            --gold-premium: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--light-bg);
-            color: var(--dark-color);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
         }
 
-        .gema-container {
+        .gema-wrapper {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
-        /* Encabezado con Logo */
+        /* Encabezado Elegante */
         .gema-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            position: relative;
         }
         .gema-header img {
-            max-width: 220px;
+            max-width: 200px;
             height: auto;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.1));
+            transition: transform 0.5s ease;
+        }
+        .gema-header img:hover {
+            transform: scale(1.05);
         }
 
-        /* Banner Dinámico del Mes */
-        .promo-banner {
+        /* Banner de Promoción de Lujo */
+        .promo-container {
             position: relative;
             width: 100%;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            margin-bottom: 50px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 25px var(--gold-glow);
+            margin-bottom: 60px;
             aspect-ratio: 16 / 6;
-            background: #e0e0e0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
-        .promo-banner img {
+        .promo-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.3s ease;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .promo-banner:hover img {
-            transform: scale(1.02);
+        .promo-container:hover img {
+            transform: scale(1.03);
+        }
+        
+        /* Overlay elegante sobre el banner */
+        .promo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(10,11,13,0.95));
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .promo-badge {
+            background: linear-gradient(135deg, #b8860b, var(--gold-premium));
+            color: #000;
+            padding: 8px 18px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px var(--gold-glow);
         }
 
-        /* Secciones principales (Grid) */
-        .main-grid {
+        /* Grid Principal */
+        .luxury-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 40px;
         }
 
-        @media (min-width: 768px) {
-            .main-grid {
-                grid-template-columns: 1.2fr 0.8fr;
+        @media (min-width: 992px) {
+            .luxury-grid {
+                grid-template-columns: 1.1fr 0.9fr;
             }
         }
 
-        /* Tarjetas Estilizadas */
-        .card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        /* Tarjetas de Contenido Estilo Dashboard */
+        .premium-card {
+            background: var(--card-dark);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            position: relative;
         }
-        .card-title {
-            font-size: 1.4rem;
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--light-bg);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Sucursales */
-        .branch-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #e0e0e0;
-        }
-        .branch-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .branch-name {
-            font-weight: bold;
-            color: var(--dark-color);
-            margin-bottom: 5px;
-        }
-        .branch-address {
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-        .maps-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
+        .section-title {
+            font-size: 1.5rem;
             font-weight: 600;
-        }
-        .maps-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* Redes Sociales / Wrapper Feed */
-        .social-feed-wrapper {
+            letter-spacing: 1px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #ffffff;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 15px;
         }
-        .social-post-mock {
-            border: 1px solid #eaeaea;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #fafafa;
+        .section-title i {
+            color: var(--gold-premium);
+            animation: pulseGlow 2s infinite ease-in-out;
         }
-        .post-header {
+
+        /* Sucursales Estilo Premium */
+        .branch-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .branch-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gold-premium);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        .branch-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .branch-card:hover::before {
+            transform: scaleY(1);
+        }
+        .branch-header {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .branch-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .luxury-maps-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-premium);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        .luxury-maps-btn:hover {
+            color: #fff;
+        }
+        .luxury-maps-btn i {
+            font-size: 1rem;
+            transition: transform 0.3s;
+        }
+        .luxury-maps-btn:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Feeds de Redes Sociales (El Wrapper Pro) */
+        .social-showcase {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .social-embed-mock {
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: transform 0.3s ease;
+        }
+        .social-embed-mock:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .embed-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .embed-profile {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 15px;
-            background: #fff;
-        }
-        .post-header i {
-            font-size: 1.2rem;
-        }
-        .post-header .fa-tiktok { color: #000000; }
-        .post-header .fa-instagram { color: #e1306c; }
-        .post-header .fa-facebook { color: #1877f2; }
-        
-        .post-user {
-            font-weight: 600;
             font-size: 0.9rem;
+            font-weight: 600;
         }
-        .post-content-preview {
+        .embed-profile i { font-size: 1.2rem; }
+        .fa-tiktok { color: #ff0050; }
+        .fa-instagram { color: #fbad50; }
+        .fa-facebook { color: #1877f2; }
+
+        .embed-media {
             position: relative;
-            background: #222;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 16 / 9;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .embed-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: all 0.4s;
+        }
+        .social-embed-mock:hover .embed-media img {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+        .play-trigger {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            overflow: hidden;
+            font-size: 1.2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+            z-index: 3;
         }
-        /* Simulación de video o post interactivo */
-        .post-content-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
-        }
-        .play-overlay {
-            position: absolute;
-            font-size: 3rem;
-            color: rgba(255,255,255,0.9);
-            transition: transform 0.2s ease;
-            cursor: pointer;
-            z-index: 2;
-        }
-        .post-content-preview:hover .play-overlay {
+        .social-embed-mock:hover .play-trigger {
+            background: var(--gold-premium);
+            color: #000;
+            box-shadow: 0 0 15px var(--gold-premium);
             transform: scale(1.1);
         }
-        .post-caption {
-            padding: 12px 15px;
+        .embed-footer {
+            padding: 15px 20px;
             font-size: 0.85rem;
-            background: #fff;
-            color: #444;
+            color: var(--text-muted);
+            line-height: 1.4;
         }
 
-        /* Botón de WhatsApp Flotante o de Acción Rápida */
-        .whatsapp-section {
-            text-align: center;
+        /* Panel de Contacto Premium (WhatsApp) */
+        .luxury-whatsapp-panel {
             margin-top: 30px;
-            background: #25d366;
-            color: white;
-            border-radius: 10px;
-            padding: 15px;
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.1), rgba(37, 211, 102, 0.02));
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
         }
-        .whatsapp-link {
-            color: white;
-            text-decoration: none;
-            font-size: 1.3rem;
-            font-weight: bold;
-            display: flex;
+        .luxury-whatsapp-panel:hover {
+            border-color: rgba(37, 211, 102, 0.5);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.15);
+        }
+        .whatsapp-btn-gold {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .whatsapp-btn-gold i {
+            color: #25d366;
+            font-size: 1.5rem;
+            animation: pulseGlowGreen 2s infinite ease-in-out;
+        }
+
+        /* --- ANIMACIONES --- */
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px var(--gold-premium)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 12px var(--gold-premium)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px var(--gold-premium)); }
+        }
+        @keyframes pulseGlowGreen {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px #25d366); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 10px #25d366); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px #25d366); }
         }
     </style>
 </head>
 <body>
 
-<div class="gema-container">
+<div class="gema-wrapper">
     
-    <!-- Encabezado con Logo Oficial -->
+    <!-- Header -->
     <header class="gema-header">
-        <img src="https://www.opticagema.com.mx/imagenes/logo-gema.jpeg" alt="Óptica Gema Logo">
+        <img src="https://www.opticagema.com.mx/imagenes/logo-gema.jpeg" alt="Óptica Gema">
     </header>
 
-    <!-- Banner Dinámico Inteligente -->
-    <!-- NOTA: Solo sube una imagen llamada promo-mes.jpg a tu carpeta de imágenes en tu repositorio para actualizarlo -->
-    <div class="promo-banner">
-        <a href="https://wa.me/525627418583?text=Hola,%20vi%20la%20promoción%20del%20mes%20y%20me%20interesa" target="_blank">
-            <img src="imagenes/promo-mes.jpg" alt="Promoción del Mes - Óptica Gema" onerror="this.src='https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=1200&q=80';">
+    <!-- Banner con placeholder real de Optica de Lujo (No tenis) -->
+    <div class="promo-container">
+        <a href="https://wa.me/525627418583?text=Me%20interesa%20la%20promocion%20del%20mes" target="_blank">
+            <img src="imagenes/promo-mes.jpg" alt="Exclusividades del Mes" onerror="this.src='https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1200&q=80';">
+            <div class="promo-overlay">
+                <span class="promo-badge">Colección Premium del Mes</span>
+            </div>
         </a>
     </div>
 
-    <!-- Grid de Contenido -->
-    <div class="main-grid">
+    <!-- Grid Estilo Dashboard -->
+    <div class="luxury-grid">
         
-        <!-- Columna Izquierda: Nuestras Sucursales -->
-        <section class="card">
-            <h2 class="card-title"><i class="fa-solid fa-location-dot"></i> Nuestras Sucursales</h2>
+        <!-- Columna 1: Sucursales con efecto Glass-Glow -->
+        <section class="premium-card">
+            <h2 class="section-title">
+                <i class="fa-solid fa-compass animated-icon"></i> Atendemos tu mirada
+            </h2>
             
-            <div class="branch-item">
-                <div class="branch-name">Centro Histórico (Tacuba)</div>
-                <div class="branch-address">Calle de Tacuba 40 desp 319, 318, Centro Histórico, 06000 Ciudad de México, CDMX.</div>
-                <a class="maps-btn" href="https://maps.google.com" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps</a>
+            <div class="branch-card">
+                <div class="branch-header">
+                    <span>Centro Histórico (Tacuba)</span>
+                </div>
+                <div class="branch-text">Calle de Tacuba 40 desp 319, 318, Centro Histórico, 06000 Ciudad de México, CDMX.</div>
+                <a class="luxury-maps-btn" href="https://maps.google.com" target="_blank">Explorar ubicación <i class="fa-solid fa-arrow-right"></i></a>
             </div>
 
-            <div class="branch-item">
-                <div class="branch-name">Centro Histórico (Tacuba II)</div>
-                <div class="branch-address">Calle de Tacuba 40 desp 207, Centro Histórico, 06000 Ciudad de México, CDMX.</div>
-                <a class="maps-btn" href="https://maps.google.com" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps</a>
+            <div class="branch-card">
+                <div class="branch-header">
+                    <span>Centro Histórico (Tacuba II)</span>
+                </div>
+                <div class="branch-text">Calle de Tacuba 40 desp 207, Centro Histórico, 06000 Ciudad de México, CDMX.</div>
+                <a class="luxury-maps-btn" href="https://maps.google.com" target="_blank">Explorar ubicación <i class="fa-solid fa-arrow-right"></i></a>
             </div>
 
-            <div class="branch-item">
-                <div class="branch-name">Centro Histórico (Motolinia)</div>
-                <div class="branch-address">Calle de Motolinia 25-Interior 201, Centro Histórico, Cuauhtémoc, 06000 Ciudad de México, CDMX.</div>
-                <!-- Puedes añadir el link específico de Maps aquí si lo requieres -->
+            <div class="branch-card">
+                <div class="branch-header">
+                    <span>Centro Histórico (Motolinia)</span>
+                </div>
+                <div class="branch-text">Calle de Tacuba 40 desp 207, Centro Histórico, 06000 Ciudad de México, CDMX.</div>
+                <a class="luxury-maps-btn" href="https://maps.google.com" target="_blank">Explorar ubicación <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </section>
 
-        <!-- Columna Derecha: Redes Sociales e Interactividad -->
-        <aside class="flex-column">
-            <div class="card">
-                <h2 class="card-title"><i class="fa-solid fa-hashtag"></i> ¿Ya nos sigues?</h2>
+        <!-- Columna 2: Redes Sociales Estilo Feed Integrado -->
+        <aside class="social-showcase">
+            
+            <div class="premium-card">
+                <h2 class="section-title"><i class="fa-solid fa-bolt"></i> Tendencias Digitales</h2>
                 
-                <div class="social-feed-wrapper">
-                    <!-- Post/Video Destacado de TikTok (Wrapper) -->
-                    <div class="social-post-mock">
-                        <div class="post-header">
-                            <i class="fa-brands fa-tiktok"></i>
-                            <span class="post-user">@opticagema</span>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    
+                    <!-- Post TikTok -->
+                    <div class="social-embed-mock">
+                        <div class="embed-header">
+                            <div class="embed-profile"><i class="fa-brands fa-tiktok"></i> <span>@opticagema</span></div>
+                            <i class="fa-solid fa-ellipsis" style="color: var(--text-muted);"></i>
                         </div>
-                        <a href="https://www.tiktok.com/@opticagema" target="_blank" class="post-content-preview">
-                            <i class="fa-solid fa-play play-overlay"></i>
-                            <!-- Imagen placeholder simulando fondo de video de lentes -->
-                            <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80" alt="Último video">
+                        <a href="https://www.tiktok.com/@opticagema" target="_blank" class="embed-media">
+                            <div class="play-trigger"><i class="fa-solid fa-play"></i></div>
+                            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=500&q=80" alt="TikTok Gema">
                         </a>
-                        <div class="post-caption">
-                            ¡Mira las nuevas tendencias en armazones que acaban de llegar! 👓✨ #EstiloGema #SaludVisual
-                        </div>
+                        <div class="embed-footer">¿Lentes de sol oscuros o armazones dorados? Te ayudamos a elegir el ideal para tu rostro 🕶️✨</div>
                     </div>
 
-                    <!-- Accesos rápidos a otras redes -->
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <a href="https://www.facebook.com/optigema" target="_blank" style="flex: 1; text-align: center; background: #1877f2; color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 1.1rem;"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="https://www.instagram.com/gema_optica" target="_blank" style="flex: 1; text-align: center; background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 1.1rem;"><i class="fa-brands fa-instagram"></i></a>
+                    <!-- Post Instagram -->
+                    <div class="social-embed-mock">
+                        <div class="embed-header">
+                            <div class="embed-profile"><i class="fa-brands fa-instagram"></i> <span>gema_optica</span></div>
+                            <i class="fa-solid fa-ellipsis" style="color: var(--text-muted);"></i>
+                        </div>
+                        <a href="https://www.instagram.com/gema_optica" target="_blank" class="embed-media">
+                            <div class="play-trigger"><i class="fa-solid fa-expand"></i></div>
+                            <img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=500&q=80" alt="Instagram Gema">
+                        </a>
+                        <div class="embed-footer">Detalles que marcan la diferencia. El lujo se nota en los acabados. Pregunta por nuestra línea exclusiva.</div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- Botón de Contacto Directo WhatsApp -->
-            <div class="whatsapp-section">
-                <a class="whatsapp-link" href="https://wa.me/525627418583" target="_blank">
-                    <i class="fa-brands fa-whatsapp"></i> +52 56 2741 8583
+            <!-- Botón WhatsApp de Alta Gama -->
+            <div class="luxury-whatsapp-panel">
+                <a class="whatsapp-btn-gold" href="https://wa.me/525627418583" target="_blank">
+                    <i class="fa-brands fa-whatsapp"></i> Conecta vía WhatsApp
                 </a>
             </div>
+
         </aside>
 
     </div>
