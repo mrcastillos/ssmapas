@@ -313,13 +313,25 @@
                 throw new Error(`No se pudo leer el archivo [${nombresPosibles.join(", ")}].`);
             }
 
-           async function actualizar() {
+   async function actualizar() {
     try {
-        const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv"]);
-        const participantes = await leerCSV(["resultados_participantes.csv", "resultados_participantes.csv", "Resultados_participantes.csv"]);
+        // Buscamos el archivo del mundial con cualquier combinación de mayúsculas/minúsculas
+        const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv", "MUNDIAL2026.csv"]);
+        
+        // Buscamos el archivo de participantes con cualquier variación de nombre que hayas usado
+        const participantes = await leerCSV([
+            "resultado_participantes.csv", 
+            "resultados_participantes.csv", 
+            "Resultado_participantes.csv",
+            "Resultados_participantes.csv",
+            "resultados_participante.csv"
+        ]);
+
+        // Verificación de seguridad: si alguno no cargó, lanzamos un error claro en vez de romper el script
+        if (!mundial || !mundial.text) throw new Error("No se pudo cargar el archivo del Mundial (Mundial2026.csv). Verifica el nombre.");
+        if (!participantes || !participantes.text) throw new Error("No se pudo cargar el archivo de Participantes. Verifica el nombre.");
 
         let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
-        let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
         let latestDate = new Date(Math.max(d1, d2));
         
         const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
