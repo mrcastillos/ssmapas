@@ -385,42 +385,26 @@
                         if (idxGl === -1) idxGl = 5;
                         if (idxGv === -1) idxGv = 6;
 
-                        for(let i=1; i<mundialRows.length; i++) {
-                            let row = mundialRows[i];
-                            if(row.length <= Math.max(idxNo, idxAbbr)) continue;
-                            let num = parseInt(row[idxNo]);
-                            if(!isNaN(num)) {
-                                let abbr = row[idxAbbr] ? row[idxAbbr].toUpperCase() : '';
-                                let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : 'FASE DE GRUPOS';
-                                let gL = row[idxGl] !== undefined ? row[idxGl].trim() : '';
-                                let gV = row[idxGv] !== undefined ? row[idxGv].trim() : '';
-                                
-                                partidosMap[num] = abbr;
-                                estructuraPartidosOriginal[num] = abbr;
-
-                                if (abbr && abbr.includes("VS") && !abbr.includes("1") && !abbr.includes("2") && !abbr.includes("3")) {
-                                    abbr.split("VS").forEach(e => poolTodasLasSelecciones.add(e.trim()));
-                                }
-
-                                let resCalculado = '';
-                                if (gL !== '' && gV !== '') {
-                                    let nL = parseInt(gL); let nV = parseInt(gV);
-                                    if (!isNaN(nL) && !isNaN(nV)) {
-                                        resCalculado = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
-                                        resultadosMap[num] = resCalculado;
-                                    }
-                                }
-
-                                datosPartidosGoles.push({ num: num, label: abbr, fase: fase, gL: gL, gV: gV, res: resCalculado });
-
-                                for (let fKey in eliminatoriasPorFase) {
-                                    if (fase.includes(fKey)) {
-                                        eliminatoriasPorFase[fKey].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                    }
-                                }
-                            }
-                        }
-                    }
+                        // REEMPLAZA TU CICLO FOR DE PROCESAMIENTO POR ESTE:
+for(let i=1; i<mundialRows.length; i++) {
+    let row = mundialRows[i];
+    
+    // --- FILTRO DE SEGURIDAD ---
+    // Si la fila está vacía o no tiene al menos el número de partido, sáltala
+    if(!row[0] || row[0].trim() === "") continue; 
+    
+    let num = parseInt(row[idxNo]);
+    if(!isNaN(num)) {
+        let gL = row[idxGl] ? row[idxGl].trim() : '';
+        let gV = row[idxGv] ? row[idxGv].trim() : '';
+        
+        // --- FILTRO DE PARTIDO JUGADO ---
+        // Solo contar como "partido jugado" si hay goles numéricos
+        if (gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
+             // AQUI TU LÓGICA DE SUMA DE PUNTOS...
+        }
+    }
+}
 
                     let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
                     let numPlayed = playedMatchIds.length;
