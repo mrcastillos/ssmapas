@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Óptica Gema - Premium Showcase</title>
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0b0d;
+            --card-dark: #121418;
+            --gold-premium: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        .gema-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Encabezado */
+        .gema-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .gema-header img {
+            max-width: 200px;
+            height: auto;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.1));
+        }
+
+        /* Banner Promocional */
+        .promo-container {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px var(--gold-glow);
+            margin-bottom: 50px;
+            aspect-ratio: 16 / 6;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .promo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+        .promo-container:hover img {
+            transform: scale(1.02);
+        }
+        .promo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(10,11,13,0.9));
+            padding: 25px;
+        }
+        .promo-badge {
+            background: linear-gradient(135deg, #b8860b, var(--gold-premium));
+            color: #000;
+            padding: 6px 16px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 30px;
+        }
+
+        /* Grid Responsivo */
+        .luxury-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        @media (min-width: 992px) {
+            .luxury-grid {
+                grid-template-columns: 1.1fr 0.9fr;
+            }
+        }
+
+        /* Tarjetas Estilo Dashboard */
+        .premium-card {
+            background: var(--card-dark);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 0;
+            margin-bottom: 35px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title i {
+            color: var(--gold-premium);
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        /* --- NUEVO: SUCURSALES CON SCROLL DE FOTOS --- */
+        .branch-showcase {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .branch-info-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Contenedor del Scroll Horizontal */
+        .image-scroll-container {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            scroll-behavior: smooth;
+            /* Estilizado de barra de scroll para navegadores modernos */
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-premium) rgba(255,255,255,0.05);
+        }
+        /* Barra de scroll para Chrome/Safari */
+        .image-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .image-scroll-container::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        .image-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--gold-premium);
+            border-radius: 10px;
+        }
+
+        .scroll-img {
+            flex: 0 0 140px; /* Tamaño perfecto para móviles y PC */
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .scroll-img:hover {
+            transform: scale(1.04);
+            border-color: var(--gold-premium);
+        }
+
+        .branch-footer-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 12px;
+        }
+        .visit-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .maps-link-luxury {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--gold-premium);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .maps-link-luxury:hover {
+            color: #fff;
+        }
+
+        /* --- REDES SOCIALES UNIFICADAS --- */
+        .social-feed-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .mock-post {
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: transform 0.3s ease;
+        }
+        .mock-post:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255,255,255,0.08);
+        }
+        .post-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            background: rgba(255,255,255,0.01);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .profile-side {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .profile-side i { font-size: 1.1rem; }
+        
+        /* Colores de marca */
+        .fa-facebook { color: #1877f2; }
+        .fa-instagram { color: #fbad50; }
+        .fa-tiktok { color: #ff0050; }
+
+        .media-box {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: #15171c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .media-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.65;
+            transition: all 0.4s ease;
+        }
+        .mock-post:hover .media-box img {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+        .action-icon-overlay {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            z-index: 2;
+        }
+        .mock-post:hover .action-icon-overlay {
+            background: var(--gold-premium);
+            color: #000;
+            box-shadow: 0 0 15px var(--gold-premium);
+        }
+        .post-bottom {
+            padding: 14px 18px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Panel de WhatsApp de Alta Gama */
+        .whatsapp-luxury-bar {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.08), rgba(37, 211, 102, 0.01));
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 25px;
+            transition: border-color 0.3s;
+        }
+        .whatsapp-luxury-bar:hover {
+            border-color: rgba(37, 211, 102, 0.4);
+        }
+        .wa-premium-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+        .wa-premium-btn i {
+            color: #25d366;
+            font-size: 1.4rem;
+            animation: pulseGlowGreen 2s infinite ease-in-out;
+        }
+
+        /* Animaciones */
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px var(--gold-premium)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 10px var(--gold-premium)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px var(--gold-premium)); }
+        }
+        @keyframes pulseGlowGreen {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px #25d366); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 8px #25d366); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px #25d366); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="gema-wrapper">
+    
+    <!-- Logo -->
+    <header class="gema-header">
+        <img src="https://www.opticagema.com.mx/imagenes/logo-gema.jpeg" alt="Óptica Gema">
+    </header>
+
+    <!-- Banner Principal -->
+    <div class="promo-container">
+        <!-- El link de WhatsApp incluye el texto predefinido que pediste -->
+        <a href="https://wa.me/525627418583?text=Hola,%20vi%20su%20página%20web%20y%20me%20interesa%20pedir%20información" target="_blank">
+            <img src="imagenes/promo-mes.jpg" alt="Colección Exclusiva" onerror="this.src='https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1200&q=80';">
+            <div class="promo-overlay">
+                <span class="promo-badge">Lanzamientos Destacados</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- Grid Estilo Dashboard -->
+    <div class="luxury-grid">
+        
+        <!-- COLUMNA IZQUIERDA: SUCURSALES CON GALERÍA SCROLLABLE -->
+        <section class="premium-card">
+            <h2 class="section-title"><i class="fa-solid fa-shop"></i> Nuestras Sucursales</h2>
+            
+            <!-- Sucursal 1 -->
+            <div class="branch-showcase">
+                <div class="branch-info-title">Centro Histórico (Tacuba)</div>
+                
+                <!-- Galería con scroll horizontal de hasta 5 imágenes -->
+                <div class="image-scroll-container">
+                    <img class="scroll-img" src="images/sucursal1_1.jpg" alt="Tacuba Vista 1" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=200&q=80';">
+                    <img class="scroll-img" src="images/sucursal1_2.jpg" alt="Tacuba Vista 2" onerror="this.src='https://images.unsplash.com/photo-1563906267088-b029e7101114?auto=format&fit=crop&w=200&q=80';">
+                    <img class="scroll-img" src="images/sucursal1_3.jpg" alt="Tacuba Vista 3" onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=200&q=80';">
+                </div>
+                
+                <div class="branch-footer-actions">
+                    <span class="visit-text">Visítanos en:</span>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Calle de Tacuba 40 desp 319, 318, Centro Histórico, CDMX.</div>
+                    <a class="maps-link-luxury" href="https://maps.google.com" target="_blank"><i class="fa-solid fa-location-arrow"></i> Ver Ruta en Google Maps</a>
+                </div>
+            </div>
+
+            <!-- Sucursal 2 -->
+            <div class="branch-showcase">
+                <div class="branch-info-title">Centro Histórico (Tacuba II)</div>
+                
+                <div class="image-scroll-container">
+                    <img class="scroll-img" src="images/sucursal2_1.jpg" alt="Tacuba II Vista 1" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=200&q=80';">
+                    <img class="scroll-img" src="images/sucursal2_2.jpg" alt="Tacuba II Vista 2" onerror="this.src='https://images.unsplash.com/photo-1563906267088-b029e7101114?auto=format&fit=crop&w=200&q=80';">
+                </div>
+                
+                <div class="branch-footer-actions">
+                    <span class="visit-text">Visítanos en:</span>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Calle de Tacuba 40 desp 207, Centro Histórico, CDMX.</div>
+                    <a class="maps-link-luxury" href="https://maps.google.com" target="_blank"><i class="fa-solid fa-location-arrow"></i> Ver Ruta en Google Maps</a>
+                </div>
+            </div>
+
+            <!-- Sucursal 3 -->
+            <div class="branch-showcase">
+                <div class="branch-info-title">Centro Histórico (Motolinia)</div>
+                
+                <div class="image-scroll-container">
+                    <img class="scroll-img" src="images/sucursal3_1.jpg" alt="Motolinia Vista 1" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=200&q=80';">
+                    <img class="scroll-img" src="images/sucursal3_2.jpg" alt="Motolinia Vista 2" onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=200&q=80';">
+                </div>
+                
+                <div class="branch-footer-actions">
+                    <span class="visit-text">Visítanos en:</span>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Calle de Motolinia 25-Interior 201, Centro Histórico, CDMX.</div>
+                    <a class="maps-link-luxury" href="https://maps.google.com" target="_blank"><i class="fa-solid fa-location-arrow"></i> Ver Ruta en Google Maps</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- COLUMNA DERECHA: REDES SOCIALES UNIFICADAS (TIKTOK, INSTAGRAM, FACEBOOK) -->
+        <aside class="social-feed-column">
+            
+            <div class="premium-card">
+                <h2 class="section-title"><i class="fa-solid fa-hashtag"></i> Comunidad Gema</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 22px;">
+                    
+                    <!-- Post TikTok -->
+                    <div class="mock-post">
+                        <div class="post-top">
+                            <div class="profile-side"><i class="fa-brands fa-tiktok"></i> <span>@opticagema</span></div>
+                            <i class="fa-solid fa-ellipsis" style="color: var(--text-muted);"></i>
+                        </div>
+                        <a href="https://www.tiktok.com/@opticagema" target="_blank" class="media-box">
+                            <div class="action-icon-overlay"><i class="fa-solid fa-play"></i></div>
+                            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=500&q=80" alt="TikTok">
+                        </a>
+                        <div class="post-bottom">Descubre cómo cambia tu outfit usando los armazones correctos. ¡Dale play! 👓🔥</div>
+                    </div>
+
+                    <!-- Post Instagram -->
+                    <div class="mock-post">
+                        <div class="post-top">
+                            <div class="profile-side"><i class="fa-brands fa-instagram"></i> <span>gema_optica</span></div>
+                            <i class="fa-solid fa-ellipsis" style="color: var(--text-muted);"></i>
+                        </div>
+                        <a href="https://www.instagram.com/gema_optica" target="_blank" class="media-box">
+                            <div class="action-icon-overlay"><i class="fa-solid fa-expand"></i></div>
+                            <img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=500&q=80" alt="Instagram">
+                        </a>
+                        <div class="post-bottom">Calidad y elegancia en cada detalle. Agenda tu examen de la vista hoy mismo. 💎</div>
+                    </div>
+
+                    <!-- NUEVO: Post Facebook -->
+                    <div class="mock-post">
+                        <div class="post-top">
+                            <div class="profile-side"><i class="fa-brands fa-facebook"></i> <span>Óptica Gema</span></div>
+                            <i class="fa-solid fa-ellipsis" style="color: var(--text-muted);"></i>
+                        </div>
+                        <a href="https://www.facebook.com/optigema" target="_blank" class="media-box">
+                            <div class="action-icon-overlay"><i class="fa-solid fa-thumbs-up"></i></div>
+                            <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=500&q=80" alt="Facebook">
+                        </a>
+                        <div class="post-bottom">¡Ya abrimos nuestra nueva sección en Motolinia! Te esperamos con promociones exclusivas en micas graduadas.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Botón WhatsApp Con Texto Preconfigurado -->
+            <div class="whatsapp-luxury-bar">
+                <a class="wa-premium-btn" href="https://wa.me/525627418583?text=Hola,%20vi%20su%20página%20web%20y%20me%20interesa%20pedir%20información" target="_blank">
+                    <i class="fa-brands fa-whatsapp"></i> Contactar Consultor Premium
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+</div>
+
+</body>
+</html>
