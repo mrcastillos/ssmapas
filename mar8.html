@@ -3,292 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
+    <title>QUINIELA MUNDIAL 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
         .font-sports { font-family: 'Rajdhani', sans-serif; }
-        .fifa-card { background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%); border: 3px solid #f3e0a3; box-shadow: 0 10px 25px rgba(184, 135, 40, 0.3); position: relative; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); }
-        .fifa-card-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #4b5563 100%); border: 3px solid #f3f4f6; box-shadow: 0 10px 25px rgba(156, 163, 175, 0.3); }
-        .fifa-card-bronze { background: linear-gradient(135deg, #ca8a04 0%, #a16207 50%, #78350f 100%); border: 3px solid #fef08a; box-shadow: 0 10px 25px rgba(161, 98, 7, 0.3); }
-        .custom-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+        .fifa-card { background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%); border: 3px solid #f3e0a3; position: relative; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #111827; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4b5563; }
-        .bracket-game { background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 8px; position: relative; }
     </style>
 </head>
-<body class="p-4 md:p-8 bg-slate-950">
-    <div class="max-w-7xl mx-auto space-y-6">
+<body class="p-4 md:p-6 bg-slate-950">
+    <div class="max-w-6xl mx-auto space-y-6">
         
-        <!-- HEADER PANEL -->
-        <header class="bg-slate-900 border-l-8 border-yellow-500 p-6 rounded-lg shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider font-sports text-white flex items-center gap-3">
-                    <i class="fa-solid fa-trophy text-yellow-500 animate-bounce"></i> ⚽ QUINIELA MUNDIAL 2026
-                </h1>
-                <p id="last-updated" class="text-xs md:text-sm font-semibold tracking-widest text-slate-400 mt-1 font-sports uppercase">
-                    ACTUALIZADO: CARGANDO DATOS...
-                </p>
+                <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">ACTUALIZANDO DATOS...</p>
             </div>
-            <div class="bg-slate-800 px-4 py-2 rounded-full border border-slate-700 text-xs font-bold text-yellow-400 font-sports tracking-wide">
-                <i class="fa-solid fa-crown mr-1"></i> VERSIÓN PREMIUM STADIUM
-            </div>
+            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 PREMIUM STADIUM</div>
         </header>
 
-        <!-- BANNER DE ERROR -->
-        <div id="error-banner" class="hidden bg-red-900/90 border-2 border-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-4">
-            <i class="fa-solid fa-circle-exclamation text-3xl text-red-400"></i>
-            <div>
-                <p class="font-bold text-lg uppercase tracking-wide">⚠️ REVISIÓN DE ENLACE EN GITHUB</p>
-                <p class="text-sm text-red-200 mt-1" id="error-text">Ocurrió un error al cargar los datos.</p>
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sports">
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Líder Actual</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">-</p></div>
+                <i class="fa-solid fa-medal text-slate-700 text-xl"></i>
             </div>
-        </div>
-
-        <!-- KPI SUMMARY CARDS -->
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 font-sports">
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🏆 Líder Actual</p>
-                    <p id="kpi-leader" class="text-xl md:text-2xl font-black text-yellow-400 mt-1">-</p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-medal"></i></div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Partidos Jugados</p><p id="kpi-played" class="text-xl font-black text-emerald-400 mt-0.5">0 / 72</p></div>
+                <i class="fa-solid fa-square-poll-vertical text-slate-700 text-xl"></i>
             </div>
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">⚽ Jugados</p>
-                    <p id="kpi-played" class="text-2xl md:text-3xl font-black text-emerald-400 mt-1">0 <span class="text-xs text-slate-500 font-normal">/ 72</span></p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-square-poll-vertical"></i></div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Máximo Aciertos</p><p id="kpi-hits" class="text-xl font-black text-cyan-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-bullseye text-slate-700 text-xl"></i>
             </div>
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">🎯 Máx Aciertos</p>
-                    <p id="kpi-hits" class="text-2xl md:text-3xl font-black text-cyan-400 mt-1">0</p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-bullseye"></i></div>
-            </div>
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">👥 Part. Totales</p>
-                    <p id="kpi-participants" class="text-2xl md:text-3xl font-black text-purple-400 mt-1">0</p>
-                </div>
-                <div class="text-slate-700 text-3xl"><i class="fa-solid fa-users"></i></div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Participantes</p><p id="kpi-participants" class="text-xl font-black text-purple-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-users text-slate-700 text-xl"></i>
             </div>
         </section>
 
-        <!-- PODIO GANADORES -->
-        <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
-            <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
-                <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO OFICIAL DE GANADORES
-            </h2>
-            <div class="grid grid-cols-3 max-w-2xl mx-auto items-end pt-12 font-sports text-center">
-                <div class="flex flex-col items-center">
-                    <div id="podium-2-names" class="text-sm font-bold text-slate-300 mb-2 truncate max-w-full px-1">🥈 -</div>
-                    <div class="w-full bg-slate-800 border-t-4 border-slate-400 h-24 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
-                        <span class="text-2xl font-black text-slate-400">2°</span>
-                        <span class="text-xs font-bold text-slate-500">PLATA</span>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <i class="fa-solid fa-crown text-yellow-400 text-2xl animate-pulse mb-1"></i>
-                    <div id="podium-1-names" class="text-base font-extrabold text-yellow-400 mb-2 truncate max-w-full px-1">🥇 -</div>
-                    <div class="w-full bg-slate-800 border-t-4 border-yellow-500 h-36 rounded-t-lg flex flex-col justify-center items-center shadow-2xl relative leader-flash">
-                        <span class="text-4xl font-black text-yellow-400">1°</span>
-                        <span class="text-xs font-bold text-yellow-500 tracking-widest">CAMPEÓN</span>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div id="podium-3-names" class="text-sm font-bold text-amber-600 mb-2 truncate max-w-full px-1">🥉 -</div>
-                    <div class="w-full bg-slate-800 border-t-4 border-amber-700 h-16 rounded-t-lg flex flex-col justify-center items-center shadow-lg">
-                        <span class="text-xl font-black text-amber-600">3°</span>
-                        <span class="text-xs font-bold text-amber-700">BRONCE</span>
-                    </div>
-                </div>
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-list-ol text-emerald-500 mr-1"></i> Tabla de Posiciones en Vivo
+                </h3>
+                <div id="ranking-container" class="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar"></div>
+            </div>
+
+            <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2 mb-4">
+                    <i class="fa-solid fa-id-card text-yellow-500 mr-1"></i> Tarjeta FIFA Líder
+                </h3>
+                <div id="fifa-leader-card" class="my-auto"></div>
             </div>
         </section>
 
-        <!-- LAYOUT CENTRAL -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4 flex items-center justify-between">
-                        <span><i class="fa-solid fa-list-ol text-emerald-500 mr-2"></i> RANKING EN TIEMPO REAL</span>
-                    </h3>
-                    <div id="ranking-container" class="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar"></div>
-                </div>
-
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-6">
-                        <i class="fa-solid fa-id-card text-yellow-500 mr-2"></i> TARJETAS FIFA WORLD CUP TOP 3 (PARTICIPANTES)
-                    </h3>
-                    <div id="fifa-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-center"></div>
-                </div>
-            </div>
-
-            <div class="space-y-6">
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
-                    <div>
-                        <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
-                            <i class="fa-solid fa-chart-pie text-cyan-500"></i> PROBABILIDAD DE VICTORIA PARTICIPANTE (TOP 3)
-                        </h3>
-                        <div id="prob-container" class="space-y-3"></div>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
-                            <i class="fa-solid fa-square-poll-horizontal text-emerald-400"></i> PROBABILIDAD LÍDER DE SELECCIONES (TOP 5)
-                        </h3>
-                        <div id="team-prob-container" class="space-y-3"></div>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-                    <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-percent text-purple-500"></i> TOP PICKS & TENDENCIAS
-                    </h3>
-                    <select id="match-select" class="w-full bg-slate-800 border border-slate-700 text-white rounded px-3 py-2 font-sports text-sm outline-none focus:border-purple-500 mb-4"></select>
-                    <div id="match-picks-display" class="bg-slate-950 p-4 rounded-lg border border-slate-800 font-sports space-y-3"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SECCIÓN COMPLETA SELECCIONES -->
-        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
-            <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
-                <i class="fa-solid fa-earth-americas text-emerald-400"></i> 🗺️ RENDIMIENTO GENERAL DE SELECCIONES (REGLAMENTO OFICIAL FIFA)
+        <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
+            <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
+                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Historial de Aciertos por Partido
             </h3>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                <div class="bg-slate-950/40 rounded-xl p-5 border border-slate-900 shadow-inner lg:col-span-1 h-full flex flex-col justify-between">
-                    <h4 class="text-xs font-bold tracking-widest text-center text-slate-400 uppercase mb-4">
-                        🎖️ TOP 3 SELECCIONES EN EL PODIO
-                    </h4>
-                    <div class="grid grid-cols-3 mx-auto items-end pt-10 text-center w-full max-w-sm">
-                        <div class="flex flex-col items-center">
-                            <div id="team-podium-2-names" class="text-xs font-black text-slate-300 mb-2 truncate max-w-full px-1">🥈 -</div>
-                            <div class="w-full bg-slate-900 border-t-4 border-slate-400 h-16 rounded-t-lg flex flex-col justify-center items-center shadow-md">
-                                <span class="text-lg font-black text-slate-400">2°</span>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <i class="fa-solid fa-star text-yellow-400 text-sm animate-pulse mb-1"></i>
-                            <div id="team-podium-1-names" class="text-sm font-black text-yellow-400 mb-2 truncate max-w-full px-1">🥇 -</div>
-                            <div class="w-full bg-slate-900 border-t-4 border-yellow-500 h-24 rounded-t-lg flex flex-col justify-center items-center shadow-xl relative leader-flash">
-                                <span class="text-2xl font-black text-yellow-400">1°</span>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <div id="team-podium-3-names" class="text-xs font-black text-amber-600 mb-2 truncate max-w-full px-1">🥉 -</div>
-                            <div class="w-full bg-slate-900 border-t-4 border-amber-700 h-12 rounded-t-lg flex flex-col justify-center items-center shadow-md">
-                                <span class="text-base font-black text-amber-600">3°</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 space-y-2">
-                    <h4 class="text-xs font-bold tracking-widest text-slate-400 uppercase pl-1">
-                        🏆 TARJETAS FIFA WORLD CUP SELECCIONES
-                    </h4>
-                    <div id="team-fifa-cards-container" class="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center"></div>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[380px] custom-scrollbar">
-                <table class="w-full text-left border-collapse text-sm">
-                    <thead>
-                        <tr class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800 sticky top-0 z-10 font-bold">
-                            <th class="p-3 text-center w-16 bg-slate-950">POS</th>
-                            <th class="p-3 bg-slate-950">SELECCIÓN</th>
-                            <th class="p-3 text-center bg-slate-950">GR</th>
-                            <th class="p-3 text-center bg-slate-950">PJ</th>
-                            <th class="p-3 text-center bg-slate-950">G</th>
-                            <th class="p-3 text-center bg-slate-950">E</th>
-                            <th class="p-3 text-center bg-slate-950">P</th>
-                            <th class="p-3 text-center bg-slate-950">GF</th>
-                            <th class="p-3 text-center bg-slate-950">GC</th>
-                            <th class="p-3 text-center bg-slate-950">DG</th>
-                            <th class="p-3 text-center text-emerald-400 font-black bg-slate-950">PTS</th>
-                        </tr>
-                    </thead>
-                    <tbody id="teams-leaderboard-body" class="divide-y divide-slate-800 text-xs">
-                        <tr>
-                            <td colspan="11" class="p-4 text-center text-slate-500">Esperando procesamiento de partidos...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- SIMULACIÓN DEL CUADRO ELIMINATORIO -->
-        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
-            <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-6 flex items-center gap-2 border-b border-slate-800 pb-3">
-                <i class="fa-solid fa-sitemap text-yellow-500"></i> 🏆 SIMULACIÓN DEL CUADRO ELIMINATORIO (REGLAMENTO FIFA 2026)
-            </h3>
-            
-            <div class="overflow-x-auto custom-scrollbar pb-4">
-                <div class="min-w-[1200px] grid grid-cols-6 gap-4 text-center items-start">
-                    <div>
-                        <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">16vos de Final</h5>
-                        <div id="bracket-16vos" class="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-1"></div>
-                    </div>
-                    <div>
-                        <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">Octavos</h5>
-                        <div id="bracket-octavos" class="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-1"></div>
-                    </div>
-                    <div>
-                        <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">Cuartos</h5>
-                        <div id="bracket-cuartos" class="space-y-4"></div>
-                    </div>
-                    <div>
-                        <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">Semifinal</h5>
-                        <div id="bracket-semis" class="space-y-8"></div>
-                    </div>
-                    <div>
-                        <h5 class="text-xs font-black text-amber-500 mb-3 border-b border-amber-800 pb-1 uppercase tracking-wider">3er Lugar</h5>
-                        <div id="bracket-tercer" class="pt-16"></div>
-                    </div>
-                    <div>
-                        <h5 class="text-xs font-black text-yellow-400 mb-3 border-b border-yellow-600 pb-1 uppercase tracking-wider">Gran Final</h5>
-                        <div id="bracket-final" class="pt-16"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CHART -->
-        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-            <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4">
-                <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÓN HISTÓRICA DE CLASIFICACIÓN
-            </h3>
-            <div class="h-80 w-full"><canvas id="evolutionChart"></canvas></div>
-        </section>
-
-        <!-- MAPA DE CALOR -->
-        <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
-            <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2">
-                <i class="fa-solid fa-fire text-orange-500 mr-2"></i> MAPA DE CALOR DE PARTIDOS
-            </h3>
-            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-96">
-                <table class="w-full border-collapse text-left text-xs font-sports">
+            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-80">
+                <table class="w-full text-left border-collapse text-xs font-sports">
                     <thead><tr id="heatmap-header" class="bg-slate-950 text-slate-400 uppercase tracking-wider sticky top-0 z-10 border-b border-slate-800"></tr></thead>
-                    <tbody id="heatmap-body" class="divide-y divide-slate-800"></tbody>
+                    <tbody id="heatmap-body" class="divide-y divide-slate-800 bg-slate-900/40"></tbody>
                 </table>
             </div>
         </section>
 
-        <!-- FOOTER -->
-        <footer class="bg-slate-900/40 border-t border-slate-800 py-6 text-center rounded-lg space-y-2">
-            <p class="text-slate-400 text-sm font-semibold tracking-wide">
-                Quiniela Mundial 2026 Premium Dashboard &copy; Todos los derechos reservados.
-            </p>
-            <p class="text-yellow-500 font-sports font-bold tracking-widest uppercase text-xs flex items-center justify-center gap-2">
-                <i class="fa-solid fa-camera text-sm"></i> VISITA: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline transition">www.instagram.com/lente.abierto.mx</a>
+        <footer class="bg-slate-900/40 py-4 text-center rounded-lg border border-slate-900">
+            <p class="text-yellow-500 font-sports font-bold tracking-widest text-xs uppercase">
+                📷 Galería Oficial: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline">@lente.abierto.mx</a>
             </p>
         </footer>
 
@@ -297,7 +85,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-            let chartInstance = null;
 
             function procesarMatrizCSV(text) {
                 if (!text) return [];
@@ -307,545 +94,109 @@
                            .filter(row => row.length > 0 && row[0] !== '');
             }
 
-            async function leerCSV(nombresPosibles) {
-                for (let nombre of nombresPosibles) {
-                    try {
-                        let urlFuerzaBruta = baseUrl + nombre + '?nocache=' + new Date().getTime();
-                        let response = await fetch(urlFuerzaBruta);
-                        if (response.ok) {
-                            let text = await response.text();
-                            return { text: text, headers: response.headers };
-                        }
-                    } catch (e) {
-                        console.log(`Error al leer ${nombre}`);
+            // Convierte cualquier formato ("2-1", "L", "l") a "L", "E" o "V" estándar
+            function normalizarResultado(valor) {
+                if (!valor) return '';
+                let v = valor.toUpperCase().trim();
+                if (v.includes('-')) {
+                    let partes = v.split('-');
+                    let gL = parseInt(partes[0]);
+                    let gV = parseInt(partes[1]);
+                    if (!isNaN(gL) && !isNaN(gV)) {
+                        return gL > gV ? 'L' : gL < gV ? 'V' : 'E';
                     }
                 }
+                return v; 
+            }
+
+            async function leerCSV(nombre) {
+                try {
+                    let response = await fetch(baseUrl + nombre + '?nocache=' + new Date().getTime());
+                    if (response.ok) {
+                        let text = await response.text();
+                        return { text: text, headers: response.headers };
+                    }
+                } catch (e) { console.error("Error cargando " + nombre); }
                 return null;
             }
 
             async function actualizar() {
-                try {
-                    const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv", "MUNDIAL2026.csv"]);
-                    const participantes = await leerCSV([
-                        "resultado_participantes.csv", 
-                        "resultados_participantes.csv", 
-                        "Resultado_participantes.csv",
-                        "Resultados_participantes.csv",
-                        "resultados_participante.csv"
-                    ]);
+                const mundial = await leerCSV("mundial2026.csv") || await leerCSV("Mundial2026.csv");
+                const participantes = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv") || await leerCSV("Resultado_participantes.csv");
 
-                    if (!mundial || !mundial.text) throw new Error("No se pudo cargar el archivo del Mundial (Mundial2026.csv). Verifica el nombre.");
-                    if (!participantes || !participantes.text) throw new Error("No se pudo cargar el archivo de Participantes. Verifica el nombre.");
+                if (!mundial || !participantes) return;
 
-                    let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
-                    let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
-                    let latestDate = new Date(Math.max(d1, d2));
-                    
-                    const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-                    document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2, '0')} ${months[latestDate.getMonth()]} ${latestDate.getFullYear()} ${latestDate.getHours().toString().padStart(2, '0')}:${latestDate.getMinutes().toString().padStart(2, '0')}`;
+                let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
+                document.getElementById("last-updated").textContent = `ACTUALIZADO: ${d1.getDate().toString().padStart(2,'0')}/${(d1.getMonth()+1).toString().padStart(2,'0')} ${d1.getHours().toString().padStart(2,'0')}:${d1.getMinutes().toString().padStart(2,'0')}`;
 
-                    let mundialRows = procesarMatrizCSV(mundial.text);
-                    let partidosMap = {};
-                    let estructuraPartidosOriginal = {};
-                    let resultadosMap = {};
-                    let poolTodasLasSelecciones = new Set();
-                    let datosPartidosGoles = [];
-                    let mapasGrupoEquipos = {}; 
-                    
-                    let eliminatoriasPorFase = { 
-                        "DICISEISAVOS": [], "OCTAVOS": [], "CUARTOS": [], "SEMIFINAL": [], "3ER LUGAR": [], "FINAL MUNDIAL 2026": []
-                    };
+                let mundialRows = procesarMatrizCSV(mundial.text);
+                let partidosMap = {};
+                let resultadosMap = {};
+                let playedMatchIds = [];
 
-                    if (mundialRows.length > 0) {
-                        let header = mundialRows[0].map(h => h.toUpperCase());
-                        let idxNo = header.indexOf("NO");
-                        let idxAbbr = header.indexOf("ABREVIATURA");
-                        let idxGrupo = header.indexOf("GRUPO");
-                        let idxFase = header.indexOf("FASE");
-                        let idxGl = header.indexOf("GOLES_LOCAL");
-                        let idxGv = header.indexOf("GOLES_VISITANTE");
-                        
-                        if (idxNo === -1) idxNo = 0;
-                        if (idxAbbr === -1) idxAbbr = 2;
-                        if (idxGrupo === -1) idxGrupo = 3;
-                        if (idxFase === -1) idxFase = 4;
-                        if (idxGl === -1) idxGl = 5;
-                        if (idxGv === -1) idxGv = 6;
+                if (mundialRows.length > 0) {
+                    let header = mundialRows[0].map(h => h.toUpperCase());
+                    let idxNo = header.indexOf("NO");
+                    let idxAbbr = header.indexOf("ABREVIATURA");
+                    let idxGl = header.indexOf("GOLES_LOCAL");
+                    let idxGv = header.indexOf("GOLES_VISITANTE");
+                    let idxRes = header.indexOf("RESULTADO");
 
-                        for(let i=1; i<mundialRows.length; i++) {
-                            let row = mundialRows[i];
-                            if(row.length <= Math.max(idxNo, idxAbbr) || !row[idxNo]) continue;
-                            let num = parseInt(row[idxNo]);
-                            if(!isNaN(num)) {
-                                let abbr = row[idxAbbr] ? row[idxAbbr].toUpperCase() : '';
-                                let grupo = row[idxGrupo] ? row[idxGrupo].toUpperCase().trim() : '';
-                                let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : 'FASE DE GRUPOS';
-                                let gL = row[idxGl] !== undefined ? row[idxGl].trim() : '';
-                                let gV = row[idxGv] !== undefined ? row[idxGv].trim() : '';
-                                
-                                if (abbr.includes("ESCOCIA") && abbr.includes("BRASIL")) {
-                                    gL = "0";
-                                    gV = "3";
-                                }
-                                
-                                partidosMap[num] = abbr;
-                                estructuraPartidosOriginal[num] = abbr;
+                    for(let i=1; i<mundialRows.length; i++) {
+                        let row = mundialRows[i];
+                        if(!row[idxNo]) continue;
+                        let num = parseInt(row[idxNo]);
+                        let abbr = row[idxAbbr] || '';
+                        let gL = row[idxGl];
+                        let gV = row[idxGv];
+                        let resCol = idxRes !== -1 ? row[idxRes] : '';
 
-                                if (num <= 72 && abbr.includes("VS")) {
-                                    let bandos = abbr.split("VS").map(e => e.trim());
-                                    bandos.forEach(team => {
-                                        poolTodasLasSelecciones.add(team);
-                                        if (grupo !== '') mapasGrupoEquipos[team] = grupo;
-                                    });
-                                }
+                        if (abbr.toUpperCase().includes("ESCOCIA") && abbr.toUpperCase().includes("BRASIL")) {
+                            gL = "0"; gV = "3";
+                        }
 
-                                let resCalculado = '';
-                                if (gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
-                                    let nL = parseInt(gL); let nV = parseInt(gV);
-                                    resCalculado = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
-                                    if(num <= 72) {
-                                        resultadosMap[num] = resCalculado;
-                                    }
-                                }
+                        partidosMap[num] = abbr;
 
-                                datosPartidosGoles.push({ num: num, label: abbr, fase: fase, gL: gL, gV: gV, res: resCalculado });
+                        // Intentamos obtener el resultado real ya sea por goles o por la columna RESULTADO
+                        let resFinal = '';
+                        if(gL !== undefined && gV !== undefined && gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
+                            let nL = parseInt(gL); let nV = parseInt(gV);
+                            resFinal = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
+                        } else if (resCol) {
+                            resFinal = normalizarResultado(resCol);
+                        }
 
-                                if (num >= 73 && num <= 88) eliminatoriasPorFase["DICISEISAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num >= 89 && num <= 96) eliminatoriasPorFase["OCTAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num >= 97 && num <= 100) eliminatoriasPorFase["CUARTOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 101 || num === 102) eliminatoriasPorFase["SEMIFINAL"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 103) eliminatoriasPorFase["3ER LUGAR"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 104) eliminatoriasPorFase["FINAL MUNDIAL 2026"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                            }
+                        if (resFinal) {
+                            resultadosMap[num] = resFinal;
+                            playedMatchIds.push(num);
                         }
                     }
+                }
 
-                    let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
-                    let numPlayed = playedMatchIds.length;
+                let numPlayed = playedMatchIds.length;
+                let participantesRows = procesarMatrizCSV(participantes.text);
+                let pHeader = participantesRows[0];
+                let listData = [];
 
-                    let tablaEquipos = {};
-                    poolTodasLasSelecciones.forEach(team => {
-                        tablaEquipos[team] = { nombre: team, grupo: mapasGrupoEquipos[team] || 'S/G', pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, dg: 0, pts: 0 };
-                    });
-
-                    datosPartidosGoles.forEach(p => {
-                        if (p.gL !== '' && p.gV !== '' && p.label.includes("VS") && p.num <= 72) {
-                            let bandos = p.label.split("VS").map(e => e.trim());
-                            if (bandos.length === 2) {
-                                let local = bandos[0]; let visitante = bandos[1];
-                                let nL = parseInt(p.gL); let nV = parseInt(p.gV);
-                                if (!isNaN(nL) && !isNaN(nV)) {
-                                    tablaEquipos[local].pj++; tablaEquipos[visitante].pj++;
-                                    tablaEquipos[local].gf += nL; tablaEquipos[local].gc += nV;
-                                    tablaEquipos[visitante].gf += nV; tablaEquipos[visitante].gc += nL;
-
-                                    if (p.res === 'L') { tablaEquipos[local].g++; tablaEquipos[visitante].p++; }
-                                    else if (p.res === 'V') { tablaEquipos[visitante].g++; tablaEquipos[local].p++; }
-                                    else if (p.res === 'E') { tablaEquipos[local].e++; tablaEquipos[visitante].e++; }
-                                }
-                            }
-                        }
-                    });
-
-                    let listaEquiposProcesados = [];
-                    for (let eq in tablaEquipos) {
-                        let d = tablaEquipos[eq];
-                        d.dg = d.gf - d.gc;
-                        d.pts = (d.g * 3) + d.e;
-                        listaEquiposProcesados.push(d);
+                for(let i=1; i<participantesRows.length; i++) {
+                    let row = participantesRows[i];
+                    if(row.length < 2) continue;
+                    let name = row[0].toUpperCase();
+                    let preds = {};
+                    for(let j=1; j<row.length; j++) {
+                        let mNum = parseInt(pHeader[j]);
+                        if(!isNaN(mNum)) preds[mNum] = normalizarResultado(row[j]);
                     }
+                    listData.push({nombre: name, preds: preds});
+                }
 
-                    let gruposSeparados = {};
-                    listaEquiposProcesados.forEach(eq => {
-                        if(!gruposSeparados[eq.grupo]) gruposSeparados[eq.grupo] = [];
-                        gruposSeparados[eq.grupo].push(eq);
-                    });
-
-                    let primerosYSegundos = [];
-                    let tercerosLugares = [];
-
-                    for(let gKey in gruposSeparados) {
-                        gruposSeparados[gKey].sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
-                        gruposSeparados[gKey].forEach((eq, idx) => {
-                            if(idx === 0 || idx === 1) primerosYSegundos.push(eq);
-                            if(idx === 2) tercerosLugares.push(eq);
-                        });
-                    }
-
-                    tercerosLugares.sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
-                    let mejoresTercerosClasificados = tercerosLugares.slice(0, 8);
-
-                    let pool32Clasificados = [...primerosYSegundos, ...mejoresTercerosClasificados];
-                    pool32Clasificados.sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
-
-                    let arregloEquiposOrdenado = [...listaEquiposProcesados].sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
-                    let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
-
-                    let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
-                    if(teamsLeaderboardBody) {
-                        teamsLeaderboardBody.innerHTML = "";
-                        arregloEquiposOrdenado.forEach((eq, idx) => {
-                            let difTexto = eq.dg > 0 ? `+${eq.dg}` : eq.dg;
-                            teamsLeaderboardBody.insertAdjacentHTML('beforeend', `
-                                <tr class="hover:bg-slate-800/30 transition">
-                                    <td class="p-3 text-center font-bold text-slate-400">${idx + 1}°</td>
-                                    <td class="p-3 font-extrabold text-white tracking-wide">${eq.nombre}</td>
-                                    <td class="p-3 text-center font-bold text-slate-400">${eq.grupo}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.pj}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.g}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.e}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.p}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.gf}</td>
-                                    <td class="p-3 text-center text-slate-300">${eq.gc}</td>
-                                    <td class="p-3 text-center font-semibold ${eq.dg > 0 ? 'text-emerald-400' : eq.dg < 0 ? 'text-red-400' : 'text-slate-400'}">${difTexto}</td>
-                                    <td class="p-3 text-center font-black text-emerald-400 text-base bg-slate-900/40">${eq.pts}</td>
-                                </tr>
-                            `);
-                        });
-                    }
-
-                    let ganadoresSimuladosMap = {};
-                    const brContainers = {
-                        "DICISEISAVOS": "bracket-16vos", "OCTAVOS": "bracket-octavos", "CUARTOS": "bracket-cuartos",
-                        "SEMIFINAL": "bracket-semis", "3ER LUGAR": "bracket-tercer", "FINAL MUNDIAL 2026": "bracket-final"
-                    };
-
-                    ["bracket-16vos", "bracket-octavos", "bracket-cuartos", "bracket-semis", "bracket-tercer", "bracket-final"].forEach(id => {
-                        let el = document.getElementById(id);
-                        if(el) el.innerHTML = "";
-                    });
-
-                    for (let fKey in eliminatoriasPorFase) {
-                        let contenedorId = brContainers[fKey];
-                        let contenedor = document.getElementById(contenedorId);
-                        if (contenedor && eliminatoriasPorFase[fKey].length > 0) {
-                            eliminatoriasPorFase[fKey].forEach((partido, index) => {
-                                let loc = '—'; let vis = '—';
-                                let esPredictivoLocal = false; let esPredictivoVis = false;
-
-                                if (partido.label && partido.label.includes("VS")) {
-                                    let partes = partido.label.split("VS");
-                                    loc = partes[0].trim();
-                                    vis = partes[1].trim();
-                                }
-
-                                if (loc === '' || loc === '?') loc = '—';
-                                if (vis === '' || vis === '?') vis = '—';
-
-                                if (fKey === "OCTAVOS") {
-                                    let baseP = 73 + (index * 2);
-                                    if (loc === '—') { loc = ganadoresSimuladosMap[baseP] || `Ganador P${baseP}`; esPredictivoLocal = true; }
-                                    if (vis === '—') { vis = ganadoresSimuladosMap[baseP + 1] || `Ganador P${baseP + 1}`; esPredictivoVis = true; }
-                                } else if (fKey === "CUARTOS") {
-                                    let baseP = 89 + (index * 2);
-                                    if (loc === '—') { loc = ganadoresSimuladosMap[baseP] || `Ganador P${baseP}`; esPredictivoLocal = true; }
-                                    if (vis === '—') { vis = ganadoresSimuladosMap[baseP + 1] || `Ganador P${baseP + 1}`; esPredictivoVis = true; }
-                                } else if (fKey === "SEMIFINAL") {
-                                    let baseP = 97 + (index * 2);
-                                    if (loc === '—') { loc = ganadoresSimuladosMap[baseP] || `Ganador P${baseP}`; esPredictivoLocal = true; }
-                                    if (vis === '—') { vis = ganadoresSimuladosMap[baseP + 1] || `Ganador P${baseP + 1}`; esPredictivoVis = true; }
-                                } else if (fKey === "3ER LUGAR") {
-                                    if (loc === '—') { loc = ganadoresSimuladosMap["perdedor-101"] || "Perdedor P101"; esPredictivoLocal = true; }
-                                    if (vis === '—') { vis = ganadoresSimuladosMap["perdedor-102"] || "Perdedor P102"; esPredictivoVis = true; }
-                                } else if (fKey === "FINAL MUNDIAL 2026") {
-                                    if (loc === '—') { loc = ganadoresSimuladosMap[101] || "Ganador P101"; esPredictivoLocal = true; }
-                                    if (vis === '—') { vis = ganadoresSimuladosMap[102] || "Ganador P102"; esPredictivoVis = true; }
-                                }
-
-                                if (partido.res === 'L') {
-                                    ganadoresSimuladosMap[partido.num] = loc;
-                                    if (partido.num === 101) ganadoresSimuladosMap["perdedor-101"] = vis;
-                                    if (partido.num === 102) ganadoresSimuladosMap["perdedor-102"] = vis;
-                                } else if (partido.res === 'V') {
-                                    ganadoresSimuladosMap[partido.num] = vis;
-                                    if (partido.num === 101) ganadoresSimuladosMap["perdedor-101"] = loc;
-                                    if (partido.num === 102) ganadoresSimuladosMap["perdedor-102"] = loc;
-                                } else {
-                                    let ptsL = tablaEquipos[loc] ? tablaEquipos[loc].pts : 0;
-                                    let ptsV = tablaEquipos[vis] ? tablaEquipos[vis].pts : 0;
-                                    ganadoresSimuladosMap[partido.num] = ptsL >= ptsV ? loc : vis;
-                                    if (partido.num === 101) ganadoresSimuladosMap["perdedor-101"] = ptsL >= ptsV ? vis : loc;
-                                    if (partido.num === 102) ganadoresSimuladosMap["perdedor-102"] = ptsL >= ptsV ? loc : vis;
-                                }
-
-                                let cLoc = partido.res === 'L' ? 'text-yellow-400 font-extrabold' : 'text-slate-300';
-                                let cVis = partido.res === 'V' ? 'text-yellow-400 font-extrabold' : 'text-slate-300';
-                                let mScore = (partido.gL !== '' && partido.gV !== '') ? `<span class="bg-slate-800 px-1 py-0.5 rounded text-[10px] text-white font-mono">${partido.gL}-${partido.gV}</span>` : '';
-
-                                let styleL = esPredictivoLocal ? 'italic opacity-60 text-cyan-400' : '';
-                                let styleV = esPredictivoVis ? 'italic opacity-60 text-cyan-400' : '';
-
-                                contenedor.insertAdjacentHTML('beforeend', `
-                                    <div class="bracket-game text-left text-xs font-sports border border-slate-800 my-2 shadow-md">
-                                        <div class="text-[9px] text-slate-500 font-bold mb-1 flex justify-between"><span>NÚM. ${partido.num}</span> ${mScore}</div>
-                                        <div class="flex justify-between items-center ${cLoc}">
-                                            <span class="${styleL}">🏠 ${loc}</span>
-                                            <span class="text-[10px]">${partido.res === 'L' ? '▶' : ''}</span>
-                                        </div>
-                                        <div class="flex justify-between items-center mt-1 ${cVis}">
-                                            <span class="${styleV}">🚀 ${vis}</span>
-                                            <span class="text-[10px]">${partido.res === 'V' ? '▶' : ''}</span>
-                                        </div>
-                                    </div>
-                                `);
-                            });
-                        }
-                    }
-
-                    ["bracket-16vos", "bracket-octavos", "bracket-cuartos", "bracket-semis", "bracket-tercer", "bracket-final"].forEach(id => {
-                        let div = document.getElementById(id);
-                        if(div && div.innerHTML.trim() === "") div.innerHTML = `<p class="text-xs text-slate-600 py-4 font-sports uppercase tracking-wider">—</p>`;
-                    });
-
-                    let participantesRows = procesarMatrizCSV(participantes.text);
-                    let pHeader = participantesRows[0];
-                    let participantsDataList = [];
-                    for(let i=1; i<participantesRows.length; i++) {
-                        let row = participantesRows[i];
-                        if(row.length < 2) continue;
-                        let name = row[0].toUpperCase();
-                        let preds = {};
-                        for(let j=1; j<row.length; j++) {
-                            let mNum = parseInt(pHeader[j]);
-                            if(!isNaN(mNum)) preds[mNum] = row[j] ? row[j].toUpperCase() : '';
-                        }
-                        participantsDataList.push({nombre: name, preds: preds});
-                    }
-
-                    let historyPoints = {}; let historyRanks = {};
-                    participantsDataList.forEach(p => { historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1]; });
+                let finalParticipants = listData.map(p => {
+                    let pts = 0;
+                    let heatmap = [];
+                    let maxStreak = 0; let currStreak = 0;
 
                     playedMatchIds.forEach(mId => {
-                        let actual = resultadosMap[mId];
-                        participantsDataList.forEach(p => {
-                            let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                            let isCorrect = (p.preds[mId] === actual);
-                            historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
-                        });
-                        let stepScores = participantsDataList.map(p => ({
-                            nombre: p.nombre, puntos: historyPoints[p.nombre][historyPoints[p.nombre].length - 1]
-                        })).sort((a,b) => b.puntos - a.puntos);
-                        let r = 1;
-                        stepScores.forEach((item, idx) => {
-                            if(idx > 0 && item.puntos < stepScores[idx-1].puntos) r = idx + 1;
-                            historyRanks[item.nombre].push(r);
-                        });
-                    });
+                        let predNormalizada = p.preds[mId];
+                        let realNormalizado = resultadosMap[mId];
 
-                    let maxHitsGlobal = 0;
-                    let finalParticipants = participantsDataList.map(p => {
-                        let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                        if(pts > maxHitsGlobal) maxHitsGlobal = pts;
-                        let maxStreak = 0; let currStreak = 0; let heatmap = [];
-
-                        for(let m=1; m<=72; m++) {
-                            if(resultadosMap[m]) {
-                                if(p.preds[m] === resultadosMap[m]) { currStreak++; if(currStreak > maxStreak) maxStreak = currStreak; heatmap.push('✅'); }
-                                else { currStreak = 0; heatmap.push('❌'); }
-                            } else { heatmap.push(''); }
-                        }
-                        let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
-                        if(rHistory.length > 1) {
-                            let currR = rHistory[rHistory.length - 1]; let prevR = rHistory[rHistory.length - 2];
-                            if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
-                            else if(currR > prevR) { trend = '▼'; trendVal = currR - prevR; }
-                        }
-                        return {
-                            nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
-                            trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
-                        };
-                    }).sort((a,b) => b.puntos - a.puntos);
-
-                    if (finalParticipants.length > 0) {
-                        let topPts = finalParticipants[0].puntos;
-                        let leaders = finalParticipants.filter(p => p.puntos === topPts).map(p => p.nombre);
-                        document.getElementById("kpi-leader").textContent = leaders.join(" / ");
-                    }
-                    document.getElementById("kpi-played").innerHTML = `${numPlayed} <span class="text-xs text-slate-500 font-normal">/ 72</span>`;
-                    document.getElementById("kpi-hits").textContent = maxHitsGlobal;
-                    document.getElementById("kpi-participants").textContent = finalParticipants.length;
-
-                    let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
-                    document.getElementById("podium-1-names").textContent = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ") || "—";
-                    document.getElementById("podium-2-names").textContent = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "—";
-                    document.getElementById("podium-3-names").textContent = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => p.nombre).join(", ") : "—";
-
-                    let rankingContainer = document.getElementById("ranking-container");
-                    if(rankingContainer) {
-                        rankingContainer.innerHTML = "";
-                        let topScore = uniqueScores[0] || 1;
-                        finalParticipants.forEach((p, index) => {
-                            let pct = topScore > 0 ? (p.puntos / topScore) * 100 : 0;
-                            let arrowColor = p.trend === '▲' ? 'text-green-400' : p.trend === '▼' ? 'text-red-400' : 'text-slate-500';
-                            let arrowIcon = p.trend === '▲' ? 'fa-arrow-up' : p.trend === '▼' ? 'fa-arrow-down' : 'fa-minus';
-                            let leaderStyle = index === 0 ? 'border-l-4 border-yellow-500 bg-slate-900 shadow-yellow-500/10 shadow-lg' : 'bg-slate-900/60';
-                            
-                            rankingContainer.insertAdjacentHTML('beforeend', `
-                                <div class="flex items-center justify-between p-3 rounded-lg ${leaderStyle} border border-slate-800 transition hover:bg-slate-800/80">
-                                    <div class="flex items-center gap-3 w-1/3">
-                                        <span class="text-sm font-bold w-6 text-slate-400">${index + 1}</span>
-                                        <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400' : 'text-slate-200'}">${p.nombre}</span>
-                                        <span class="${arrowColor} text-xs flex items-center font-bold"><i class="fa-solid ${arrowIcon} mr-1 text-[10px]"></i>${p.trendVal > 0 ? p.trendVal : ''}</span>
-                                    </div>
-                                    <div class="w-1/2 px-4 hidden sm:block">
-                                        <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden"><div class="h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-400' : 'bg-gradient-to-r from-emerald-500 to-cyan-400'}" style="width: ${pct}%"></div></div>
-                                    </div>
-                                    <div class="text-right font-sports font-bold text-slate-200 w-1/6"><span class="text-lg text-white font-black">${p.puntos}</span> <span class="text-xs text-slate-500">PTS</span></div>
-                                </div>
-                            `);
-                        });
-                    }
-
-                    let fifaContainer = document.getElementById("fifa-cards-container");
-                    if(fifaContainer) {
-                        fifaContainer.innerHTML = "";
-                        for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
-                            let p = finalParticipants[i];
-                            let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
-                            fifaContainer.insertAdjacentHTML('beforeend', `
-                                <div class="${cardClass} p-5 text-center font-sports text-slate-950 flex flex-col justify-between h-72">
-                                    <div><div class="text-2xl">${i===0?'🥇':i===1?'🥈':'🥉'}</div><div class="text-xl font-black uppercase tracking-wider mt-1 border-b border-black/20 pb-1">${p.nombre}</div></div>
-                                    <div class="my-auto space-y-2">
-                                        <div><span class="text-3xl font-black">${p.puntos}</span><span class="text-sm font-bold block -mt-1 uppercase tracking-tight">PUNTOS</span></div>
-                                        <div class="grid grid-cols-2 text-xs font-bold bg-black/10 rounded p-2 text-left gap-y-1"><div>EFECTIVIDAD:</div><div class="text-right">${p.efectividad}%</div><div>TENDENCIA:</div><div class="text-right">${p.trend === '▲' ? `+${p.trendVal} POS` : p.trend === '▼' ? `-${p.trendVal} POS` : '= MANT'}</div></div>
-                                    </div>
-                                    <div class="bg-black/90 text-yellow-400 rounded py-1 px-2 text-xs font-bold flex items-center justify-center gap-1"><i class="fa-solid fa-fire text-orange-500"></i> ${p.maxStreak} ACIERTOS SEG.</div>
-                                </div>
-                            `);
-                        }
-                    }
-
-                    let winCounts = {}; let teamWinCounts = {};
-                    finalParticipants.forEach(p => winCounts[p.nombre] = 0);
-                    arregloEquiposOrdenado.forEach(eq => teamWinCounts[eq.nombre] = 0);
-                    
-                    let remainingMatches = [];
-                    for(let m=1; m<=72; m++) {
-                        if(!resultadosMap[m] && estructuraPartidosOriginal[m]) remainingMatches.push(m);
-                    }
-
-                    let totalSims = remainingMatches.length > 0 ? 1000 : 1;
-                    if(remainingMatches.length > 0) {
-                        const outcomes = ['L', 'E', 'V'];
-                        for(let s=0; s<totalSims; s++) {
-                            let simScores = {}; let simTeamScores = {};
-                            finalParticipants.forEach(p => simScores[p.nombre] = p.puntos);
-                            arregloEquiposOrdenado.forEach(eq => simTeamScores[eq.nombre] = eq.pts);
-                            
-                            remainingMatches.forEach(mId => {
-                                let randRes = outcomes[Math.floor(Math.random()*3)];
-                                finalParticipants.forEach(p => { if(p.preds[mId] === randRes) simScores[p.nombre]++; });
-                                let bandos = estructuraPartidosOriginal[mId].split("VS").map(e => e.trim());
-                                if (bandos.length === 2) {
-                                    let loc = bandos[0]; let vis = bandos[1];
-                                    if(loc !== '?' && vis !== '?') {
-                                        if (randRes === 'L') simTeamScores[loc] = (simTeamScores[loc]||0) + 3;
-                                        else if (randRes === 'V') simTeamScores[vis] = (simTeamScores[vis]||0) + 3;
-                                        else { simTeamScores[loc] = (simTeamScores[loc]||0) + 1; simTeamScores[vis] = (simTeamScores[vis]||0) + 1; }
-                                    }
-                                }
-                            });
-                            
-                            let maxS = -1; let winners = [];
-                            for(let name in simScores) {
-                                if(simScores[name] > maxS) { maxS = simScores[name]; winners = [name]; }
-                                else if(simScores[name] === maxS) { winners.push(name); }
-                            }
-                            winners.forEach(w => winCounts[w] += (1 / winners.length));
-
-                            let maxTS = -1; let teamWinners = [];
-                            for(let tName in simTeamScores) {
-                                if(simTeamScores[tName] > maxTS) { maxTS = simTeamScores[tName]; teamWinners = [tName]; }
-                                else if(simTeamScores[tName] === maxTS) { teamWinners.push(tName); }
-                            }
-                            teamWinners.forEach(tw => { if(teamWinCounts[tw] !== undefined) teamWinCounts[tw] += (1 / teamWinners.length); });
-                        }
-                    } else {
-                        if (finalParticipants[0]) winCounts[finalParticipants[0].nombre] = 1;
-                        if (arregloEquiposOrdenado[0]) teamWinCounts[arregloEquiposOrdenado[0].nombre] = 1;
-                    }
-
-                    let probabilities = finalParticipants.map(p => ({ nombre: p.nombre, prob: (winCounts[p.nombre] / totalSims) * 100 })).sort((a,b) => b.prob - a.prob);
-                    let probContainer = document.getElementById("prob-container");
-                    if(probContainer) {
-                        probContainer.innerHTML = "";
-                        probabilities.slice(0, 3).forEach(p => {
-                            let roundedProb = Math.round(p.prob);
-                            probContainer.insertAdjacentHTML('beforeend', `<div><div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5"><span>${p.nombre}</span><span class="text-cyan-400">${roundedProb}%</span></div><div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-cyan-500 h-1.5 rounded-full" style="width: ${roundedProb}%"></div></div></div>`);
-                        });
-                    }
-
-                    let teamProbabilities = arregloEquiposOrdenado.map(eq => ({ nombre: eq.nombre, prob: (teamWinCounts[eq.nombre] / totalSims) * 100, ptsReales: eq.pts, dgReales: eq.dg })).sort((a,b) => b.prob - a.prob || b.ptsReales - a.ptsReales || b.dgReales - a.dgReales);
-                    let teamProbContainer = document.getElementById("team-prob-container");
-                    if(teamProbContainer) {
-                        teamProbContainer.innerHTML = "";
-                        let equiposMostrados = 0;
-                        for (let tp of teamProbabilities) {
-                            let roundedTProb = Math.round(tp.prob);
-                            if (roundedTProb < 1 && equiposMostrados >= 5) continue;
-                            if (equiposMostrados >= 5) break;
-                            teamProbContainer.insertAdjacentHTML('beforeend', `<div><div class="flex justify-between font-bold text-xs text-slate-300 mb-0.5"><span>${tp.nombre} <span class="text-[9px] text-slate-500 font-normal">(${tp.ptsReales} PTS)</span></span><span class="text-emerald-400">${roundedTProb}%</span></div><div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-emerald-500 h-1.5 rounded-full" style="width: ${roundedTProb}%"></div></div></div>`);
-                            equiposMostrados++;
-                        }
-                    }
-
-                    let topPicksData = {};
-                    for(let m=1; m<=72; m++) {
-                        let counts = {L:0, E:0, V:0}; let total = 0;
-                        finalParticipants.forEach(p => { let pr = p.preds[m]; if(counts[pr] !== undefined) { counts[pr]++; total++; } });
-                        topPicksData[m] = { label: partidosMap[m] || `PARTIDO ${m}`, L: total > 0 ? Math.round((counts.L/total)*100) : 0, E: total > 0 ? Math.round((counts.E/total)*100) : 0, V: total > 0 ? Math.round((counts.V/total)*100) : 0, actual: resultadosMap[m] || null };
-                    }
-
-                    let matchSelect = document.getElementById("match-select");
-                    if(matchSelect) {
-                        matchSelect.innerHTML = "";
-                        for(let m=1; m<=72; m++) { if(partidosMap[m]) { let statusText = topPicksData[m].actual ? `(FINAL: ${topPicksData[m].actual})` : `(PENDIENTE)`; let opt = document.createElement("option"); opt.value = m; opt.textContent = `PARTIDO ${m}: ${topPicksData[m].label} ${statusText}`; matchSelect.appendChild(opt); } }
-                        matchSelect.value = remainingMatches.length > 0 ? remainingMatches[0] : 1;
-
-                        function renderMatchPicks(mId) {
-                            let data = topPicksData[mId]; let display = document.getElementById("match-picks-display"); if(!data || !display) return;
-                            let outcomeInfo = data.actual ? `<span class="bg-emerald-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded ml-2">REAL: ${data.actual}</span>` : `<span class="bg-slate-800 text-slate-400 font-bold text-xs px-2 py-0.5 rounded ml-2">PENDIENTE</span>`;
-                            display.innerHTML = `<div class="text-sm font-black text-white uppercase tracking-wider mb-3 flex items-center justify-between"><span>${data.label}</span> ${outcomeInfo}</div><div class="space-y-2 text-xs font-bold text-slate-300"><div><div class="flex justify-between mb-1"><span>L (LOCAL)</span><span>${data.L}%</span></div><div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800"><div class="bg-purple-500 h-2.5 rounded-full" style="width: ${data.L}%"></div></div></div><div><div class="flex justify-between mb-1"><span>E (EMPATE)</span><span>${data.E}%</span></div><div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800"><div class="bg-amber-500 h-2.5 rounded-full" style="width: ${data.E}%"></div></div></div><div><div class="flex justify-between mb-1"><span>V (VISITANTE)</span><span>${data.V}%</span></div><div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800"><div class="bg-blue-500 h-2.5 rounded-full" style="width: ${data.V}%"></div></div></div></div>`;
-                        }
-                        renderMatchPicks(matchSelect.value);
-                        matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
-                    }
-
-                    let heatmapHeader = document.getElementById("heatmap-header");
-                    let heatmapBody = document.getElementById("heatmap-body");
-                    if(heatmapHeader && heatmapBody) {
-                        heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">PARTICIPANTE</th>`;
-                        for(let m=1; m<=72; m++) { if(partidosMap[m]) { heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-3 text-center min-w-[70px] border-l border-slate-900 font-bold">${partidosMap[m]}</th>`); } }
-                        heatmapBody.innerHTML = "";
-                        finalParticipants.forEach(p => {
-                            let rowHtml = `<tr class="hover:bg-slate-800/40 transition"><td class="p-3 font-extrabold text-slate-200 bg-slate-900 sticky left-0 z-10 font-sports tracking-wide border-r border-slate-800 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">${p.nombre}</td>`;
-                            for(let m=1; m<=72; m++) { if(partidosMap[m]) { let cell = p.heatmap[m-1]; let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/20' : cell === '❌' ? 'text-red-400 bg-red-950/20' : 'text-slate-600'; rowHtml += `<td class="p-2 text-center border-l border-slate-800 ${colorClass}"><div class="font-black text-[11px]">${p.preds[m] || '-'}</div><div class="text-[10px] mt-0.5">${cell}</div></td>`; } }
-                            heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
-                        });
-                    }
-
-                    let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id])];
-                    let chartDatasets = finalParticipants.map((p, idx) => {
-                        const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899', '#84cc16'];
-                        let color = colors[idx % colors.length];
-                        return { label: p.nombre, data: historyRanks[p.nombre], borderColor: color, backgroundColor: color + '11', borderWidth: idx === 0 ? 4 : 2, tension: 0.2, pointRadius: 3 };
-                    });
-                    let chartEl = document.getElementById('evolutionChart');
-                    if(chartEl) {
-                        if(chartInstance) chartInstance.destroy();
-                        chartInstance = new Chart(chartEl.getContext('2d'), { type: 'line', data: { labels: chartLabels, datasets: chartDatasets }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'Montserrat', size: 10 } } }, y: { reversed: true, min: 1, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold', size: 12 } } } }, plugins: { legend: { position: 'top', labels: { color: '#f3f4f6', font: { family: 'Montserrat', weight: '600', size: 11 } } } } } });
-                    }
-
-                } catch (err) {
-                    console.error(err);
-                    let errBanner = document.getElementById("error-banner");
-                    let errText = document.getElementById("error-text");
-                    if(errText) errText.textContent = err.message;
-                    if(errBanner) errBanner.classList.remove("hidden");
-                }
-            }
-            actualizar();
-        });
-    </script>
-</body>
-</html>
+                        if(
