@@ -316,7 +316,7 @@
            async function actualizar() {
     try {
         const mundial = await leerCSV(["Mundial2026.csv", "mundial2026.csv"]);
-        const participantes = await leerCSV(["resultado_participantes.csv", "resultados_participantes.csv", "Resultado_participantes.csv"]);
+        const participantes = await leerCSV(["resultados_participantes.csv", "resultados_participantes.csv", "Resultados_participantes.csv"]);
 
         let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
         let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
