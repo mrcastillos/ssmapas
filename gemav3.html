@@ -36,10 +36,18 @@
             text-align: center;
             margin-bottom: 40px;
         }
-        .gema-header img {
-            max-width: 200px;
-            height: auto;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.1));
+        .gema-header h1 {
+            color: #ffffff;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .gema-header span {
+            color: var(--gold-premium);
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
         }
 
         /* Banner Promocional */
@@ -119,7 +127,7 @@
             animation: pulseGlow 2s infinite ease-in-out;
         }
 
-        /* --- NUEVO: SUCURSALES CON SCROLL DE FOTOS --- */
+        /* Sucursales con Scroll */
         .branch-showcase {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid rgba(255, 255, 255, 0.04);
@@ -137,7 +145,6 @@
             gap: 8px;
         }
         
-        /* Contenedor del Scroll Horizontal */
         .image-scroll-container {
             display: flex;
             gap: 12px;
@@ -145,11 +152,9 @@
             padding-bottom: 15px;
             margin-bottom: 15px;
             scroll-behavior: smooth;
-            /* Estilizado de barra de scroll para navegadores modernos */
             scrollbar-width: thin;
             scrollbar-color: var(--gold-premium) rgba(255,255,255,0.05);
         }
-        /* Barra de scroll para Chrome/Safari */
         .image-scroll-container::-webkit-scrollbar {
             height: 6px;
         }
@@ -163,7 +168,7 @@
         }
 
         .scroll-img {
-            flex: 0 0 140px; /* Tamaño perfecto para móviles y PC */
+            flex: 0 0 140px;
             aspect-ratio: 4 / 3;
             object-fit: cover;
             border-radius: 10px;
@@ -202,7 +207,7 @@
             color: #fff;
         }
 
-        /* --- REDES SOCIALES UNIFICADAS --- */
+        /* Redes Sociales */
         .social-feed-column {
             display: flex;
             flex-direction: column;
@@ -236,7 +241,6 @@
         }
         .profile-side i { font-size: 1.1rem; }
         
-        /* Colores de marca */
         .fa-facebook { color: #1877f2; }
         .fa-instagram { color: #fbad50; }
         .fa-tiktok { color: #ff0050; }
@@ -290,7 +294,7 @@
             line-height: 1.4;
         }
 
-        /* Panel de WhatsApp de Alta Gama */
+        /* Panel de WhatsApp */
         .whatsapp-luxury-bar {
             background: linear-gradient(135deg, rgba(37, 211, 102, 0.08), rgba(37, 211, 102, 0.01));
             border: 1px solid rgba(37, 211, 102, 0.2);
@@ -335,16 +339,16 @@
 
 <div class="gema-wrapper">
     
-    <!-- Logo -->
+    <!-- Header Tipográfico de Lujo (Evita el bloqueo de seguridad Mixed Content) -->
     <header class="gema-header">
-        <img src="https://www.opticagema.com.mx/imagenes/logo-gema.jpeg" alt="Óptica Gema">
+        <h1>ÓPTICA GEMA</h1>
+        <span>Alta Gama Visual</span>
     </header>
 
     <!-- Banner Principal -->
     <div class="promo-container">
-        <!-- El link de WhatsApp incluye el texto predefinido que pediste -->
         <a href="https://wa.me/525627418583?text=Hola,%20vi%20su%20página%20web%20y%20me%20interesa%20pedir%20información" target="_blank">
-            <img src="imagenes/promo-mes.jpg" alt="Colección Exclusiva" onerror="this.src='https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1200&q=80';">
+            <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1200&q=80" alt="Colección Exclusiva">
             <div class="promo-overlay">
                 <span class="promo-badge">Lanzamientos Destacados</span>
             </div>
@@ -354,21 +358,18 @@
     <!-- Grid Estilo Dashboard -->
     <div class="luxury-grid">
         
-        <!-- COLUMNA IZQUIERDA: SUCURSALES CON GALERÍA SCROLLABLE -->
+        <!-- SUCURSALES CON IMÁGENES PRECARGADAS -->
         <section class="premium-card">
             <h2 class="section-title"><i class="fa-solid fa-shop"></i> Nuestras Sucursales</h2>
             
             <!-- Sucursal 1 -->
             <div class="branch-showcase">
                 <div class="branch-info-title">Centro Histórico (Tacuba)</div>
-                
-                <!-- Galería con scroll horizontal de hasta 5 imágenes -->
                 <div class="image-scroll-container">
-                    <img class="scroll-img" src="images/sucursal1_1.jpg" alt="Tacuba Vista 1" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=200&q=80';">
-                    <img class="scroll-img" src="images/sucursal1_2.jpg" alt="Tacuba Vista 2" onerror="this.src='https://images.unsplash.com/photo-1563906267088-b029e7101114?auto=format&fit=crop&w=200&q=80';">
-                    <img class="scroll-img" src="images/sucursal1_3.jpg" alt="Tacuba Vista 3" onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=200&q=80';">
+                    <img class="scroll-img" src="https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=200&q=80" alt="Tacuba 1">
+                    <img class="scroll-img" src="https://images.unsplash.com/photo-1563906267088-b029e7101114?auto=format&fit=crop&w=200&q=80" alt="Tacuba 2">
+                    <img class="scroll-img" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=200&q=80" alt="Tacuba 3">
                 </div>
-                
                 <div class="branch-footer-actions">
                     <span class="visit-text">Visítanos en:</span>
                     <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Calle de Tacuba 40 desp 319, 318, Centro Histórico, CDMX.</div>
@@ -379,12 +380,10 @@
             <!-- Sucursal 2 -->
             <div class="branch-showcase">
                 <div class="branch-info-title">Centro Histórico (Tacuba II)</div>
-                
                 <div class="image-scroll-container">
-                    <img class="scroll-img" src="images/sucursal2_1.jpg" alt="Tacuba II Vista 1" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=200&q=80';">
-                    <img class="scroll-img" src="images/sucursal2_2.jpg" alt="Tacuba II Vista 2" onerror="this.src='https://images.unsplash.com/photo-1563906267088-b029e7101114?auto=format&fit=crop&w=200&q=80';">
+                    <img class="scroll-img" src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=200&q=80" alt="Tacuba II 1">
+                    <img class="scroll-img" src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=200&q=80" alt="Tacuba II 2">
                 </div>
-                
                 <div class="branch-footer-actions">
                     <span class="visit-text">Visítanos en:</span>
                     <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Calle de Tacuba 40 desp 207, Centro Histórico, CDMX.</div>
@@ -395,12 +394,10 @@
             <!-- Sucursal 3 -->
             <div class="branch-showcase">
                 <div class="branch-info-title">Centro Histórico (Motolinia)</div>
-                
                 <div class="image-scroll-container">
-                    <img class="scroll-img" src="images/sucursal3_1.jpg" alt="Motolinia Vista 1" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=200&q=80';">
-                    <img class="scroll-img" src="images/sucursal3_2.jpg" alt="Motolinia Vista 2" onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=200&q=80';">
+                    <img class="scroll-img" src="https://images.unsplash.com/photo-1591076482161-42ce6da69f67?auto=format&fit=crop&w=200&q=80" alt="Motolinia 1">
+                    <img class="scroll-img" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=200&q=80" alt="Motolinia 2">
                 </div>
-                
                 <div class="branch-footer-actions">
                     <span class="visit-text">Visítanos en:</span>
                     <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Calle de Motolinia 25-Interior 201, Centro Histórico, CDMX.</div>
@@ -409,15 +406,13 @@
             </div>
         </section>
 
-        <!-- COLUMNA DERECHA: REDES SOCIALES UNIFICADAS (TIKTOK, INSTAGRAM, FACEBOOK) -->
+        <!-- REDES SOCIALES (TIKTOK, INSTAGRAM, FACEBOOK) -->
         <aside class="social-feed-column">
-            
             <div class="premium-card">
                 <h2 class="section-title"><i class="fa-solid fa-hashtag"></i> Comunidad Gema</h2>
-                
                 <div style="display: flex; flex-direction: column; gap: 22px;">
                     
-                    <!-- Post TikTok -->
+                    <!-- TikTok -->
                     <div class="mock-post">
                         <div class="post-top">
                             <div class="profile-side"><i class="fa-brands fa-tiktok"></i> <span>@opticagema</span></div>
@@ -430,7 +425,7 @@
                         <div class="post-bottom">Descubre cómo cambia tu outfit usando los armazones correctos. ¡Dale play! 👓🔥</div>
                     </div>
 
-                    <!-- Post Instagram -->
+                    <!-- Instagram -->
                     <div class="mock-post">
                         <div class="post-top">
                             <div class="profile-side"><i class="fa-brands fa-instagram"></i> <span>gema_optica</span></div>
@@ -443,7 +438,7 @@
                         <div class="post-bottom">Calidad y elegancia en cada detalle. Agenda tu examen de la vista hoy mismo. 💎</div>
                     </div>
 
-                    <!-- NUEVO: Post Facebook -->
+                    <!-- Facebook -->
                     <div class="mock-post">
                         <div class="post-top">
                             <div class="profile-side"><i class="fa-brands fa-facebook"></i> <span>Óptica Gema</span></div>
@@ -459,13 +454,12 @@
                 </div>
             </div>
 
-            <!-- Botón WhatsApp Con Texto Preconfigurado -->
+            <!-- Botón WhatsApp -->
             <div class="whatsapp-luxury-bar">
                 <a class="wa-premium-btn" href="https://wa.me/525627418583?text=Hola,%20vi%20su%20página%20web%20y%20me%20interesa%20pedir%20información" target="_blank">
                     <i class="fa-brands fa-whatsapp"></i> Contactar Consultor Premium
                 </a>
             </div>
-
         </aside>
 
     </div>
