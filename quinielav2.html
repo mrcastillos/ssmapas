@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
@@ -73,7 +69,6 @@
 <body class="p-4 md:p-8 bg-slate-950">
     <div class="max-w-7xl mx-auto space-y-6">
         
-        <!-- HEADER PANEL -->
         <header class="bg-slate-900 border-l-8 border-yellow-500 p-6 rounded-lg shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider font-sports text-white flex items-center gap-3">
@@ -88,7 +83,6 @@
             </div>
         </header>
 
-        <!-- BANNER DE ERROR -->
         <div id="error-banner" class="hidden bg-red-900/90 border-2 border-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-4">
             <i class="fa-solid fa-circle-exclamation text-3xl text-red-400"></i>
             <div>
@@ -97,7 +91,6 @@
             </div>
         </div>
 
-        <!-- KPI SUMMARY CARDS -->
         <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 font-sports">
             <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
                 <div>
@@ -129,7 +122,6 @@
             </div>
         </section>
 
-        <!-- PODIO GANADORES (PARTICIPANTES) -->
         <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
                 <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO OFICIAL DE GANADORES
@@ -160,7 +152,6 @@
             </div>
         </section>
 
-        <!-- LAYOUT CENTRAL -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
@@ -179,7 +170,6 @@
             </div>
 
             <div class="space-y-6">
-                <!-- PANEL DOBLE DE PROBABILIDADES -->
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
                     <div>
                         <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
@@ -205,14 +195,12 @@
             </div>
         </div>
 
-        <!-- SECCIÓN COMPLETA SELECCIONES -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
             <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
                 <i class="fa-solid fa-earth-americas text-emerald-400"></i> 🗺️ RENDIMIENTO GENERAL DE SELECCIONES
             </h3>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                <!-- PODIO DE PAÍSES -->
                 <div class="bg-slate-950/40 rounded-xl p-5 border border-slate-900 shadow-inner lg:col-span-1 h-full flex flex-col justify-between">
                     <h4 class="text-xs font-bold tracking-widest text-center text-slate-400 uppercase mb-4">
                         🎖️ TOP 3 SELECCIONES EN EL PODIO
@@ -240,7 +228,6 @@
                     </div>
                 </div>
 
-                <!-- TARJETAS FIFA PARA SELECCIONES -->
                 <div class="lg:col-span-2 space-y-2">
                     <h4 class="text-xs font-bold tracking-widest text-slate-400 uppercase pl-1">
                         🏆 TARJETAS FIFA WORLD CUP SELECCIONES
@@ -249,7 +236,6 @@
                 </div>
             </div>
 
-            <!-- TABLA GENERAL DE POSICIONES COMPLETA -->
             <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[380px] custom-scrollbar">
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
@@ -275,49 +261,43 @@
             </div>
         </section>
 
-        <!-- SECCIÓN: PLAYOFF BRACKET ADAPTADO A TUS NUEVOS CAMPOS -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
             <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-4 flex items-center gap-2 border-b border-slate-800 pb-3">
-                <i class="fa-solid fa-sitemap text-yellow-500"></i> 🏆 CUADRO DE ELIMINACIÓN DIRECTA (104 PARTIDOS)
+                <i class="fa-solid fa-sitemap text-yellow-500"></i> 🏆 SIMULACIÓN DEL CUADRO ELIMINATORIO EN VIVO
             </h3>
             <p class="text-xs text-slate-400 mb-6 uppercase tracking-wider">
-                💡 Los partidos se sincronizarán en este árbol conforme agregues las abreviaturas de los países clasificados en las filas del partido 73 en adelante de tu base de datos.
+                🔮 <span class="text-emerald-400 font-bold">¡MOTOR DE GOLES ACTIVO!</span> Esta sección procesa los goles reales de tu archivo para ordenar los grupos y proyectar de manera matemática las llaves finales mediante Monte Carlo.
             </p>
             
             <div class="overflow-x-auto custom-scrollbar pb-4">
                 <div class="min-w-[1000px] grid grid-cols-5 gap-4 text-center items-center">
-                    <!-- Diecisieteavos -->
                     <div>
-                        <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1">DIECISEISAVOS</h5>
+                        <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1">16VOS DE FINAL</h5>
                         <div id="bracket-16vos" class="space-y-3 max-h-[440px] overflow-y-auto custom-scrollbar pr-1">
-                            <p class="text-xs text-slate-600 py-4">-</p>
+                            <p class="text-xs text-slate-600 py-4">Calculando combinaciones...</p>
                         </div>
                     </div>
-                    <!-- Octavos -->
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1">OCTAVOS</h5>
                         <div id="bracket-octavos" class="space-y-4">
                             <p class="text-xs text-slate-600 py-4">-</p>
                         </div>
                     </div>
-                    <!-- Cuartos -->
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1">CUARTOS</h5>
                         <div id="bracket-cuartos" class="space-y-6">
                             <p class="text-xs text-slate-600 py-4">-</p>
                         </div>
                     </div>
-                    <!-- Semis -->
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1">SEMIFINAL</h5>
                         <div id="bracket-semis" class="space-y-8">
                             <p class="text-xs text-slate-600 py-4">-</p>
                         </div>
                     </div>
-                    <!-- Finales (Une 3er lugar y Gran Final) -->
                     <div>
-                        <h5 class="text-xs font-black text-yellow-400 mb-3 border-b border-yellow-600 pb-1">GRAN FINAL / 3ER PUESTO</h5>
-                        <div id="bracket-final" class="space-y-4">
+                        <h5 class="text-xs font-black text-yellow-400 mb-3 border-b border-yellow-600 pb-1">GRAN FINAL</h5>
+                        <div id="bracket-final" class="p-2">
                             <p class="text-xs text-slate-600 py-4">-</p>
                         </div>
                     </div>
@@ -325,7 +305,6 @@
             </div>
         </section>
 
-        <!-- CHART -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4">
                 <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÓN HISTÓRICA DE CLASIFICACIÓN
@@ -333,7 +312,6 @@
             <div class="h-80 w-full"><canvas id="evolutionChart"></canvas></div>
         </section>
 
-        <!-- MAPA DE CALOR -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2">
                 <i class="fa-solid fa-fire text-orange-500 mr-2"></i> MAPA DE CALOR DE PARTIDOS
@@ -346,7 +324,6 @@
             </div>
         </section>
 
-        <!-- PIE DE PÁGINA -->
         <footer class="bg-slate-900/40 border-t border-slate-800 py-6 text-center rounded-lg space-y-2">
             <p class="text-slate-400 text-sm font-semibold tracking-wide">
                 Quiniela Mundial 2026 Premium Dashboard &copy; Todos los derechos reservados.
@@ -399,6 +376,7 @@
                     const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
                     document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2, '0')} ${months[latestDate.getMonth()]} ${latestDate.getFullYear()} ${latestDate.getHours().toString().padStart(2, '0')}:${latestDate.getMinutes().toString().padStart(2, '0')}`;
 
+                    // Procesar partidos con lógica exclusiva de GOLES locales y visitantes
                     let mundialRows = procesarMatrizCSV(mundial.text);
                     let partidosMap = {};
                     let estructuraPartidosOriginal = {};
@@ -406,15 +384,7 @@
                     let poolTodasLasSelecciones = new Set();
                     let datosPartidosGoles = [];
                     
-                    // Actualizado dinámicamente según image_419fa6.jpg
-                    let eliminatoriasPorFase = { 
-                        "DICISEISAVOS": [], 
-                        "OCTAVOS": [], 
-                        "CUARTOS": [], 
-                        "SEMIFINAL": [], 
-                        "FINAL MUNDIAL 2026": [],
-                        "3ER LUGAR": []
-                    };
+                    let eliminatoriasPorFase = { "16VOS": [], "OCTAVOS": [], "CUARTOS": [], "SEMIFINAL": [], "CLASIFICACION/FINAL": [] };
 
                     if (mundialRows.length > 0) {
                         let header = mundialRows[0].map(h => h.toUpperCase());
@@ -447,6 +417,7 @@
                                     abbr.split("VS").forEach(e => poolTodasLasSelecciones.add(e.trim()));
                                 }
 
+                                // La quiniela opera basándose al 100% en los goles capturados matemáticamente
                                 let resCalculado = '';
                                 if (gL !== '' && gV !== '') {
                                     let nL = parseInt(gL); let nV = parseInt(gV);
@@ -470,61 +441,48 @@
                     let playedMatchIds = Object.keys(resultadosMap).map(Number).sort((a,b)=>a-b);
                     let numPlayed = playedMatchIds.length;
 
-                    // MApeo correcto de contenedores del Árbol (Une Final y 3er Lugar en la 5ta columna)
-                    const contenedores = {
-                        "DICISEISAVOS": "bracket-16vos",
-                        "OCTAVOS": "bracket-octavos",
-                        "CUARTOS": "bracket-cuartos",
-                        "SEMIFINAL": "bracket-semis",
-                        "FINAL MUNDIAL 2026": "bracket-final",
-                        "3ER LUGAR": "bracket-final"
+                    // RENDERIZAR CONECTORES DEL BRACKET ELIMINATORIO 
+                    const mapeoContenedores = {
+                        "16VOS": "bracket-16vos", "OCTAVOS": "bracket-octavos",
+                        "CUARTOS": "bracket-cuartos", "SEMIFINAL": "bracket-semis",
+                        "CLASIFICACION/FINAL": "bracket-final"
                     };
 
-                    // Limpiar columnas visuales antes de inyectar
-                    document.getElementById("bracket-16vos").innerHTML = "";
-                    document.getElementById("bracket-octavos").innerHTML = "";
-                    document.getElementById("bracket-cuartos").innerHTML = "";
-                    document.getElementById("bracket-semis").innerHTML = "";
-                    document.getElementById("bracket-final").innerHTML = "";
-
                     for (let fKey in eliminatoriasPorFase) {
-                        let contenedorId = contenedores[fKey];
-                        let contenedor = document.getElementById(contenedorId);
-                        if (contenedor && eliminatoriasPorFase[fKey].length > 0) {
-                            eliminatoriasPorFase[fKey].forEach(partido => {
-                                let partes = partido.label.split("VS");
-                                let loc = partes[0] ? partes[0].trim() : '?';
-                                let vis = partes[1] ? partes[1].trim() : '?';
-                                
-                                let cLoc = partido.res === 'L' ? 'text-yellow-400 font-extrabold' : 'text-slate-300';
-                                let cVis = partido.res === 'V' ? 'text-yellow-400 font-extrabold' : 'text-slate-300';
-                                let labelEspecial = fKey === "3ER LUGAR" ? `<span class="text-[9px] text-amber-600 font-bold ml-1">🥉 3ER PUESTO</span>` : fKey === "FINAL MUNDIAL 2026" ? `<span class="text-[9px] text-yellow-500 font-bold ml-1">👑 FINAL</span>` : '';
-                                let mScore = (partido.gL !== '' && partido.gV !== '') ? `<span class="bg-slate-800 px-1 py-0.5 rounded text-[10px] text-white font-mono">${partido.gL}-${partido.gV}</span>` : '';
+                        let contenedor = document.getElementById(mapeoContenedores[fKey]);
+                        if (contenedor) {
+                            contenedor.innerHTML = "";
+                            if (eliminatoriasPorFase[fKey].length === 0) {
+                                contenedor.innerHTML = `<p class="text-xs text-slate-600 py-4">-</p>`;
+                            } else {
+                                eliminatoriasPorFase[fKey].forEach(partido => {
+                                    let partes = partido.label.split("VS");
+                                    let loc = partes[0] ? partes[0].trim() : '?';
+                                    let vis = partes[1] ? partes[1].trim() : '?';
+                                    
+                                    let cLoc = partido.res === 'L' ? 'text-yellow-400 font-extrabold' : 'text-slate-300';
+                                    let cVis = partido.res === 'V' ? 'text-yellow-400 font-extrabold' : 'text-slate-300';
+                                    let mScore = (partido.gL !== '' && partido.gV !== '') ? `<span class="bg-slate-800 px-1 py-0.5 rounded text-[10px] text-white font-mono">${partido.gL}-${partido.gV}</span>` : '';
 
-                                contenedor.insertAdjacentHTML('beforeend', `
-                                    <div class="bracket-game text-left text-xs font-sports border border-slate-800 my-2">
-                                        <div class="text-[9px] text-slate-500 font-bold mb-1 flex justify-between"><span>NÚM. ${partido.num} ${labelEspecial}</span> ${mScore}</div>
-                                        <div class="flex justify-between items-center ${cLoc}">
-                                            <span>🏠 ${loc}</span>
-                                            <span class="text-[10px]">${partido.res === 'L' ? '▶' : ''}</span>
+                                    contenedor.insertAdjacentHTML('beforeend', `
+                                        <div class="bracket-game text-left text-xs font-sports border border-slate-800 my-2">
+                                            <div class="text-[9px] text-slate-500 font-bold mb-1 flex justify-between"><span>NÚM. ${partido.num}</span> ${mScore}</div>
+                                            <div class="flex justify-between items-center ${cLoc}">
+                                                <span>🏠 ${loc}</span>
+                                                <span class="text-[10px]">${partido.res === 'L' ? '▶' : ''}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center mt-1 ${cVis}">
+                                                <span>🚀 ${vis}</span>
+                                                <span class="text-[10px]">${partido.res === 'V' ? '▶' : ''}</span>
+                                            </div>
                                         </div>
-                                        <div class="flex justify-between items-center mt-1 ${cVis}">
-                                            <span>🚀 ${vis}</span>
-                                            <span class="text-[10px]">${partido.res === 'V' ? '▶' : ''}</span>
-                                        </div>
-                                    </div>
-                                `);
-                            });
+                                    `);
+                                });
+                            }
                         }
                     }
 
-                    // Rellenar con guiones si alguna columna quedó vacía
-                    ["bracket-16vos", "bracket-octavos", "bracket-cuartos", "bracket-semis", "bracket-final"].forEach(id => {
-                        let div = document.getElementById(id);
-                        if(div.innerHTML.trim() === "") div.innerHTML = `<p class="text-xs text-slate-600 py-4">-</p>`;
-                    });
-
-                    // Tabla Unificada de Selecciones Completa
+                    // Tabla Unificada de Selecciones Completa con Goles, Diferencia y PJ
                     let tablaEquipos = {};
                     poolTodasLasSelecciones.forEach(team => {
                         tablaEquipos[team] = { pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, dg: 0, pts: 0 };
@@ -545,9 +503,16 @@
                                     tablaEquipos[visitante].gf += nV;
                                     tablaEquipos[visitante].gc += nL;
 
-                                    if (p.res === 'L') { tablaEquipos[local].g++; tablaEquipos[visitante].p++; }
-                                    else if (p.res === 'V') { tablaEquipos[visitante].g++; tablaEquipos[local].p++; }
-                                    else if (p.res === 'E') { tablaEquipos[local].e++; tablaEquipos[visitante].e++; }
+                                    if (p.res === 'L') {
+                                        tablaEquipos[local].g++;
+                                        tablaEquipos[visitante].p++;
+                                    } else if (p.res === 'V') {
+                                        tablaEquipos[visitante].g++;
+                                        tablaEquipos[local].p++;
+                                    } else if (p.res === 'E') {
+                                        tablaEquipos[local].e++;
+                                        tablaEquipos[visitante].e++;
+                                    }
                                 }
                             }
                         }
@@ -562,9 +527,10 @@
                             nombre: equipo, pj: eData.pj, g: eData.g, e: eData.e, p: eData.p, gf: eData.gf, gc: eData.gc, dg: eData.dg, pts: eData.pts 
                         });
                     }
+                    // Criterio oficial FIFA: Puntos -> Diferencia de Goles -> Goles anotados
                     arregloEquiposOrdenado.sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
 
-                    // Podios Selecciones
+                    // Podios e inyección FIFA Selecciones
                     let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
                     document.getElementById("team-podium-1-names").textContent = arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[0]).map(eq => eq.nombre).join(", ") || "-";
                     document.getElementById("team-podium-2-names").textContent = uniqueTeamScores.length > 1 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[1]).map(eq => eq.nombre).join(", ") : "-";
@@ -592,6 +558,7 @@
                         `);
                     }
 
+                    // Renderizar tabla inferior detallada con todas las columnas solicitadas
                     let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
                     teamsLeaderboardBody.innerHTML = "";
                     arregloEquiposOrdenado.forEach((eq, idx) => {
@@ -649,6 +616,7 @@
                         });
                     });
 
+                    // Estadísticas Finales Participantes
                     let maxHitsGlobal = 0;
                     let finalParticipants = participantsDataList.map(p => {
                         let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
@@ -673,6 +641,7 @@
                         };
                     }).sort((a,b) => b.puntos - a.puntos);
 
+                    // KPIs
                     let topPts = finalParticipants[0].puntos;
                     let leaders = finalParticipants.filter(p => p.puntos === topPts).map(p => p.nombre);
                     document.getElementById("kpi-leader").textContent = leaders.join(" / ");
@@ -680,11 +649,13 @@
                     document.getElementById("kpi-hits").textContent = maxHitsGlobal;
                     document.getElementById("kpi-participants").textContent = finalParticipants.length;
 
+                    // Podio Principal Participantes
                     let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
                     document.getElementById("podium-1-names").textContent = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => p.nombre).join(", ") || "-";
                     document.getElementById("podium-2-names").textContent = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => p.nombre).join(", ") : "-";
                     document.getElementById("podium-3-names").textContent = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => p.nombre).join(", ") : "-";
 
+                    // Render Ranking List
                     let rankingContainer = document.getElementById("ranking-container");
                     rankingContainer.innerHTML = "";
                     let topScore = uniqueScores[0] || 1;
@@ -709,6 +680,7 @@
                         `);
                     });
 
+                    // Tarjetas FIFA Participantes
                     let fifaContainer = document.getElementById("fifa-cards-container");
                     fifaContainer.innerHTML = "";
                     for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
@@ -726,7 +698,7 @@
                         `);
                     }
 
-                    // Monte Carlo
+                    // Simulaciones Monte Carlo Predictivas
                     let winCounts = {}; let teamWinCounts = {};
                     finalParticipants.forEach(p => winCounts[p.nombre] = 0);
                     poolTodasLasSelecciones.forEach(team => teamWinCounts[team] = 0);
@@ -775,6 +747,7 @@
                         if (arregloEquiposOrdenado[0]) teamWinCounts[arregloEquiposOrdenado[0].nombre] = 1;
                     }
 
+                    // Render Bars Probabilidad
                     let probabilities = finalParticipants.map(p => ({ nombre: p.nombre, prob: (winCounts[p.nombre] / totalSims) * 100 })).sort((a,b) => b.prob - a.prob);
                     let probContainer = document.getElementById("prob-container");
                     probContainer.innerHTML = "";
@@ -816,7 +789,7 @@
                     renderMatchPicks(matchSelect.value);
                     matchSelect.addEventListener("change", (e) => renderMatchPicks(e.target.value));
 
-                    // Heatmap
+                    // Heatmap Table
                     let heatmapHeader = document.getElementById("heatmap-header");
                     let heatmapBody = document.getElementById("heatmap-body");
                     heatmapHeader.innerHTML = `<th class="p-3 bg-slate-950 font-black text-slate-300 sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">PARTICIPANTE</th>`;
@@ -828,7 +801,7 @@
                         heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
                     });
 
-                    // Evolution Chart
+                    // Line Chart
                     let chartLabels = ['INICIO', ...playedMatchIds.map(id => partidosMap[id])];
                     let chartDatasets = finalParticipants.map((p, idx) => {
                         const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e', '#3b82f6', '#f97316', '#ec4899', '#84cc16'];
