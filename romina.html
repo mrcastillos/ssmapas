@@ -1,7 +1,3 @@
-¡Entendido al 100%! Discúlpame por volver atrás; ahora veo exactamente lo que me dices: la columna en resultados_participantes.csv se llama explícitamente igual al valor exacto de la columna id partido (o sea, las columnas de tus participantes son literalmente WC2026-001, WC2026-002, etc.).
-El fallo en mi código anterior fue intentar mapear números (1 al 72) cuando en realidad tus dos archivos ya usan perfectamente el mismo formato textual exacto. Al forzar esa conversión matemática, rompía la lectura del mapa de aciertos y detenía la carga de todo el dashboard.
-Para solucionarlo definitivamente y que no se vuelva a romper nunca más, aquí tienes el código limpio y preciso. Hace el match directo de string contra string utilizando los nombres exactos de tus columnas:
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,7 +9,7 @@ Para solucionarlo definitivamente y que no se vuelva a romper nunca más, aquí 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #0b0f19; color: #f3f4f6; margin: 0; padding: 0; }
         .font-sports { font-family: 'Rajdhani', sans-serif; }
         .fifa-card { background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%); border: 3px solid #f3e0a3; position: relative; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
         .fifa-card-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #4b5563 100%); border: 3px solid #f3f4f6; }
@@ -29,14 +25,19 @@ Para solucionarlo definitivamente y que no se vuelva a romper nunca más, aquí 
         <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
-                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronización Directa de Archivos...</p>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Buscando y procesando archivos CSV...</p>
             </div>
             <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 TABLA AUTOMÁTICA COMPLETA</div>
         </header>
 
+        <div id="error-console" class="hidden bg-red-950/80 border border-red-500 text-red-200 p-4 rounded-lg text-sm font-mono">
+            <p class="font-bold mb-1">🚨 Alerta del Sistema:</p>
+            <p id="error-message"></p>
+        </div>
+
         <section class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sports">
             <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                <div><p class="text-xs text-slate-400 uppercase">Líder de la Porra</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">-</p></div>
+                <div><p class="text-xs text-slate-400 uppercase">Líder de la Porra</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">—</p></div>
                 <i class="fa-solid fa-medal text-slate-700 text-xl"></i>
             </div>
             <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
@@ -128,232 +129,67 @@ Para solucionarlo definitivamente y que no se vuelva a romper nunca más, aquí 
             const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
             let chartInstance = null;
 
+            function showError(msg) {
+                const consoleDiv = document.getElementById("error-console");
+                const msgP = document.getElementById("error-message");
+                if(consoleDiv && msgP) {
+                    consoleDiv.classList.remove("hidden");
+                    msgP.innerHTML += msg + "<br>";
+                }
+            }
+
             function procesarMatrizCSV(text) {
                 if (!text) return [];
                 if (text.charCodeAt(0) === 0xFEFF) { text = text.substr(1); }
-                return text.split(/\r?\n|\r/).map(line => line.split(',').map(cell => cell.replace(/^["']|["']$/g, '').trim())).filter(row => row.length > 0 && row[0] !== '');
+                return text.split(/\r?\n|\r/)
+                           .map(line => line.split(',').map(cell => cell.replace(/^["']|["']$/g, '').trim()))
+                           .filter(row => row.length > 0 && row[0] !== '');
             }
 
             async function leerCSV(nombre) {
                 try {
-                    let response = await fetch(baseUrl + nombre + '?nocache=' + new Date().getTime());
+                    let url = baseUrl + nombre + '?nocache=' + new Date().getTime();
+                    let response = await fetch(url);
                     if (response.ok) {
                         return await response.text();
+                    } else {
+                        console.warn("No se pudo leer el archivo: " + nombre + " (Status: " + response.status + ")");
                     }
-                } catch (e) { console.error("Error cargando " + nombre); }
+                } catch (e) { 
+                    console.error("Error crítico cargando " + nombre, e); 
+                }
                 return null;
             }
 
             async function actualizar() {
-                const mundialText = await leerCSV("Mundial2026.csv") || await leerCSV("mundial2026.csv");
-                const participantesText = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv");
+                try {
+                    const mundialText = await leerCSV("Mundial2026.csv") || await leerCSV("mundial2026.csv");
+                    const participantesText = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv");
 
-                if (!mundialText || !participantesText) return;
+                    if (!mundialText) {
+                        showError("Error: No se encontró el archivo 'Mundial2026.csv' en tu repositorio GitHub Pages. Verifica las mayúsculas/minúsculas.");
+                        return;
+                    }
+                    if (!participantesText) {
+                        showError("Error: No se encontró el archivo 'resultados_participantes.csv' en tu repositorio GitHub Pages.");
+                        return;
+                    }
 
-                let mundialRows = procesarMatrizCSV(mundialText);
-                let partidosMap = {};
-                let resultadosMap = {}; 
-                let idListOrdenada = []; 
-                let playedMatchIds = [];
+                    document.getElementById("last-updated").textContent = "Sincronizando datos...";
 
-                if (mundialRows.length > 0) {
-                    let headerMundial = mundialRows[0].map(h => h.toUpperCase().trim());
-                    let idxIdPartido = headerMundial.indexOf("ID PARTIDO");
-                    if (idxIdPartido === -1) idxIdPartido = headerMundial.indexOf("ID_PARTIDO");
-                    if (idxIdPartido === -1) idxIdPartido = 1;
+                    let mundialRows = procesarMatrizCSV(mundialText);
+                    let partidosMap = {};
+                    let resultadosMap = {}; 
+                    let idListOrdenada = []; 
+                    let playedMatchIds = [];
 
-                    let idxAbbr = headerMundial.indexOf("ABREVIATURA");
-                    if (idxAbbr === -1) idxAbbr = 2;
-
-                    let idxRes = headerMundial.indexOf("RESULTADO");
-                    if (idxRes === -1) idxRes = 5;
-
-                    for(let i=1; i<mundialRows.length; i++) {
-                        let row = mundialRows[i];
-                        if(!row[idxIdPartido]) continue;
+                    if (mundialRows.length > 0) {
+                        // Limpiar y estandarizar encabezados
+                        let headerMundial = mundialRows[0].map(h => h.toUpperCase().replace(/["']/g, "").trim());
                         
-                        let idPartido = row[idxIdPartido].trim().toUpperCase(); 
-                        let abbr = row[idxAbbr] || idPartido;
-                        let resEscrito = row[idxRes] ? row[idxRes].toUpperCase().trim() : '';
+                        // Buscar el índice de la columna del ID del Partido de forma súper flexible
+                        let idxIdPartido = headerMundial.findIndex(h => h.includes("ID PARTIDO") || h.includes("ID_PARTIDO") || h === "ID" || h.includes("PARTIDO"));
+                        if (idxIdPartido === -1) idxIdPartido = 1; // Fallback clásico si falla
 
-                        partidosMap[idPartido] = abbr;
-                        idListOrdenada.push(idPartido);
-
-                        if (resEscrito === 'L' || resEscrito === 'V' || resEscrito === 'E') {
-                            resultadosMap[idPartido] = resEscrito;
-                            playedMatchIds.push(idPartido);
-                        }
-                    }
-                }
-
-                let numPlayed = playedMatchIds.length;
-
-                let participantesRows = procesarMatrizCSV(participantesText);
-                let pHeaderClean = participantesRows[0].map(h => h.trim().toUpperCase());
-                let idxNombrePart = pHeaderClean.indexOf("NOMBRE");
-                if(idxNombrePart === -1) idxNombrePart = 0; 
-
-                let listData = [];
-                for(let i=1; i<participantesRows.length; i++) {
-                    let row = participantesRows[i];
-                    if(row.length < 2 || !row[idxNombrePart]) continue;
-                    let name = row[idxNombrePart].toUpperCase().trim();
-                    let preds = {};
-                    
-                    for(let j=0; j<row.length; j++) {
-                        if(j === idxNombrePart) continue;
-                        let colHeader = pHeaderClean[j];
-                        if(colHeader) {
-                            preds[colHeader] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
-                        }
-                    }
-                    listData.push({nombre: name, preds: preds});
-                }
-
-                let historyPoints = {}; let historyRanks = {};
-                listData.forEach(p => { historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1]; });
-
-                playedMatchIds.forEach(idPartido => {
-                    let actual = resultadosMap[idPartido];
-                    listData.forEach(p => {
-                        let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                        let isCorrect = (p.preds[idPartido] === actual);
-                        historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
-                    });
-
-                    let stepScores = listData.map(p => ({
-                        nombre: p.nombre, puntos: historyPoints[p.nombre][historyPoints[p.nombre].length - 1]
-                    })).sort((a,b) => b.puntos - a.puntos);
-
-                    let r = 1;
-                    stepScores.forEach((item, idx) => {
-                        if(idx > 0 && item.puntos < stepScores[idx-1].puntos) r = idx + 1;
-                        historyRanks[item.nombre].push(r);
-                    });
-                });
-
-                let maxHitsGlobal = 0;
-                let finalParticipants = listData.map(p => {
-                    let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
-                    if(pts > maxHitsGlobal) maxHitsGlobal = pts;
-
-                    let maxStreak = 0; let currStreak = 0; let heatmap = [];
-                    
-                    idListOrdenada.forEach(idPartido => {
-                        if(resultadosMap[idPartido]) {
-                            if(p.preds[idPartido] === resultadosMap[idPartido]) {
-                                currStreak++;
-                                if(currStreak > maxStreak) maxStreak = currStreak;
-                                heatmap.push('✅');
-                            } else {
-                                currStreak = 0;
-                                heatmap.push('❌');
-                            }
-                        } else {
-                            heatmap.push('—'); 
-                        }
-                    });
-
-                    let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
-                    if(rHistory.length > 1) {
-                        let currR = rHistory[rHistory.length - 1]; let prevR = rHistory[rHistory.length - 2];
-                        if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
-                        else if(currR > prevR) { trend = '▼'; trendVal = currR - prevR; }
-                    }
-
-                    return {
-                        nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
-                        trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
-                    };
-                }).sort((a,b) => b.puntos - a.puntos);
-
-                if(finalParticipants.length > 0) document.getElementById("kpi-leader").textContent = finalParticipants[0].nombre;
-                document.getElementById("kpi-played").textContent = numPlayed;
-                document.getElementById("kpi-hits").textContent = maxHitsGlobal;
-                document.getElementById("kpi-participants").textContent = finalParticipants.length;
-
-                let uniqueScores = [...new Set(finalParticipants.map(p => p.puntos))].sort((a,b)=>b-a);
-                document.getElementById("podium-1-names").innerHTML = finalParticipants.filter(p => p.puntos === uniqueScores[0]).map(p => `<span class="block">${p.nombre}</span>`).join("") || "—";
-                document.getElementById("podium-2-names").innerHTML = uniqueScores.length > 1 ? finalParticipants.filter(p => p.puntos === uniqueScores[1]).map(p => `<span class="block">${p.nombre}</span>`).join("") : "—";
-                document.getElementById("podium-3-names").innerHTML = uniqueScores.length > 2 ? finalParticipants.filter(p => p.puntos === uniqueScores[2]).map(p => `<span class="block">${p.nombre}</span>`).join("") : "—";
-
-                let rankingContainer = document.getElementById("ranking-container");
-                rankingContainer.innerHTML = "";
-                let maxPts = uniqueScores[0] || 1;
-                
-                finalParticipants.forEach((p, index) => {
-                    let pct = (p.puntos / maxPts) * 100;
-                    let arrowColor = p.trend === '▲' ? 'text-green-400' : p.trend === '▼' ? 'text-red-400' : 'text-slate-500';
-                    let arrowIcon = p.trend === '▲' ? 'fa-arrow-up' : p.trend === '▼' ? 'fa-arrow-down' : 'fa-minus';
-
-                    rankingContainer.insertAdjacentHTML('beforeend', `
-                        <div class="flex items-center justify-between p-2.5 rounded bg-slate-900/60 border border-slate-800 hover:bg-slate-800/40 transition">
-                            <div class="flex items-center gap-3 w-1/2">
-                                <span class="text-xs font-bold text-slate-500 w-4">${index + 1}</span>
-                                <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400 text-sm' : 'text-slate-200'}">${p.nombre}</span>
-                                <span class="${arrowColor} text-[10px] flex items-center font-bold"><i class="fa-solid ${arrowIcon} mr-0.5"></i>${p.trendVal > 0 ? p.trendVal : ''}</span>
-                            </div>
-                            <div class="w-1/3 px-2 hidden sm:block">
-                                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden"><div class="h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-400" style="width: ${pct}%"></div></div>
-                            </div>
-                            <div class="text-right font-sports font-bold text-slate-300 w-1/4"><span class="text-base text-white font-black">${p.puntos}</span> <span class="text-[10px] text-slate-500">PTS</span></div>
-                        </div>`);
-                });
-
-                let fifaContainer = document.getElementById("fifa-cards-container");
-                fifaContainer.innerHTML = "";
-                for(let i=0; i<Math.min(3, finalParticipants.length); i++) {
-                    let p = finalParticipants[i];
-                    let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
-                    fifaContainer.insertAdjacentHTML('beforeend', `
-                        <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-48 w-44">
-                            <div class="text-sm font-black uppercase tracking-wider border-b border-black/10 pb-0.5">${p.nombre}</div>
-                            <div>
-                                <span class="text-3xl font-black block">${p.puntos}</span>
-                                <span class="text-[9px] font-bold text-slate-800 block -mt-1">ACIERTOS</span>
-                            </div>
-                            <div class="bg-black/90 text-yellow-400 rounded py-0.5 px-2 text-[9px] font-bold">
-                                🔥 RACHA: ${p.maxStreak} | ${p.efectividad}% EF.
-                            </div>
-                        </div>`);
-                }
-
-                let heatmapHeader = document.getElementById("heatmap-header");
-                let heatmapBody = document.getElementById("heatmap-body");
-                heatmapHeader.innerHTML = `<th class="p-2.5 bg-slate-950 font-black text-slate-400 sticky left-0 z-20">PARTICIPANTE</th>`;
-                
-                idListOrdenada.forEach(idPartido => {
-                    heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-2.5 text-center border-l border-slate-800 font-bold min-w-[65px]">${partidosMap[idPartido]}</th>`);
-                });
-
-                heatmapBody.innerHTML = "";
-                finalParticipants.forEach(p => {
-                    let rowHtml = `<tr><td class="p-2.5 font-extrabold text-slate-300 bg-slate-900 sticky left-0 z-10 border-r border-slate-800 font-sports">${p.nombre}</td>`;
-                    idListOrdenada.forEach(idPartido => {
-                        let actual = resultadosMap[idPartido];
-                        let cell = '—';
-                        if (actual) {
-                            cell = (p.preds[idPartido] === actual) ? '✅' : '❌';
-                        }
-                        let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/10' : cell === '❌' ? 'text-red-400 bg-red-950/10' : 'text-slate-600 bg-slate-950/10';
-                        rowHtml += `<td class="p-2 text-center border-l border-slate-800/40 ${colorClass}"><div class="font-bold text-[10px]">${p.preds[idPartido] || '-'}</div><div class="text-[9px] opacity-70">${cell}</div></td>`;
-                    });
-                    heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
-                });
-
-                let chartLabels = ['INICIO', ...playedMatchIds.map(idPartido => partidosMap[idPartido])];
-                let chartDatasets = finalParticipants.slice(0, 5).map((p, idx) => {
-                    const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e'];
-                    let color = colors[idx % colors.length];
-                    return { label: p.nombre, data: historyRanks[p.nombre], borderColor: color, backgroundColor: 'transparent', borderWidth: idx === 0 ? 3 : 1.5, tension: 0.1, pointRadius: 1 };
-                });
-                if(chartInstance) chartInstance.destroy();
-                chartInstance = new Chart(document.getElementById('evolutionChart').getContext('2d'), { type: 'line', data: { labels: chartLabels, datasets: chartDatasets }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { reversed: true, min: 1, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold' } } } }, plugins: { legend: { labels: { color: '#f3f4f6', font: { size: 10 } } } } } });
-            }
-            actualizar();
-        });
-    </script>
-</body>
-</html>
-
-```
+                        let idxAbbr = headerMundial.findIndex(h => h.includes("ABREVIATURA") || h.includes("EQUIPO") || h.includes("MATCH"));
+                        if (idxAbbr === -1)
