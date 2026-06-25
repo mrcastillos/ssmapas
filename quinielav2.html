@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QUINIELA MUNDIAL 2026 - PREMIUM DASHBOARD</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
@@ -66,7 +62,6 @@
 <body class="p-4 md:p-8 bg-slate-950">
     <div class="max-w-7xl mx-auto space-y-6">
         
-        <!-- HEADER PANEL -->
         <header class="bg-slate-900 border-l-8 border-yellow-500 p-6 rounded-lg shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider font-sports text-white flex items-center gap-3">
@@ -81,7 +76,6 @@
             </div>
         </header>
 
-        <!-- BANNER DE ERROR -->
         <div id="error-banner" class="hidden bg-red-900/90 border-2 border-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-4">
             <i class="fa-solid fa-circle-exclamation text-3xl text-red-400"></i>
             <div>
@@ -90,7 +84,6 @@
             </div>
         </div>
 
-        <!-- KPI SUMMARY CARDS -->
         <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 font-sports">
             <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl flex items-center justify-between">
                 <div>
@@ -122,7 +115,6 @@
             </div>
         </section>
 
-        <!-- PODIO GANADORES -->
         <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
                 <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO OFICIAL DE GANADORES
@@ -153,7 +145,6 @@
             </div>
         </section>
 
-        <!-- LAYOUT CENTRAL -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
@@ -172,7 +163,6 @@
             </div>
 
             <div class="space-y-6">
-                <!-- PANEL DOBLE DE PROBABILIDADES -->
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
                     <div>
                         <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
@@ -198,14 +188,12 @@
             </div>
         </div>
 
-        <!-- SECCIÓN COMPLETA SELECCIONES -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports space-y-6">
             <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
                 <i class="fa-solid fa-earth-americas text-emerald-400"></i> 🗺️ RENDIMIENTO GENERAL DE SELECCIONES (REGLAMENTO OFICIAL FIFA)
             </h3>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                <!-- PODIO DE PAÍSES -->
                 <div class="bg-slate-950/40 rounded-xl p-5 border border-slate-900 shadow-inner lg:col-span-1 h-full flex flex-col justify-between">
                     <h4 class="text-xs font-bold tracking-widest text-center text-slate-400 uppercase mb-4">
                         🎖️ TOP 3 SELECCIONES EN EL PODIO
@@ -233,7 +221,6 @@
                     </div>
                 </div>
 
-                <!-- TARJETAS FIFA PARA SELECCIONES -->
                 <div class="lg:col-span-2 space-y-2">
                     <h4 class="text-xs font-bold tracking-widest text-slate-400 uppercase pl-1">
                         🏆 TARJETAS FIFA WORLD CUP SELECCIONES
@@ -242,7 +229,6 @@
                 </div>
             </div>
 
-            <!-- TABLA GENERAL DE POSICIONES COMPLETA -->
             <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[380px] custom-scrollbar">
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
@@ -269,7 +255,6 @@
             </div>
         </section>
 
-        <!-- SECCIÓN: CUADRO ELIMINATORIO CON PROYECCIÓN EN VIVO -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl font-sports">
             <h3 class="text-lg font-bold tracking-wider uppercase text-slate-200 mb-6 flex items-center gap-2 border-b border-slate-800 pb-3">
                 <i class="fa-solid fa-sitemap text-yellow-500"></i> 🏆 SIMULACIÓN DEL CUADRO ELIMINATORIO (REGLAMENTO FIFA 2026)
@@ -277,32 +262,26 @@
             
             <div class="overflow-x-auto custom-scrollbar pb-4">
                 <div class="min-w-[1200px] grid grid-cols-6 gap-4 text-center items-start">
-                    <!-- Dieciseisavos -->
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">16vos de Final</h5>
                         <div id="bracket-16vos" class="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-1"></div>
                     </div>
-                    <!-- Octavos -->
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">Octavos</h5>
                         <div id="bracket-octavos" class="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-1"></div>
                     </div>
-                    <!-- Cuartos -->
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">Cuartos</h5>
                         <div id="bracket-cuartos" class="space-y-4"></div>
                     </div>
-                    <!-- Semis -->
                     <div>
                         <h5 class="text-xs font-black text-slate-400 mb-3 border-b border-slate-800 pb-1 uppercase tracking-wider">Semifinal</h5>
                         <div id="bracket-semis" class="space-y-8"></div>
                     </div>
-                    <!-- 3er Lugar -->
                     <div>
                         <h5 class="text-xs font-black text-amber-500 mb-3 border-b border-amber-800 pb-1 uppercase tracking-wider">3er Lugar</h5>
                         <div id="bracket-tercer" class="pt-16"></div>
                     </div>
-                    <!-- Final -->
                     <div>
                         <h5 class="text-xs font-black text-yellow-400 mb-3 border-b border-yellow-600 pb-1 uppercase tracking-wider">Gran Final</h5>
                         <div id="bracket-final" class="pt-16"></div>
@@ -311,7 +290,6 @@
             </div>
         </section>
 
-        <!-- CHART -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-4">
                 <i class="fa-solid fa-chart-line text-amber-500 mr-2"></i> EVOLUCIÓN HISTÓRICA DE CLASIFICACIÓN
@@ -319,7 +297,6 @@
             <div class="h-80 w-full"><canvas id="evolutionChart"></canvas></div>
         </section>
 
-        <!-- MAPA DE CALOR -->
         <section class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h3 class="text-lg font-bold font-sports tracking-wider uppercase text-slate-200 mb-2">
                 <i class="fa-solid fa-fire text-orange-500 mr-2"></i> MAPA DE CALOR DE PARTIDOS
@@ -332,7 +309,6 @@
             </div>
         </section>
 
-        <!-- PIE DE PÁGINA -->
         <footer class="bg-slate-900/40 border-t border-slate-800 py-6 text-center rounded-lg space-y-2">
             <p class="text-slate-400 text-sm font-semibold tracking-wide">
                 Quiniela Mundial 2026 Premium Dashboard &copy; Todos los derechos reservados.
@@ -420,15 +396,14 @@
                             if(!isNaN(num)) {
                                 let abbr = row[idxAbbr] ? row[idxAbbr].toUpperCase() : '';
                                 let grupo = row[idxGrupo] ? row[idxGrupo].toUpperCase().trim() : '';
-                                let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : '';
+                                let fase = row[idxFase] ? row[idxFase].toUpperCase().trim() : 'FASE DE GRUPOS';
                                 let gL = row[idxGl] !== undefined ? row[idxGl].trim() : '';
                                 let gV = row[idxGv] !== undefined ? row[idxGv].trim() : '';
                                 
                                 partidosMap[num] = abbr;
                                 estructuraPartidosOriginal[num] = abbr;
 
-                                // FLEXIBILIDAD: Si el número de partido está entre 1 y 72, es fase de grupos obligatoriamente
-                                if (num <= 72 && abbr.includes("VS")) {
+                                if (fase.includes("GRUPO") && abbr.includes("VS")) {
                                     let bandos = abbr.split("VS").map(e => e.trim());
                                     bandos.forEach(team => {
                                         poolTodasLasSelecciones.add(team);
@@ -447,13 +422,11 @@
 
                                 datosPartidosGoles.push({ num: num, label: abbr, fase: fase, gL: gL, gV: gV, res: resCalculado });
 
-                                // Clasificación flexible por rango numérico oficial de llaves mundialistas si el texto falla
-                                if (num >= 73 && num <= 88) eliminatoriasPorFase["DICISEISAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num >= 89 && num <= 96) eliminatoriasPorFase["OCTAVOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num >= 97 && num <= 100) eliminatoriasPorFase["CUARTOS"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 101 || num === 102) eliminatoriasPorFase["SEMIFINAL"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 103) eliminatoriasPorFase["3ER LUGAR"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
-                                else if (num === 104) eliminatoriasPorFase["FINAL MUNDIAL 2026"].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                                for (let fKey in eliminatoriasPorFase) {
+                                    if (fase.includes(fKey)) {
+                                        eliminatoriasPorFase[fKey].push({ num: num, label: abbr, res: resCalculado, gL: gL, gV: gV });
+                                    }
+                                }
                             }
                         }
                     }
@@ -467,15 +440,12 @@
                     });
 
                     datosPartidosGoles.forEach(p => {
-                        if (p.gL !== '' && p.gV !== '' && p.label.includes("VS") && p.num <= 72) {
+                        if (p.gL !== '' && p.gV !== '' && p.label.includes("VS") && p.fase.includes("GRUPO")) {
                             let bandos = p.label.split("VS").map(e => e.trim());
                             if (bandos.length === 2) {
                                 let local = bandos[0]; let visitante = bandos[1];
                                 let nL = parseInt(p.gL); let nV = parseInt(p.gV);
                                 if (!isNaN(nL) && !isNaN(nV)) {
-                                    if(!tablaEquipos[local]) tablaEquipos[local] = { nombre: local, grupo: 'S/G', pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, dg: 0, pts: 0 };
-                                    if(!tablaEquipos[visitante]) tablaEquipos[visitante] = { nombre: visitante, grupo: 'S/G', pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, dg: 0, pts: 0 };
-                                    
                                     tablaEquipos[local].pj++; tablaEquipos[visitante].pj++;
                                     tablaEquipos[local].gf += nL; tablaEquipos[local].gc += nV;
                                     tablaEquipos[visitante].gf += nV; tablaEquipos[visitante].gc += nL;
@@ -519,21 +489,13 @@
                     let pool32Clasificados = [...primerosYSegundos, ...mejoresTercerosClasificados];
                     pool32Clasificados.sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
 
-                    // PLAN DE CONTINGENCIA: Si la tabla de grupos falló por completo, cargamos la lista total de selecciones por seguridad para que nunca quede vacío
-                    if (pool32Clasificados.length === 0) {
-                        let fallbackList = [...poolTodasLasSelecciones].map(t => ({ nombre: t, pts: 0, dg: 0 }));
-                        pool32Clasificados = fallbackList.slice(0, 32);
-                    }
-
                     let arregloEquiposOrdenado = [...listaEquiposProcesados].sort((a,b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
 
-                    // Inyección Visual de los Podios de Selecciones
                     let uniqueTeamScores = [...new Set(arregloEquiposOrdenado.map(eq => eq.pts))].sort((a,b)=>b-a);
                     document.getElementById("team-podium-1-names").textContent = arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[0]).map(eq => eq.nombre).join(", ") || "—";
                     document.getElementById("team-podium-2-names").textContent = uniqueTeamScores.length > 1 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[1]).map(eq => eq.nombre).join(", ") : "—";
                     document.getElementById("team-podium-3-names").textContent = uniqueTeamScores.length > 2 ? arregloEquiposOrdenado.filter(eq => eq.pts === uniqueTeamScores[2]).map(eq => eq.nombre).join(", ") : "—";
 
-                    // Tarjetas FIFA Selecciones
                     let teamFifaContainer = document.getElementById("team-fifa-cards-container");
                     teamFifaContainer.innerHTML = "";
                     for(let i=0; i<Math.min(3, arregloEquiposOrdenado.length); i++) {
@@ -556,7 +518,6 @@
                         `);
                     }
 
-                    // Inyectar Datos en la Tabla General de Selecciones Inferior
                     let teamsLeaderboardBody = document.getElementById("teams-leaderboard-body");
                     teamsLeaderboardBody.innerHTML = "";
                     arregloEquiposOrdenado.forEach((eq, idx) => {
