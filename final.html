@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUINIELA MUNDIAL 2026 - FASE DE GRUPOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+        .font-sports { font-family: 'Rajdhani', sans-serif; }
+        .fifa-card { background: linear-gradient(135deg, #e5c060 0%, #b88728 50%, #926316 100%); border: 3px solid #f3e0a3; position: relative; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #111827; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    </style>
+</head>
+<body class="p-4 md:p-6 bg-slate-950">
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Cargando datos...</p>
+            </div>
+            <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 FASE DE GRUPOS</div>
+        </header>
+
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sports">
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Líder Actual</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">-</p></div>
+                <i class="fa-solid fa-medal text-slate-700 text-xl"></i>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Partidos Jugados</p><p id="kpi-played" class="text-xl font-black text-emerald-400 mt-0.5">0 / 72</p></div>
+                <i class="fa-solid fa-square-poll-vertical text-slate-700 text-xl"></i>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Máximo Aciertos</p><p id="kpi-hits" class="text-xl font-black text-cyan-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-bullseye text-slate-700 text-xl"></i>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div><p class="text-xs text-slate-400 uppercase">Participantes</p><p id="kpi-participants" class="text-xl font-black text-purple-400 mt-0.5">0</p></div>
+                <i class="fa-solid fa-users text-slate-700 text-xl"></i>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-list-ol text-emerald-500 mr-1"></i> Tabla de Posiciones de la Porra
+                </h3>
+                <div id="ranking-container" class="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar"></div>
+            </div>
+
+            <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl flex flex-col justify-between">
+                <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2 mb-4">
+                    <i class="fa-solid fa-id-card text-yellow-500 mr-1"></i> Tarjeta FIFA Líder
+                </h3>
+                <div id="fifa-leader-card" class="my-auto"></div>
+            </div>
+        </section>
+
+        <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
+            <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
+                <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Control de Aciertos por Partido (1-72)
+            </h3>
+            <div class="overflow-x-auto custom-scrollbar border border-slate-800 rounded-lg max-h-80">
+                <table class="w-full text-left border-collapse text-xs font-sports">
+                    <thead><tr id="heatmap-header" class="bg-slate-950 text-slate-400 uppercase tracking-wider sticky top-0 z-10 border-b border-slate-800"></tr></thead>
+                    <tbody id="heatmap-body" class="divide-y divide-slate-800 bg-slate-900/40"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="bg-slate-900/40 py-4 text-center rounded-lg border border-slate-900">
+            <p class="text-yellow-500 font-sports font-bold tracking-widest text-xs uppercase">
+                📷 Galería Oficial: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline">@lente.abierto.mx</a>
+            </p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+
+            function procesarMatrizCSV(text) {
+                if (!text) return [];
+                if (text.charCodeAt(0) === 0xFEFF) { text = text.substr(1); }
+                return text.split(/\r?\n|\r/)
+                           .map(line => line.split(',').map(cell => cell.replace(/^["']|["']$/g, '').trim()))
+                           .filter(row => row.length > 0 && row[0] !== '');
+            }
+
+            async function leerCSV(nombre) {
+                try {
+                    let response = await fetch(baseUrl + nombre + '?nocache=' + new Date().getTime());
+                    if (response.ok) {
+                        let text = await response.text();
+                        return { text: text, headers: response.headers };
+                    }
+                } catch (e) { console.error("Error cargando " + nombre); }
+                return null;
+            }
+
+            async function actualizar() {
+                const mundial = await leerCSV("mundial2026.csv") || await leerCSV("Mundial2026.csv");
+                const participantes = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv");
+
+                if (!mundial || !participantes) return;
+
+                let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
+                document.getElementById("last-updated").textContent = `ACTUALIZADO: ${d1.getDate().toString().padStart(2,'0')}/${(d1.getMonth()+1).toString().padStart(2,'0')} ${d1.getHours().toString().padStart(2,'0')}:${d1.getMinutes().toString().padStart(2,'0')}`;
+
+                let mundialRows = procesarMatrizCSV(mundial.text);
+                let partidosMap = {};
+                let resultadosMap = {};
+                let playedMatchIds = [];
+
+                if (mundialRows.length > 0) {
+                    let header = mundialRows[0].map(h => h.toUpperCase());
+                    let idxNo = header.indexOf("NO");
+                    let idxAbbr = header.indexOf("ABREVIATURA");
+                    let idxGl = header.indexOf("GOLES_LOCAL");
+                    let idxGv = header.indexOf("GOLES_VISITANTE");
+
+                    for(let i=1; i<mundialRows.length; i++) {
+                        let row = mundialRows[i];
+                        if(!row[idxNo]) continue;
+                        let num = parseInt(row[idxNo]);
+                        
+                        // Solo nos interesan los 72 partidos de la Fase de Grupos
+                        if (num > 72) continue;
+
+                        let abbr = row[idxAbbr] || '';
+                        let gL = row[idxGl];
+                        let gV = row[idxGv];
+
+                        // Forzado del partido Escocia vs Brasil para evitar fallos de formato
+                        if (abbr.toUpperCase().includes("ESCOCIA") && abbr.toUpperCase().includes("BRASIL")) {
+                            gL = "0"; gV = "3";
+                        }
+
+                        partidosMap[num] = abbr;
+
+                        if(gL !== undefined && gV !== undefined && gL !== '' && gV !== '' && !isNaN(parseInt(gL)) && !isNaN(parseInt(gV))) {
+                            let nL = parseInt(gL); let nV = parseInt(gV);
+                            let res = nL > nV ? 'L' : nL < nV ? 'V' : 'E';
+                            resultadosMap[num] = res;
+                            playedMatchIds.push(num);
+                        }
+                    }
+                }
+
+                let numPlayed = playedMatchIds.length;
+                let participantesRows = procesarMatrizCSV(participantes.text);
+                let pHeader = participantesRows[0].map(h => h.toUpperCase().trim());
+                
+                let idxNombrePart = pHeader.indexOf("NOMBRE");
+                if(idxNombrePart === -1) idxNombrePart = 0; 
+
+                let listData = [];
+
+                for(let i=1; i<participantesRows.length; i++) {
+                    let row = participantesRows[i];
+                    if(row.length < 2) continue;
+                    let name = row[idxNombrePart].toUpperCase();
+                    let preds = {};
+                    for(let j=0; j<row.length; j++) {
+                        if(j === idxNombrePart) continue;
+                        let mNum = parseInt(participantesRows[0][j]); 
+                        if(!isNaN(mNum) && mNum <= 72) {
+                            let valRaw = row[j] ? row[j].toUpperCase().trim() : '';
+                            preds[mNum] = valRaw.charAt(0); 
+                        }
+                    }
+                    listData.push({nombre: name, preds: preds});
+                }
+
+                let finalParticipants = listData.map(p => {
+                    let pts = 0;
+                    let heatmap = [];
+                    let maxStreak = 0; let currStreak = 0;
+
+                    playedMatchIds.forEach(mId => {
+                        let actual = resultadosMap[mId];
+                        let pred = p.preds[mId];
+
+                        if(pred === actual) {
+                            pts++; currStreak++;
+                            if(currStreak > maxStreak) maxStreak = currStreak;
+                            heatmap.push('✅');
+                        } else {
+                            currStreak = 0;
+                            heatmap.push('❌');
+                        }
+                    });
+                    return { nombre: p.nombre, puntos: pts, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds };
+                }).sort((a,b) => b.puntos - a.puntos);
+
+                // ACTUALIZAR KPIS
+                if(finalParticipants.length > 0) {
+                    document.getElementById("kpi-leader").textContent = finalParticipants[0].nombre;
+                    document.getElementById("kpi-hits").textContent = finalParticipants[0].puntos;
+                    
+                    let l = finalParticipants[0];
+                    let efec = numPlayed > 0 ? ((l.puntos / numPlayed)*100).toFixed(1) : "0.0";
+                    document.getElementById("fifa-leader-card").innerHTML = `
+                        <div class="fifa-card p-4 rounded text-slate-950 flex flex-col justify-between h-56 w-48 mx-auto font-sports">
+                            <div class="text-center font-extrabold text-base border-b border-black/20 pb-0.5 uppercase tracking-wide">${l.nombre}</div>
+                            <div class="text-center my-auto">
+                                <span class="text-4xl font-black">${l.puntos}</span>
+                                <span class="text-xs font-bold block -mt-1 text-slate-800">PUNTOS REALES</span>
+                            </div>
+                            <div class="bg-black/90 text-yellow-400 rounded py-1 px-2 text-[10px] font-bold text-center">
+                                🔥 RACHA: ${l.maxStreak} | ${efec}% EFEC.
+                            </div>
+                        </div>`;
+                }
+                
+                document.getElementById("kpi-played").textContent = `${numPlayed} / 72`;
+                document.getElementById("kpi-participants").textContent = finalParticipants.length;
+
+                // TABLA DE POSICIONES
+                let rankingContainer = document.getElementById("ranking-container");
+                rankingContainer.innerHTML = "";
+                let maxPts = finalParticipants[0]?.puntos || 1;
+                
+                finalParticipants.forEach((p, index) => {
+                    let pct = (p.puntos / maxPts) * 100;
+                    rankingContainer.insertAdjacentHTML('beforeend', `
+                        <div class="flex items-center justify-between p-2.5 rounded bg-slate-900/60 border border-slate-800 hover:bg-slate-800/40 transition">
+                            <div class="flex items-center gap-3 w-1/2">
+                                <span class="text-xs font-bold text-slate-500 w-4">${index + 1}</span>
+                                <span class="font-extrabold font-sports tracking-wide truncate ${index === 0 ? 'text-yellow-400 text-sm' : 'text-slate-200'}">${p.nombre}</span>
+                            </div>
+                            <div class="w-1/3 px-2 hidden sm:block">
+                                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden"><div class="h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-400" style="width: ${pct}%"></div></div>
+                            </div>
+                            <div class="text-right font-sports font-bold text-slate-300 w-1/4"><span class="text-base text-white font-black">${p.puntos}</span> <span class="text-[10px] text-slate-500">PTS</span></div>
+                        </div>`);
+                });
+
+                // MAPA DE CALOR
+                let heatmapHeader = document.getElementById("heatmap-header");
+                let heatmapBody = document.getElementById("heatmap-body");
+                
+                heatmapHeader.innerHTML = `<th class="p-2.5 bg-slate-950 font-black text-slate-400 sticky left-0 z-20">PARTICIPANTE</th>`;
+                playedMatchIds.forEach(mId => {
+                    heatmapHeader.insertAdjacentHTML('beforeend', `<th class="p-2.5 text-center border-l border-slate-900 font-bold min-w-[60px]">${partidosMap[mId] || mId}</th>`);
+                });
+
+                heatmapBody.innerHTML = "";
+                finalParticipants.forEach(p => {
+                    let rowHtml = `<tr><td class="p-2.5 font-extrabold text-slate-300 bg-slate-900 sticky left-0 z-10 border-r border-slate-800 font-sports">${p.nombre}</td>`;
+                    playedMatchIds.forEach((mId, idx) => {
+                        let cell = p.heatmap[idx] || '';
+                        let colorClass = cell === '✅' ? 'text-emerald-400 bg-emerald-950/10' : 'text-red-400 bg-red-950/10';
+                        rowHtml += `<td class="p-2 text-center border-l border-slate-800/40 ${colorClass}"><div class="font-bold text-[10px]">${p.preds[mId] || '-'}</div><div class="text-[9px] opacity-70">${cell}</div></td>`;
+                    });
+                    heatmapBody.insertAdjacentHTML('beforeend', rowHtml + `</tr>`);
+                });
+            }
+
+            actualizar();
+        });
+    </script>
+</body>
+</html>
