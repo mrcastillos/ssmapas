@@ -537,11 +537,14 @@
                                 let esPredictivoLocal = false; let esPredictivoVis = false;
 
                                 if (partido.label && partido.label.includes("VS")) {
-                                    let partes = partido.label.split("VS");
-                                    let lTxt = partes[0].trim(); let vTxt = partes[1].trim();
-                                    if (lTxt !== '' && lTxt !== '?' && !lTxt.includes("1") && !lTxt.includes("2")) loc = lTxt;
-                                    if (vTxt !== '' && vTxt !== '?' && !vTxt.includes("1") && !vTxt.includes("2")) vis = vTxt;
-                                }
+    let partes = partido.label.split("VS");
+    loc = partes[0].trim();
+    vis = partes[1].trim();
+}
+
+// Si viene con signos de interrogación o posiciones lógicas (ej. "1A"), se queda tal cual lo tienes en tu CSV
+if (loc === '' || loc === '?') loc = '—';
+if (vis === '' || vis === '?') vis = '—';
 
                                 if (fKey === "DICISEISAVOS") {
                                     if (loc === '—' && pool32Clasificados[index]) { loc = pool32Clasificados[index].nombre; esPredictivoLocal = true; }
