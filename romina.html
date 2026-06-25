@@ -22,16 +22,14 @@
 <body class="p-4 md:p-6 bg-slate-950">
     <div class="max-w-6xl mx-auto space-y-6">
         
-        <!-- ENCABEZADO -->
         <header class="bg-slate-900 border-l-8 border-yellow-500 p-5 rounded-lg shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-extrabold font-sports text-white tracking-wider">⚽ QUINIELA MUNDIAL 2026</h1>
-                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Sincronización Total en Tiempo Real Activa...</p>
+                <p id="last-updated" class="text-xs font-semibold text-slate-400 font-sports uppercase tracking-widest mt-1">Procesamiento Dinámico Automatizado...</p>
             </div>
             <div class="bg-slate-800 px-3 py-1 rounded-full text-xs font-bold text-yellow-400 font-sports">🏆 PREMIUM STADIUM</div>
         </header>
 
-        <!-- KPIS GLOBALES -->
         <section class="grid grid-cols-2 md:grid-cols-4 gap-4 font-sports">
             <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
                 <div><p class="text-xs text-slate-400 uppercase">Líder de la Porra</p><p id="kpi-leader" class="text-lg font-black text-yellow-400 mt-0.5">-</p></div>
@@ -51,7 +49,6 @@
             </div>
         </section>
 
-        <!-- PODIO COLECTIVO CON AGRUPACIÓN -->
         <section class="bg-slate-900/50 rounded-xl p-6 border border-slate-800 shadow-xl">
             <h2 class="text-xl font-bold font-sports tracking-widest text-center uppercase text-slate-300 mb-6 flex justify-center items-center gap-2">
                 <i class="fa-solid fa-ranking-star text-yellow-500"></i> PODIO GENERAL DE GANADORES
@@ -79,7 +76,6 @@
             </div>
         </section>
 
-        <!-- PANEL CENTRAL -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
                 <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
@@ -88,7 +84,6 @@
                 <div id="ranking-container" class="space-y-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar"></div>
             </div>
 
-            <!-- TARJETAS FIFA TOP 3 -->
             <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl space-y-4">
                 <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
                     <i class="fa-solid fa-id-card text-yellow-500 mr-1"></i> Tarjetas FIFA Destacados
@@ -97,7 +92,6 @@
             </div>
         </section>
 
-        <!-- EVOLUCIÓN HISTÓRICA -->
         <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
             <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-4">
                 <i class="fa-solid fa-chart-line text-amber-500 mr-1"></i> Línea de Rendimiento Histórico (Top 5)
@@ -105,8 +99,7 @@
             <div class="h-64 w-full"><canvas id="evolutionChart"></canvas></div>
         </section>
 
-        <!-- MAPA DE CALOR COMPLETO -->
-        <section class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xl">
+        <section class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-xl">
             <h3 class="text-base font-bold font-sports text-slate-200 uppercase tracking-wider mb-3">
                 <i class="fa-solid fa-fire text-orange-500 mr-1"></i> Control de Aciertos por Partido
             </h3>
@@ -118,7 +111,6 @@
             </div>
         </section>
 
-        <!-- PIE DE PÁGINA -->
         <footer class="bg-slate-900/40 py-4 text-center rounded-lg border border-slate-900">
             <p class="text-yellow-500 font-sports font-bold tracking-widest text-xs uppercase">
                 📷 Galería Oficial: <a href="https://www.instagram.com/lente.abierto.mx" target="_blank" class="hover:text-white underline">@lente.abierto.mx</a>
@@ -132,6 +124,10 @@
             const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
             let chartInstance = null;
 
+            function normalizarTexto(txt) {
+                return txt ? txt.toString().toUpperCase().replace(/[\s\.\-_]/g, '').trim() : '';
+            }
+
             function procesarMatrizCSV(text) {
                 if (!text) return [];
                 if (text.charCodeAt(0) === 0xFEFF) { text = text.substr(1); }
@@ -140,29 +136,21 @@
 
             async function leerCSV(nombre) {
                 try {
-                    // SE AGREGA CACHÉ BUSTER ABSOLUTO POR TIEMPO PARA FORZAR LECTURA DE DATOS NUEVOS
                     let response = await fetch(baseUrl + nombre + '?v=' + new Date().getTime());
                     if (response.ok) {
-                        let text = await response.text();
-                        return { text: text, headers: response.headers };
+                        return await response.text();
                     }
                 } catch (e) { console.error("Error cargando " + nombre); }
                 return null;
             }
 
             async function actualizar() {
-                const mundial = await leerCSV("Mundial2026.csv") || await leerCSV("mundial2026.csv");
-                const participantes = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv");
+                const mundialText = await leerCSV("Mundial2026.csv") || await leerCSV("mundial2026.csv");
+                const participantesText = await leerCSV("resultados_participantes.csv") || await leerCSV("resultado_participantes.csv");
 
-                if (!mundial || !participantes) return;
+                if (!mundialText || !participantesText) return;
 
-                let d1 = new Date(mundial.headers.get('Last-Modified') || Date.now());
-                let d2 = new Date(participantes.headers.get('Last-Modified') || Date.now());
-                let latestDate = new Date(Math.max(d1, d2));
-                
-                document.getElementById("last-updated").textContent = `ACTUALIZADO: ${latestDate.getDate().toString().padStart(2,'0')}/${(latestDate.getMonth()+1).toString().padStart(2,'0')} ${latestDate.getHours().toString().padStart(2,'0')}:${latestDate.getMinutes().toString().padStart(2,'0')}`;
-
-                let mundialRows = procesarMatrizCSV(mundial.text);
+                let mundialRows = procesarMatrizCSV(mundialText);
                 let partidosMap = {};
                 let resultadosMap = {}; 
                 let idListOrdenada = []; 
@@ -198,7 +186,7 @@
 
                 let numPlayed = playedMatchIds.length;
 
-                let participantesRows = procesarMatrizCSV(participantes.text);
+                let participantesRows = procesarMatrizCSV(participantesText);
                 let pHeaderClean = participantesRows[0].map(h => h.trim().toUpperCase());
                 let idxNombrePart = pHeaderClean.indexOf("NOMBRE");
                 if(idxNombrePart === -1) idxNombrePart = 0; 
@@ -207,44 +195,47 @@
                 for(let i=1; i<participantesRows.length; i++) {
                     let row = participantesRows[i];
                     if(row.length < 2 || !row[idxNombrePart]) continue;
-                    let name = row[idxNombrePart].toUpperCase().trim();
+                    let originalName = row[idxNombrePart].trim();
+                    let nameNormalized = normalizarTexto(originalName);
                     let preds = {};
                     
                     for(let j=0; j<row.length; j++) {
                         if(j === idxNombrePart) continue;
                         let colHeader = pHeaderClean[j];
                         if(colHeader) {
-                            preds[colHeader] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
+                            let numStr = colHeader.replace("WC2026-", "").padStart(3, '0');
+                            let keyMundial = "WC2026-" + numStr;
+                            preds[keyMundial] = row[j] ? row[j].toUpperCase().trim().charAt(0) : '';
                         }
                     }
-                    listData.push({nombre: name, preds: preds});
+                    listData.push({nombreOriginal: originalName, nombreClean: nameNormalized, preds: preds});
                 }
 
                 let historyPoints = {}; let historyRanks = {};
-                listData.forEach(p => { historyPoints[p.nombre] = [0]; historyRanks[p.nombre] = [1]; });
+                listData.forEach(p => { historyPoints[p.nombreClean] = [0]; historyRanks[p.nombreClean] = [1]; });
 
                 playedMatchIds.forEach(idPartido => {
                     let actual = resultadosMap[idPartido];
                     listData.forEach(p => {
-                        let prevPts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                        let prevPts = historyPoints[p.nombreClean][historyPoints[p.nombreClean].length - 1];
                         let isCorrect = (p.preds[idPartido] === actual);
-                        historyPoints[p.nombre].push(isCorrect ? prevPts + 1 : prevPts);
+                        historyPoints[p.nombreClean].push(isCorrect ? prevPts + 1 : prevPts);
                     });
 
                     let stepScores = listData.map(p => ({
-                        nombre: p.nombre, puntos: historyPoints[p.nombre][historyPoints[p.nombre].length - 1]
+                        nombreClean: p.nombreClean, puntos: historyPoints[p.nombreClean][historyPoints[p.nombreClean].length - 1]
                     })).sort((a,b) => b.puntos - a.puntos);
 
                     let r = 1;
                     stepScores.forEach((item, idx) => {
                         if(idx > 0 && item.puntos < stepScores[idx-1].puntos) r = idx + 1;
-                        historyRanks[item.nombre].push(r);
+                        historyRanks[item.nombreClean].push(r);
                     });
                 });
 
                 let maxHitsGlobal = 0;
                 let finalParticipants = listData.map(p => {
-                    let pts = historyPoints[p.nombre][historyPoints[p.nombre].length - 1];
+                    let pts = historyPoints[p.nombreClean][historyPoints[p.nombreClean].length - 1];
                     if(pts > maxHitsGlobal) maxHitsGlobal = pts;
 
                     let maxStreak = 0; let currStreak = 0; let heatmap = [];
@@ -264,7 +255,7 @@
                         }
                     });
 
-                    let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombre];
+                    let trend = '●'; let trendVal = 0; let rHistory = historyRanks[p.nombreClean];
                     if(rHistory.length > 1) {
                         let currR = rHistory[rHistory.length - 1]; let prevR = rHistory[rHistory.length - 2];
                         if(currR < prevR) { trend = '▲'; trendVal = prevR - currR; }
@@ -272,7 +263,7 @@
                     }
 
                     return {
-                        nombre: p.nombre, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
+                        nombre: p.nombreOriginal.toUpperCase(), idClean: p.nombreClean, puntos: pts, efectividad: numPlayed > 0 ? ((pts / numPlayed)*100).toFixed(1) : "0.0",
                         trend: trend, trendVal: trendVal, maxStreak: maxStreak, heatmap: heatmap, preds: p.preds
                     };
                 }).sort((a,b) => b.puntos - a.puntos);
@@ -317,7 +308,7 @@
                     let cardClass = i === 0 ? "fifa-card" : i === 1 ? "fifa-card fifa-card-silver" : "fifa-card fifa-card-bronze";
                     fifaContainer.insertAdjacentHTML('beforeend', `
                         <div class="${cardClass} p-4 text-center font-sports text-slate-950 flex flex-col justify-between h-48 w-44">
-                            <div class="text-sm font-black uppercase tracking-wider border-b border-black/10 pb-0.5">${p.nombre}</div>
+                            <div class="text-sm font-black uppercase tracking-wider border-b border-black/10 pb-0.5 animate-pulse">${p.nombre}</div>
                             <div>
                                 <span class="text-3xl font-black block">${p.puntos}</span>
                                 <span class="text-[9px] font-bold text-slate-800 block -mt-1">ACIERTOS</span>
@@ -355,7 +346,7 @@
                 let chartDatasets = finalParticipants.slice(0, 5).map((p, idx) => {
                     const colors = ['#fbbf24', '#10b981', '#06b6d4', '#a855f7', '#f43f5e'];
                     let color = colors[idx % colors.length];
-                    return { label: p.nombre, data: historyRanks[p.nombre], borderColor: color, backgroundColor: 'transparent', borderWidth: idx === 0 ? 3 : 1.5, tension: 0.1, pointRadius: 1 };
+                    return { label: p.nombre, data: historyRanks[p.idClean], borderColor: color, backgroundColor: 'transparent', borderWidth: idx === 0 ? 3 : 1.5, tension: 0.1, pointRadius: 1 };
                 });
                 if(chartInstance) chartInstance.destroy();
                 chartInstance = new Chart(document.getElementById('evolutionChart').getContext('2d'), { type: 'line', data: { labels: chartLabels, datasets: chartDatasets }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { reversed: true, min: 1, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', stepSize: 1, font: { family: 'Rajdhani', weight: 'bold' } } } }, plugins: { legend: { labels: { color: '#f3f4f6', font: { size: 10 } } } } } });
