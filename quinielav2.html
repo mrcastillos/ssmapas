@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2</title>
+    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2 PRO</title>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -247,6 +247,25 @@
         .trend-down { color: #ff5252; }
         .trend-equal { color: var(--text-blue); opacity: 0.5; }
 
+        /* RECUADROS DE RACHA HISTÓRICA (AVANCE) */
+        .streak-container {
+            display: flex;
+            gap: 5px;
+        }
+        .streak-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+        .streak-dot.w { background-color: var(--text-neon); }
+        .streak-dot.l { background-color: #ff5252; color: #fff; }
+
         /* ANALYTICS BLOCK */
         .analytics-container {
             display: flex;
@@ -268,11 +287,44 @@
             margin-bottom: 8px;
             letter-spacing: 0.5px;
         }
-        .analytics-value {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--text-blue);
+
+        /* Lista distribuciones probabilidad */
+        .prob-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 5px;
         }
+        .prob-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(20,37,75,0.4);
+            padding-bottom: 4px;
+        }
+
+        /* Componente Barra de Tendencia Distribuida */
+        .trend-bar-wrapper {
+            margin-top: 10px;
+        }
+        .trend-bar-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        .trend-bar-graphic {
+            display: flex;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #14254b;
+        }
+        .bar-segment { height: 100%; transition: width 0.5s ease; }
+        .bar-segment.local { background-color: var(--text-neon); }
+        .bar-segment.draw { background-color: var(--text-blue); }
+        .bar-segment.visit { background-color: #ff5252; }
 
         /* HEATMAP */
         .heatmap-container { max-width: 100%; overflow-x: auto; padding-bottom: 5px; }
@@ -360,6 +412,7 @@
                                 <th>Participante</th>
                                 <th>Acertados</th>
                                 <th>Fallados</th>
+                                <th>Evolución Reciente (Últimos 5)</th>
                                 <th style="text-align: right;">Puntos Totales</th>
                             </tr>
                         </thead>
@@ -372,16 +425,33 @@
             <div class="panel-box">
                 <div class="panel-title"><i class="fa-solid fa-chart-line" style="color: var(--text-gold);"></i> Analítica de Tendencias</div>
                 <div class="analytics-container">
+                    
+                    <!-- PROBABILIDAD DE CAMPEÓN (TOP 4 DISTRIBUIDO) -->
                     <div class="analytics-card">
-                        <h4>🏆 Probabilidad de Campeón</h4>
-                        <div class="analytics-value" id="an-prob" style="color: var(--text-gold); text-transform: uppercase;">-</div>
-                        <small style="font-size:0.7rem; color:var(--text-light)">Basado en efectividad acumulada de aciertos</small>
+                        <h4>🏆 Probabilidad de Campeón (Top 4)</h4>
+                        <div class="prob-list" id="an-prob-list">
+                            <!-- Inyección dinámica de los 4 mejores de la jornada -->
+                        </div>
                     </div>
+
+                    <!-- TOP PICKS CON BARRA DE RENDIMIENTO 100% -->
                     <div class="analytics-card">
                         <h4>🔥 Top Picks (Próximo Favorito)</h4>
-                        <div class="analytics-value" id="an-pick" style="color: var(--text-blue); font-size: 1rem;">Buscando próximo juego...</div>
-                        <small style="font-size:0.7rem; color:var(--text-light)">Tendencia de predicción mayoritaria del grupo</small>
+                        <div style="font-weight: 800; color:#fff; font-size:0.95rem; margin-bottom: 5px;" id="next-match-label">Buscando juego...</div>
+                        <div class="trend-bar-wrapper">
+                            <div class="trend-bar-info">
+                                <span style="color: var(--text-neon);" id="lbl-bar-l">L: 0%</span>
+                                <span style="color: var(--text-blue);" id="lbl-bar-e">E: 0%</span>
+                                <span style="color: #ff5252;" id="lbl-bar-v">V: 0%</span>
+                            </div>
+                            <div class="trend-bar-graphic">
+                                <div class="bar-segment local" id="bar-l" style="width: 33.3%"></div>
+                                <div class="bar-segment draw" id="bar-e" style="width: 33.3%"></div>
+                                <div class="bar-segment visit" id="bar-v" style="width: 33.3%"></div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -406,7 +476,6 @@
     </footer>
 
     <script>
-        // REGRESAMOS AL SISTEMA DE RUTAS LOCALES EFECTIVAS DE LA VERSIÓN 1
         const URL_MUNDIAL = './mundial.csv';
         const URL_PARTICIPANTES = './participantes.csv';
 
@@ -430,13 +499,16 @@
                 if (!p.nombre) return;
                 let aciertos = 0;
                 let fallados = 0;
+                let historialRacha = []; // Guardará el avance histórico cronológico
 
                 listaPartidosIDs.forEach(idMatch => {
                     if (p[idMatch]) {
                         if (p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
                             aciertos++;
+                            historialRacha.push('w');
                         } else {
                             fallados++;
+                            historialRacha.push('l');
                         }
                     }
                 });
@@ -446,11 +518,11 @@
                     aciertos: aciertos,
                     fallados: fallados,
                     puntos: aciertos * 1,
+                    racha: historialRacha.slice(-5), // Extraer avance de los últimos 5 partidos jugados
                     predicciones: p
                 });
             });
 
-            // Ordenación: Por puntos desc y Empate por Orden Alfabético asc
             lista.sort((a, b) => b.puntos - a.puntos || a.nombre.localeCompare(b.nombre));
             return lista;
         }
@@ -486,9 +558,9 @@
                 });
 
                 const totalJugados = partidosConResultadoIDs.length;
-
                 const rankingActual = calcularRanking(participantesData, partidosReales, partidosConResultadoIDs);
 
+                // TENDENCIAS HISTÓRICAS DE POSICIÓN
                 let tendencias = {};
                 if (totalJugados > 1) {
                     const partidosIDsAnterior = partidosConResultadoIDs.slice(0, -1);
@@ -500,25 +572,58 @@
                     });
                 }
 
+                // CÁLCULO DISTRIBUIDO DE PROBABILIDAD DE CAMPEÓN (TOP 4)
+                const probListContainer = document.getElementById('an-prob-list');
+                probListContainer.innerHTML = '';
                 if (rankingActual.length > 0) {
-                    let totalAciertosGrupo = rankingActual.reduce((acc, curr) => acc + curr.puntos, 0);
-                    let efectividadLeader = totalAciertosGrupo > 0 ? Math.round((rankingActual[0].puntos / totalAciertosGrupo) * 100) : 100;
-                    document.getElementById('an-prob').innerText = `${rankingActual[0].nombre} (${efectividadLeader + 20}% Max)`;
-                }
-
-                if (proximoPartidoID) {
-                    let conteoVotos = { L: 0, E: 0, V: 0 };
-                    participantesData.forEach(p => {
-                        let voto = p[proximoPartidoID] ? p[proximoPartidoID].trim().toUpperCase() : '';
-                        if (conteoVotos[voto] !== undefined) conteoVotos[voto]++;
+                    let sumAciertosTop4 = rankingActual.slice(0, 4).reduce((acc, curr) => acc + curr.puntos, 0);
+                    
+                    rankingActual.slice(0, 4).forEach((p, idx) => {
+                        let colorMedal = idx === 0 ? 'var(--text-gold)' : 'var(--text-white)';
+                        let pctPlausible = sumAciertosTop4 > 0 ? Math.round((p.puntos / sumAciertosTop4) * 100) : 25;
+                        probListContainer.insertAdjacentHTML('beforeend', `
+                            <div class="prob-item">
+                                <span style="font-weight:700; color:${colorMedal}">#${idx+1} ${p.nombre.toUpperCase()}</span>
+                                <span style="font-weight:900; color:var(--text-blue)">${pctPlausible}%</span>
+                            </div>
+                        `);
                     });
-                    let favorito = Object.keys(conteoVotos).reduce((a, b) => conteoVotos[a] > conteoVotos[b] ? a : b);
-                    let tipoVoto = favorito === 'L' ? 'Local' : favorito === 'E' ? 'Empate' : 'Visitante';
-                    document.getElementById('an-pick').innerText = `${proximoPartidoAbrev} ➔ gana ${tipoVoto}`;
-                } else {
-                    document.getElementById('an-pick').innerText = "Fase de Grupos finalizada";
                 }
 
+                // CÁLCULO DE LA BARRA DE TENDENCIA DEL PROX PARTIDO (100% DISTRIBUIDO)
+                if (proximoPartidoID) {
+                    document.getElementById('next-match-label').innerText = `${proximoPartidoID} : ${proximoPartidoAbrev.toUpperCase()}`;
+                    let totalVotos = 0;
+                    let votos = { L: 0, E: 0, V: 0 };
+                    
+                    participantesData.forEach(p => {
+                        let pred = p[proximoPartidoID] ? p[proximoPartidoID].trim().toUpperCase() : '';
+                        if (votos[pred] !== undefined) {
+                            votos[pred]++;
+                            totalVotos++;
+                        }
+                    });
+
+                    if (totalVotos > 0) {
+                        let pctL = Math.round((votos['L'] / totalVotos) * 100);
+                        let pctE = Math.round((votos['E'] / totalVotos) * 100);
+                        let pctV = 100 - (pctL + pctE); // Garantizar cuadre del 100% matemático
+                        
+                        if(votos['V'] === 0) pctV = 0;
+
+                        document.getElementById('lbl-bar-l').innerText = `L: ${pctL}%`;
+                        document.getElementById('lbl-bar-e').innerText = `E: ${pctE}%`;
+                        document.getElementById('lbl-bar-v').innerText = `V: ${pctV}%`;
+
+                        document.getElementById('bar-l').style.width = `${pctL}%`;
+                        document.getElementById('bar-e').style.width = `${pctE}%`;
+                        document.getElementById('bar-v').style.width = `${pctV}%`;
+                    }
+                } else {
+                    document.getElementById('next-match-label').innerText = "Fase de Grupos Completada";
+                }
+
+                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO CON LÍNEA DE TENDENCIA / AVANCE
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
                 
@@ -536,17 +641,27 @@
                         }
                     }
 
+                    // Construcción visual de los bloques de racha
+                    let streakHtml = `<div class="streak-container">`;
+                    p.racha.forEach(matchStatus => {
+                        streakHtml += `<span class="streak-dot ${matchStatus}">${matchStatus.toUpperCase()}</span>`;
+                    });
+                    if(p.racha.length === 0) streakHtml += `<span style="font-size:0.75rem; opacity:0.4;">Sin partidos</span>`;
+                    streakHtml += `</div>`;
+
                     leaderboardBody.insertAdjacentHTML('beforeend', `
                         <tr>
                             <td class="rank-number">#${rank}</td>
                             <td class="user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
                             <td>${p.aciertos}</td>
                             <td style="color:#ff5252;">${p.fallados}</td>
+                            <td>${streakHtml}</td>
                             <td class="pts-count" style="text-align: right;">${p.puntos} PTS</td>
                         </tr>
                     `);
                 });
 
+                // RENDERIZAR PODIO OLÍMPICO (TOP 3)
                 const gruposPuntajes = [];
                 rankingActual.forEach(p => {
                     let g = gruposPuntajes.find(x => x.puntos === p.puntos);
@@ -574,6 +689,7 @@
                     document.getElementById('podium-bronze-names').innerText = "PENDIENTE";
                 }
 
+                // RENDERIZAR CABECERA DEL HEATMAP
                 const heatmapHead = document.getElementById('heatmap-head');
                 let headHtml = `<tr><th class="sticky-col">Participante</th>`;
                 mundialData.forEach(p => {
@@ -582,6 +698,7 @@
                 headHtml += `</tr>`;
                 heatmapHead.innerHTML = headHtml;
 
+                // RENDERIZAR FILAS DEL HEATMAP
                 const heatmapBody = document.getElementById('heatmap-body');
                 heatmapBody.innerHTML = '';
                 rankingActual.forEach(p => {
@@ -601,7 +718,7 @@
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252; background:rgba(255,82,82,0.1); padding:5px 10px; border-radius:5px;">Error de sincronización. Asegúrate de que 'mundial.csv' y 'participantes.csv' están en esta carpeta.</span>`;
+                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252;">Error de sincronización con los archivos locales.</span>`;
             }
         }
 
