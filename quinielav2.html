@@ -138,12 +138,10 @@
             width: 100%;
         }
 
-        /* En celulares: Oro arriba(1), Plata medio(2), Bronce abajo(3) */
         .col-oro { order: 1; }
         .col-plata { order: 2; }
         .col-bronce { order: 3; }
 
-        /* En computadoras: Mantenemos el orden de TV Olímpica (Plata - Oro - Bronce) */
         @media (min-width: 768px) {
             .col-plata { order: 1; }
             .col-oro { order: 2; }
@@ -196,7 +194,7 @@
         }
 
         .pedestal {
-            display: none; /* Se oculta en celulares para ahorrar espacio */
+            display: none;
             width: 100%;
             max-width: 260px;
             background: linear-gradient(180deg, #14254b 0%, #091124 100%);
@@ -251,7 +249,7 @@
             gap: 12px;
         }
 
-        /* NUEVA ESTRUCTURA DE DESPLAZAMIENTO FLUIDO CON COLUMNA FIJA PARA AMBAS TABLAS */
+        /* TABLAS RESPONSIVAS CON COLUMNA STICKY */
         .table-responsive {
             max-width: 100%;
             overflow-x: auto;
@@ -279,7 +277,6 @@
             white-space: nowrap;
         }
 
-        /* Congelamos de forma idéntica la columna de nombres en ambas tablas para celulares */
         table .sticky-col {
             position: sticky;
             left: 0;
@@ -329,13 +326,16 @@
         .c-miss { background-color: rgba(255, 51, 51, 0.15); color: #ff5252; border: 1px solid rgba(255, 51, 51, 0.3); }
         .c-pending { background-color: rgba(143, 160, 188, 0.05); color: rgba(143, 160, 188, 0.4); border: 1px solid transparent; }
 
-        /* FOOTER */
+        /* FOOTER OPTIMIZADO CON NUEVOS LINKS */
         footer {
             background-color: var(--bg-body); border-top: 1px solid var(--border-card);
             text-align: center; padding: 25px; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
         }
-        footer p { font-size: 0.85rem; font-weight: 700;}
-        footer a { color: var(--text-gold); text-decoration: none; font-weight: 800;}
+        footer p { font-size: 0.85rem; font-weight: 700; color: var(--text-light); }
+        footer a { color: var(--text-gold); text-decoration: none; font-weight: 800; transition: all 0.2s ease;}
+        footer a:hover { text-shadow: 0 0 8px var(--text-gold); color: #fff; }
+        footer .insta-link { color: var(--text-blue); margin-left: 10px; }
+        footer .insta-link:hover { text-shadow: 0 0 8px var(--text-blue); }
     </style>
 </head>
 <body>
@@ -390,7 +390,7 @@
         <!-- CONTENIDO INTERMEDIO -->
         <div class="main-content-layout">
             
-            <!-- PANEL TABLA DE POSICIONES OPTIMIZADA PARA CELULARES -->
+            <!-- PANEL TABLA DE POSICIONES -->
             <div class="panel-box">
                 <div class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--text-blue);"></i> Clasificación General de Competidores</div>
                 <div class="table-responsive">
@@ -464,9 +464,12 @@
 
     </div>
 
-    <!-- FOOTER -->
+    <!-- FOOTER ACTUALIZADO -->
     <footer>
-        <p>Creado por <a href="https://www.facebook.com/MaloSquishy" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
+        <p>
+            Creado por <a href="https://www.facebook.com/MaloSquishy" target="_blank">Martín R. Castillo Sánchez <i class="fa-brands fa-facebook"></i></a> 
+            | <a class="insta-link" href="https://www.instagram.com/lente.abierto.mx/" target="_blank">Visita mi Instagram <i class="fa-brands fa-instagram"></i></a>
+        </p>
     </footer>
 
     <script>
@@ -529,8 +532,15 @@
                 const textPart = await resPart.text();
                 const participantesData = parseCSV(textPart);
 
+                // FORZAR FORMATO DE 24 HORAS ESTRICTO PARA LA ULTIMA ACTUALIZACION
                 const lastMod = resMundial.headers.get('Last-Modified');
-                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA TRANSMISIÓN EN VIVO: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
+                if (lastMod) {
+                    const dateObj = new Date(lastMod);
+                    const formattedDate = dateObj.toLocaleString('es-MX', { hour12: false });
+                    document.getElementById('last-update').innerText = `ÚLTIMA ACTUALIZACIÓN: ${formattedDate}`;
+                } else {
+                    document.getElementById('last-update').innerText = 'DATOS EN VIVO ACTUALIZADOS';
+                }
 
                 const partidosConResultadoIDs = [];
                 const partidosReales = {};
@@ -550,7 +560,6 @@
                 const totalJugados = partidosConResultadoIDs.length;
                 const rankingActual = calcularRanking(participantesData, partidosReales, partidosConResultadoIDs);
 
-                // TENDENCIAS HISTÓRICAS DE POSICIÓN
                 let tendencias = {};
                 if (totalJugados > 1) {
                     const partidosIDsAnterior = partidosConResultadoIDs.slice(0, -1);
@@ -562,7 +571,7 @@
                     });
                 }
 
-                // CÁLCULO DISTRIBUIDO DE PROBABILIDAD DE CAMPEÓN (TOP 4)
+                // PROBABILIDAD DE CAMPEÓN (TOP 4)
                 const probListContainer = document.getElementById('an-prob-list');
                 probListContainer.innerHTML = '';
                 if (rankingActual.length > 0) {
@@ -580,7 +589,7 @@
                     });
                 }
 
-                // CÁLCULO DE LA BARRA DE TENDENCIA DEL PROX PARTIDO
+                // BARRA DE TENDENCIA DEL PROX PARTIDO
                 if (proximoPartidoID) {
                     document.getElementById('next-match-label').innerText = `${proximoPartidoID} : ${proximoPartidoAbrev.toUpperCase()}`;
                     let totalVotos = 0;
@@ -612,7 +621,7 @@
                     document.getElementById('next-match-label').innerText = "Fase de Grupos Completada";
                 }
 
-                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO CON SOPORTE DE DESPLAZAMIENTO FIJO DE COLUMNA
+                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
                 
@@ -669,7 +678,7 @@
                     document.getElementById('podium-bronze-names').innerText = "PENDIENTE";
                 }
 
-                // GENERAR LA GRÁFICA DE LÍNEAS (Evolución de los 3 mejores líderes)
+                // GRÁFICA DE LÍNEAS DE AVANCE HISTÓRICO
                 const top3Nombres = rankingActual.slice(0, 3).map(p => p.nombre);
                 const datasetsGrafica = top3Nombres.map((nombre, i) => {
                     let ptsAcumulados = 0;
