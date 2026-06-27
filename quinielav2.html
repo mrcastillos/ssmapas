@@ -276,11 +276,10 @@
             white-space: nowrap;
         }
 
-        /* Corrección total al glitch de desaparición en scroll */
         table .sticky-col {
             position: sticky;
             left: 0;
-            background-color: #091124 !important; /* Fuerza el color exacto del fondo del contenedor */
+            background-color: #091124 !important;
             z-index: 10 !important;
             text-align: left;
             border-right: 2px solid var(--border-card);
@@ -294,6 +293,25 @@
         .trend-up { color: var(--text-neon); }
         .trend-down { color: #ff5252; }
         .trend-equal { color: var(--text-blue); opacity: 0.5; }
+
+        /* BLOQUES DE RACHAS AUTOMÁTICAS (W / L) */
+        .streak-container {
+            display: flex;
+            gap: 5px;
+        }
+        .streak-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+        .streak-dot.w { background-color: var(--text-neon); color: #020612; }
+        .streak-dot.l { background-color: #ff5252; color: #fff; }
 
         /* ANALYTICS */
         .analytics-container { display: flex; flex-direction: column; gap: 15px; }
@@ -394,7 +412,7 @@
         <!-- CONTENIDO INTERMEDIO -->
         <div class="main-content-layout">
             
-            <!-- PANEL TABLA DE POSICIONES -->
+            <!-- PANEL TABLA DE POSICIONES COMPLETADA CON RACHAS W / L -->
             <div class="panel-box">
                 <div class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--text-blue);"></i> Clasificación General de Competidores</div>
                 <div class="table-responsive">
@@ -405,6 +423,7 @@
                                 <th class="sticky-col" style="color: var(--text-white); font-weight: 800;">Participante</th>
                                 <th>Acertados</th>
                                 <th>Fallados</th>
+                                <th>Evolución Reciente (Últimos 5)</th>
                                 <th style="text-align: right;">Puntos Totales</th>
                             </tr>
                         </thead>
@@ -486,13 +505,16 @@
                 if (!p.nombre) return;
                 let aciertos = 0;
                 let fallados = 0;
+                let historialRacha = [];
 
                 listaPartidosIDs.forEach(idMatch => {
                     if (p[idMatch]) {
                         if (p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
                             aciertos++;
+                            historialRacha.push('w');
                         } else {
                             fallados++;
+                            historialRacha.push('l');
                         }
                     }
                 });
@@ -502,6 +524,7 @@
                     aciertos: aciertos,
                     fallados: fallados,
                     puntos: aciertos * 1,
+                    racha: historialRacha.slice(-5), // Extraer avance de los últimos 5 partidos jugados cronológicamente
                     predicciones: p
                 });
             });
@@ -522,18 +545,10 @@
                 const textPart = await resPart.text();
                 const participantesData = parseCSV(textPart);
 
-                const lastMod = resMundial.headers.get('Last-Modified');
-                if (lastMod) {
-                    const dateObj = new Date(lastMod);
-                    const formattedDate = dateObj.toLocaleString('es-MX', { hour12: false });
-                    document.getElementById('last-update').innerText = `ÚLTIMA ACTUALIZACIÓN: ${formattedDate}`;
-                } else {
-                    document.getElementById('last-update').innerText = 'DATOS EN VIVO ACTUALIZADOS';
-                }
-
                 const partidosConResultadoIDs = [];
                 const partidosReales = {};
                 const proximosPartidosArray = [];
+                let totalPartidosTorneo = mundialData.length;
 
                 mundialData.forEach(p => {
                     if (p.RESULTADO && p.RESULTADO.trim() !== "") {
@@ -546,6 +561,17 @@
 
                 const totalJugados = partidosConResultadoIDs.length;
                 const rankingActual = calcularRanking(participantesData, partidosReales, partidosConResultadoIDs);
+
+                // MOSTRAR CONTADOR GLOBAL DE PARTIDOS Y MÁXIMO DE PUNTOS POSIBLES EN EL SUBTÍTULO
+                const lastMod = resMundial.headers.get('Last-Modified');
+                let stringHora24 = "";
+                if (lastMod) {
+                    const dateObj = new Date(lastMod);
+                    stringHora24 = dateObj.toLocaleString('es-MX', { hour12: false });
+                } else {
+                    stringHora24 = new Date().toLocaleString('es-MX', { hour12: false });
+                }
+                document.getElementById('last-update').innerText = `ÚLTIMA ACTUALIZACIÓN: ${stringHora24} | PARTIDOS JUGADOS: ${totalJugados} DE ${totalPartidosTorneo} | MÁXIMO DE PUNTOS POSIBLES: ${totalJugados} PTS`;
 
                 let tendencias = {};
                 if (totalJugados > 1) {
@@ -620,7 +646,7 @@
                     nextMatchesContainer.innerHTML = `<div style="font-size:0.85rem; opacity:0.5;">Torneo finalizado</div>`;
                 }
 
-                // ESTADÍSTICAS GLOBALES
+                // TENDENCIA DE ESTILO GLOBAL
                 let acumuladoGlobalVotos = { L: 0, E: 0, V: 0, total: 0 };
                 participantesData.forEach(p => {
                     mundialData.forEach(m => {
@@ -645,7 +671,7 @@
                     `;
                 }
 
-                // RENDERIZAR CLASIFICACIÓN GENERAL
+                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO CON BLOQUES W / L
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
                 
@@ -663,12 +689,21 @@
                         }
                     }
 
+                    // Construcción visual de los bloques de racha
+                    let streakHtml = `<div class="streak-container">`;
+                    p.racha.forEach(matchStatus => {
+                        streakHtml += `<span class="streak-dot ${matchStatus}">${matchStatus.toUpperCase()}</span>`;
+                    });
+                    if(p.racha.length === 0) streakHtml += `<span style="font-size:0.75rem; opacity:0.4;">Sin partidos</span>`;
+                    streakHtml += `</div>`;
+
                     leaderboardBody.insertAdjacentHTML('beforeend', `
                         <tr>
                             <td class="rank-number">#${rank}</td>
                             <td class="sticky-col user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
                             <td>${p.aciertos}</td>
                             <td style="color: #ff5252;">${p.fallados}</td>
+                            <td>${streakHtml}</td>
                             <td class="pts-count" style="font-weight: 800; color: var(--text-neon);">${p.puntos} PTS</td>
                         </tr>
                     `);
