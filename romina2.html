@@ -375,9 +375,17 @@
     </footer>
 
     <script>
-        // Forzamos rutas dinámicas sin importar si estás en local o en servidor (GitHub Pages)
-        const URL_MUNDIAL = './mundial.csv?v=' + Date.now();
-        const URL_PARTICIPANTES = './participantes.cvs?v=' + Date.now();
+        // Detectamos automáticamente el entorno (si es local o GitHub Pages)
+        let repoPath = "./";
+        if (window.location.hostname.includes("github.io")) {
+            const pathParts = window.location.pathname.split('/');
+            const repoName = pathParts[1]; // Captura el repositorio actual, ej. 'ssmapas'
+            repoPath = `/${repoName}/`;
+        }
+
+        // Rutas fijadas estrictamente a .csv
+        const URL_MUNDIAL = `${repoPath}mundial.csv`;
+        const URL_PARTICIPANTES = `${repoPath}participantes.csv`;
 
         function parseCSV(text) {
             const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
@@ -395,23 +403,23 @@
 
         async function cargarQuiniela() {
             try {
-                // Intentar leer mundial.csv
-                const resMundial = await fetch(URL_MUNDIAL);
-                if (!resMundial.ok) throw new Error();
+                // 1. Descargar mundial.csv forzando actualización de caché (?v=)
+                const resMundial = await fetch(URL_MUNDIAL + '?v=' + Date.now());
+                if (!resMundial.ok) throw new Error("No se encontró mundial.csv");
                 const textMundial = await resMundial.text();
                 const mundialData = parseCSV(textMundial);
 
-                // Intentar leer participantes.cvs
-                const resPart = await fetch(URL_PARTICIPANTES);
-                if (!resPart.ok) throw new Error();
+                // 2. Descargar participantes.csv
+                const resPart = await fetch(URL_PARTICIPANTES + '?v=' + Date.now());
+                if (!resPart.ok) throw new Error("No se encontró participantes.csv");
                 const textPart = await resPart.text();
                 const participantesData = parseCSV(textPart);
 
-                // Procesar la fecha de modificación real
+                // Procesar la fecha de modificación real desde los encabezados del servidor
                 const lastMod = resMundial.headers.get('Last-Modified');
                 document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA ACTUALIZACIÓN DEL SERVIDOR: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
 
-                // Mapear resultados reales
+                // Mapear resultados reales procesados
                 const partidosReales = {};
                 let countJugados = 0;
                 mundialData.forEach(p => {
@@ -421,7 +429,7 @@
                     }
                 });
 
-                // Procesar puntuaciones de los participantes
+                // Calcular puntajes de los participantes
                 const tablaPosiciones = [];
                 participantesData.forEach(p => {
                     if (!p.nombre) return;
@@ -442,10 +450,10 @@
                     });
                 });
 
-                // Ordenar líderes
+                // Ordenar líderes desc
                 tablaPosiciones.sort((a, b) => b.puntos - a.puntos || b.aciertos - a.aciertos);
 
-                // ACTUALIZAR KPIS ARRIBA
+                // ACTUALIZAR CONTENEDORES DE KPIS DE LA TRANSMISIÓN
                 if (tablaPosiciones.length > 0) {
                     document.getElementById('kpi-leader').innerText = tablaPosiciones[0].nombre;
                     document.getElementById('kpi-max').innerText = tablaPosiciones[0].puntos;
@@ -455,7 +463,7 @@
                 document.getElementById('kpi-played').innerText = `${countJugados} / 72`;
                 document.getElementById('kpi-count').innerText = tablaPosiciones.length;
 
-                // RENDERIZAR TABLA DE POSICIONES
+                // RENDERIZAR TABLA DE POSICIONES EN VIVO
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
                 let rank = 1;
@@ -472,7 +480,7 @@
                     `);
                 });
 
-                // RENDERIZAR HEATMAP (CABECERA)
+                // RENDERIZAR CABECERA DEL HEATMAP
                 const heatmapHead = document.getElementById('heatmap-head');
                 let headHtml = `<tr><th class="sticky-col">Participante</th>`;
                 mundialData.forEach(p => {
@@ -481,7 +489,7 @@
                 headHtml += `</tr>`;
                 heatmapHead.innerHTML = headHtml;
 
-                // RENDERIZAR HEATMAP (FILAS)
+                // RENDERIZAR FILAS DEL HEATMAP
                 const heatmapBody = document.getElementById('heatmap-body');
                 heatmapBody.innerHTML = '';
                 tablaPosiciones.forEach(p => {
@@ -501,7 +509,7 @@
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252; background:rgba(255,82,82,0.1); padding:5px 10px; border-radius:5px;">Error al cargar archivos locales (.csv). Verifica que estén en la misma carpeta.</span>`;
+                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252; background:rgba(255,82,82,0.1); padding:5px 10px; border-radius:5px;">Error al cargar los archivos .csv. Verifica que 'mundial.csv' y 'participantes.csv' estén en minúsculas en tu carpeta de GitHub.</span>`;
             }
         }
 
