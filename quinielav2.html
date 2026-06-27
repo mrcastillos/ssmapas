@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2 PRO PLUS</title>
-    <!-- Google Fonts, FontAwesome & Chart.js -->
+    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2 FINAL</title>
+    <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
@@ -51,7 +50,7 @@
             gap: 25px;
         }
 
-        /* HEADER OPTIMIZADO */
+        /* HEADER */
         .main-header {
             background-color: var(--bg-card);
             border: 1px solid var(--border-card);
@@ -114,7 +113,7 @@
             letter-spacing: 1px;
         }
 
-        /* PODIO RESPONSIVO INTELIGENTE */
+        /* PODIO RESPONSIVO */
         .olympic-podium-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -295,6 +294,25 @@
         .trend-down { color: #ff5252; }
         .trend-equal { color: var(--text-blue); opacity: 0.5; }
 
+        /* BLOQUES DE AVANCE W L (RACHAS) */
+        .streak-container {
+            display: flex;
+            gap: 5px;
+        }
+        .streak-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+        .streak-dot.w { background-color: var(--text-neon); }
+        .streak-dot.l { background-color: #ff5252; color: #fff; }
+
         /* ANALYTICS */
         .analytics-container { display: flex; flex-direction: column; gap: 15px; }
         .analytics-card {
@@ -316,8 +334,6 @@
         .bar-segment.draw { background-color: var(--text-blue); }
         .bar-segment.visit { background-color: #ff5252; }
 
-        .chart-box-wrapper { margin-top: 15px; height: 180px; position: relative; }
-
         /* HEATMAP */
         .heatmap-table th { font-size: 0.65rem; padding: 8px; text-align: center; min-width: 50px; }
         .heatmap-table td { padding: 8px; text-align: center; font-weight: 800; font-size: 0.8rem; }
@@ -326,7 +342,7 @@
         .c-miss { background-color: rgba(255, 51, 51, 0.15); color: #ff5252; border: 1px solid rgba(255, 51, 51, 0.3); }
         .c-pending { background-color: rgba(143, 160, 188, 0.05); color: rgba(143, 160, 188, 0.4); border: 1px solid transparent; }
 
-        /* FOOTER OPTIMIZADO CON NUEVOS LINKS */
+        /* FOOTER */
         footer {
             background-color: var(--bg-body); border-top: 1px solid var(--border-card);
             text-align: center; padding: 25px; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
@@ -351,7 +367,7 @@
             <div class="premium-badge"><i class="fa-solid fa-bolt"></i> ¡Vamos con todo!</div>
         </header>
 
-        <!-- TARJETA FIFA WORLD CUP TOP 3 (PODIO OLÍMPICO) -->
+        <!-- TARJETA FIFA WORLD CUP TOP 3 -->
         <h2 style="color: #fff; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: -10px;"><i class="fa-solid fa-star" style="color: var(--text-gold);"></i> Tarjetas FIFA World Cup Top 3</h2>
         <section class="olympic-podium-container" id="podium-section-container">
             
@@ -390,7 +406,7 @@
         <!-- CONTENIDO INTERMEDIO -->
         <div class="main-content-layout">
             
-            <!-- PANEL TABLA DE POSICIONES -->
+            <!-- PANEL TABLA DE POSICIONES CON AVANCE HISTÓRICO EN BLOQUES W/L -->
             <div class="panel-box">
                 <div class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--text-blue);"></i> Clasificación General de Competidores</div>
                 <div class="table-responsive">
@@ -401,6 +417,7 @@
                                 <th class="sticky-col">Participante</th>
                                 <th>Acertados</th>
                                 <th>Fallados</th>
+                                <th>Evolución Reciente (Últimos 5)</th>
                                 <th style="text-align: right;">Puntos Totales</th>
                             </tr>
                         </thead>
@@ -438,14 +455,6 @@
                         </div>
                     </div>
 
-                    <!-- GRÁFICA DE TENDENCIAS -->
-                    <div class="analytics-card">
-                        <h4>📈 Curva de Avance Histórico (Top Líderes)</h4>
-                        <div class="chart-box-wrapper">
-                            <canvas id="trendChart"></canvas>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
@@ -464,7 +473,7 @@
 
     </div>
 
-    <!-- FOOTER ACTUALIZADO -->
+    <!-- FOOTER -->
     <footer>
         <p>
             Creado por <a href="https://www.facebook.com/MaloSquishy" target="_blank">Martín R. Castillo Sánchez <i class="fa-brands fa-facebook"></i></a> 
@@ -496,13 +505,16 @@
                 if (!p.nombre) return;
                 let aciertos = 0;
                 let fallados = 0;
+                let historialRacha = [];
 
                 listaPartidosIDs.forEach(idMatch => {
                     if (p[idMatch]) {
                         if (p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
                             aciertos++;
+                            historialRacha.push('w');
                         } else {
                             fallados++;
+                            historialRacha.push('l');
                         }
                     }
                 });
@@ -512,6 +524,7 @@
                     aciertos: aciertos,
                     fallados: fallados,
                     puntos: aciertos * 1,
+                    racha: historialRacha.slice(-5),
                     predicciones: p
                 });
             });
@@ -532,7 +545,7 @@
                 const textPart = await resPart.text();
                 const participantesData = parseCSV(textPart);
 
-                // FORZAR FORMATO DE 24 HORAS ESTRICTO PARA LA ULTIMA ACTUALIZACION
+                // RELOJ FORZADO A 24 HORAS ESTRICTO
                 const lastMod = resMundial.headers.get('Last-Modified');
                 if (lastMod) {
                     const dateObj = new Date(lastMod);
@@ -639,12 +652,20 @@
                         }
                     }
 
+                    let streakHtml = `<div class="streak-container">`;
+                    p.racha.forEach(matchStatus => {
+                        streakHtml += `<span class="streak-dot ${matchStatus}">${matchStatus.toUpperCase()}</span>`;
+                    });
+                    if(p.racha.length === 0) streakHtml += `<span style="font-size:0.75rem; opacity:0.4;">Sin partidos</span>`;
+                    streakHtml += `</div>`;
+
                     leaderboardBody.insertAdjacentHTML('beforeend', `
                         <tr>
                             <td class="rank-number">#${rank}</td>
                             <td class="sticky-col user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
                             <td>${p.aciertos}</td>
                             <td style="color: #ff5252;">${p.fallados}</td>
+                            <td>${streakHtml}</td>
                             <td class="pts-count" style="text-align: right; font-weight: 800; color: var(--text-neon);">${p.puntos} PTS</td>
                         </tr>
                     `);
@@ -677,49 +698,6 @@
                 } else {
                     document.getElementById('podium-bronze-names').innerText = "PENDIENTE";
                 }
-
-                // GRÁFICA DE LÍNEAS DE AVANCE HISTÓRICO
-                const top3Nombres = rankingActual.slice(0, 3).map(p => p.nombre);
-                const datasetsGrafica = top3Nombres.map((nombre, i) => {
-                    let ptsAcumulados = 0;
-                    let dataPuntos = [];
-                    let pData = participantesData.find(x => x.nombre && x.nombre.trim() === nombre);
-                    
-                    partidosConResultadoIDs.forEach(idMatch => {
-                        if(pData && pData[idMatch] && pData[idMatch].trim().toUpperCase() === partidosReales[idMatch]){
-                            ptsAcumulados++;
-                        }
-                        dataPuntos.push(ptsAcumulados);
-                    });
-
-                    const coloresLinea = ['#ffb703', '#94a3b8', '#edae7e'];
-                    return {
-                        label: nombre.toUpperCase(),
-                        data: dataPuntos,
-                        borderColor: coloresLinea[i] || '#00e5ff',
-                        backgroundColor: 'transparent',
-                        borderWidth: 3,
-                        tension: 0.2,
-                        pointRadius: 0
-                    };
-                });
-
-                const labelsX = partidosConResultadoIDs.map((_, idx) => `J${idx+1}`);
-
-                const ctx = document.getElementById('trendChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: { labels: labelsX, datasets: datasetsGrafica },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#fff', font: { family: 'Montserrat', weight: 'bold', size: 10 } } } },
-                        scales: {
-                            x: { grid: { display: false }, ticks: { color: '#8fa0bc', font: { size: 9 } } },
-                            y: { grid: { color: 'rgba(20,37,75,0.3)' }, ticks: { color: '#8fa0bc', font: { size: 9 } } }
-                        }
-                    }
-                });
 
                 // RENDERIZAR CABECERA DEL HEATMAP
                 const heatmapHead = document.getElementById('heatmap-head');
