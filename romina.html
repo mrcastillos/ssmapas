@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DASHBOARD QUINIELA - MUNDIAL 2026</title>
+    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM</title>
     <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-principal: #0b0c10;
-            --bg-card: #1f2833;
+            --bg-body: #030814;
+            --bg-card: #0b1426;
+            --border-card: #13223f;
             --text-neon: #00ff66;
-            --text-secondary: #45f3ff;
-            --text-light: #c5c6c7;
+            --text-blue: #00e5ff;
+            --text-gold: #ffb703;
+            --text-light: #8fa0bc;
             --text-white: #ffffff;
-            --oro: #ffd700;
-            --plata: #c0c0c0;
-            --bronce: #cd7f32;
         }
 
         * {
@@ -29,481 +28,484 @@
         }
 
         body {
-            background-color: var(--bg-principal);
+            background-color: var(--bg-body);
             color: var(--text-light);
-            background-image: radial-gradient(circle at 50% 10%, #1a2332 0%, #0b0c10 70%);
             min-height: 100vh;
-            padding-bottom: 100px;
+            padding: 30px;
+            padding-bottom: 120px;
         }
 
-        header {
-            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-            padding: 30px 5%;
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* HEADER ESTILO EA SPORTS */
+        .main-header {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-left: 6px solid var(--text-gold);
+            border-radius: 12px;
+            padding: 25px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid rgba(0, 255, 102, 0.2);
         }
 
-        .logo-area h1 {
+        .header-title h1 {
+            color: var(--text-white);
+            font-size: 1.8rem;
             font-weight: 900;
-            font-size: 2.2rem;
-            color: var(--text-white);
-            letter-spacing: -1px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .logo-area h1 span {
-            color: var(--text-neon);
-            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
-        }
-
-        .update-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(69, 243, 255, 0.3);
-            padding: 8px 15px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* DISEÑO DE PODIO FOX SPORTS */
-        .podium-section {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 50px;
-            align-items: flex-end;
-        }
-
-        .podium-card {
-            background: linear-gradient(135deg, rgba(31, 40, 51, 0.9) 0%, rgba(11, 12, 16, 0.9) 100%);
-            border-top: 5px solid var(--text-light);
-            border-radius: 8px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .podium-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .podium-card.oro { border-color: var(--oro); grid-order: 2; height: 260px; }
-        .podium-card.plata { border-color: var(--plata); grid-order: 1; height: 220px; }
-        .podium-card.bronce { border-color: var(--bronce); grid-order: 3; height: 190px; }
-
-        .p-1 { order: 2; }
-        .p-2 { order: 1; }
-        .p-3 { order: 3; }
-
-        .medal-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        .oro .medal-icon { color: var(--oro); text-shadow: 0 0 10px var(--oro); }
-        .plata .medal-icon { color: var(--plata); }
-        .bronce .medal-icon { color: var(--bronce); }
-
-        .podium-card h3 {
-            font-size: 1.1rem;
+        .header-title p {
+            font-size: 0.8rem;
+            font-weight: 700;
             text-transform: uppercase;
-            color: var(--text-white);
-            margin-bottom: 15px;
+            color: var(--text-light);
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+
+        .premium-badge {
+            background: rgba(255, 183, 3, 0.1);
+            border: 1px solid var(--text-gold);
+            color: var(--text-gold);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 800;
-        }
-
-        .podium-names {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--text-white);
-            margin-bottom: 10px;
-        }
-
-        .podium-pts {
-            font-size: 0.9rem;
-            color: var(--text-neon);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* TABLA GENERAL DE POSICIONES */
-        .section-title {
-            font-size: 1.5rem;
+        /* GRID DE RECUADROS / KPIS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .kpi-info h3 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-white);
+        }
+
+        .kpi-card i {
+            font-size: 1.8rem;
+            color: rgba(143, 160, 188, 0.15);
+        }
+
+        /* SECCIÓN CENTRAL INTERMEDIA */
+        .main-content-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content-layout { grid-template-columns: 1fr; }
+        }
+
+        /* CONTENEDOR COMÚN DE SECCIONES */
+        .panel-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .panel-title {
+            color: var(--text-white);
+            font-size: 1.1rem;
             font-weight: 800;
             text-transform: uppercase;
             margin-bottom: 20px;
-            color: var(--text-white);
-            border-left: 4px solid var(--text-neon);
-            padding-left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
         }
 
-        .table-container {
-            background: rgba(31, 40, 51, 0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 8px;
+        /* TABLAS ESTILO FOX SPORTS */
+        .table-responsive {
             overflow-x: auto;
-            margin-bottom: 50px;
-            backdrop-filter: blur(10px);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            text-align: left;
         }
 
         th {
-            background-color: rgba(0, 0, 0, 0.6);
             color: var(--text-white);
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            padding: 18px 20px;
+            font-size: 0.75rem;
             font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--border-card);
+            text-align: left;
         }
 
         td {
-            padding: 16px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.95rem;
+            padding: 14px 15px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-bottom: 1px solid rgba(19, 34, 63, 0.5);
         }
 
-        tr:hover {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
+        tr:last-child td { border: none; }
 
-        .rank-number {
-            font-weight: 900;
-            color: var(--text-secondary);
-        }
+        .rank-number { font-weight: 900; color: var(--text-blue); }
+        .user-name { font-weight: 700; color: var(--text-white); }
+        .pts-count { font-weight: 800; color: var(--text-neon); }
 
-        .pts-badge {
-            background: rgba(0, 255, 102, 0.1);
-            color: var(--text-neon);
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-weight: 700;
-            border: 1px solid rgba(0, 255, 102, 0.2);
-        }
-
-        /* SECCIÓN HEATMAP */
-        .heatmap-grid {
+        /* HEATMAP INTEGRADO ABAJO */
+        .heatmap-container {
+            max-width: 100%;
             overflow-x: auto;
-            background: #0f131a;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .heatmap-table {
-            width: max-content;
-            min-width: 100%;
+            padding-bottom: 5px;
         }
 
         .heatmap-table th {
+            font-size: 0.65rem;
             padding: 8px;
-            font-size: 0.7rem;
-            transform: rotate(-45deg);
-            height: 60px;
-            white-space: nowrap;
+            text-align: center;
+            min-width: 50px;
         }
 
-        .heatmap-table th.name-col, .heatmap-table td.name-col {
-            transform: none;
-            height: auto;
+        .heatmap-table td {
+            padding: 8px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+        }
+
+        .heatmap-table .sticky-col {
             position: sticky;
             left: 0;
-            background: #0f131a;
-            z-index: 2;
-            font-size: 0.9rem;
+            background-color: var(--bg-card);
+            z-index: 5;
+            text-align: left;
             font-weight: 700;
-            border-right: 2px solid rgba(255,255,255,0.1);
+            color: var(--text-white);
+            border-right: 2px solid var(--border-card);
+            min-width: 140px;
         }
 
-        .cell-prediction {
-            width: 35px;
-            height: 35px;
-            text-align: center !important;
-            padding: 0;
-            font-size: 0.8rem;
-            font-weight: bold;
+        /* Estados del Heatmap coincidiendo con las tarjetas */
+        .c-hit { background-color: rgba(0, 255, 102, 0.15); color: var(--text-neon); border: 1px solid rgba(0, 255, 102, 0.3); }
+        .c-miss { background-color: rgba(255, 51, 51, 0.15); color: #ff5252; border: 1px solid rgba(255, 51, 51, 0.3); }
+        .c-pending { background-color: rgba(143, 160, 188, 0.05); color: rgba(143, 160, 188, 0.4); border: 1px solid transparent; }
+
+        /* COMPONENTE EXTRAS: TARJETA LÍDER FUT */
+        .fifa-card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .fut-card {
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            border-radius: 15px;
+            width: 200px;
+            height: 280px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 3px solid #fff;
             color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 25px;
         }
 
-        .hit { background-color: #00ff66 !important; color: #0b0c10 !important; }
-        .miss { background-color: #ff3333 !important; color: #fff !important; }
-        .pending { background-color: #2b3a4a !important; color: rgba(255,255,255,0.4) !important; }
+        .fut-card .avatar-icon { font-size: 4.5rem; color: rgba(0,0,0,0.7); margin-bottom: 10px; }
+        .fut-card .leader-name { font-size: 1.2rem; font-weight: 900; text-transform: uppercase; text-align: center; width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .fut-card .leader-stat-badge { background: #000; color: #fff; padding: 5px 15px; font-weight: 800; border-radius: 20px; font-size: 0.9rem; margin-top: 15px; position: absolute; bottom: 30px;}
 
         /* FOOTER */
         footer {
-            background: #050508;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background-color: var(--bg-body);
+            border-top: 1px solid var(--border-card);
             text-align: center;
             padding: 25px;
             position: fixed;
             bottom: 0;
+            left: 0;
             width: 100%;
-            z-index: 10;
+            z-index: 100;
         }
 
-        footer p {
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        footer a {
-            color: var(--text-neon);
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--text-secondary);
-            text-shadow: 0 0 8px var(--text-secondary);
-        }
-
-        @media (max-width: 768px) {
-            .podium-section { grid-template-columns: 1fr; }
-            .podium-card.oro, .podium-card.plata, .podium-card.bronce { height: auto; order: initial !important; }
-            header { flex-direction: column; gap: 15px; text-align: center; }
-        }
+        footer p { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px;}
+        footer a { color: var(--text-gold); text-decoration: none; font-weight: 800;}
+        footer a:hover { text-shadow: 0 0 10px var(--text-gold); }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-area">
-            <h1>Quiniela <span>Mundial 2026</span></h1>
-        </div>
-        <div class="update-badge" id="last-update">
-            <i class="fa-solid fa-clock"></i> Actualizado el: Detectando...
-        </div>
-    </header>
-
-    <div class="container">
+    <div class="dashboard-container">
         
-        <!-- PODIO TOP 3 -->
-        <h2 class="section-title">Líderes de la Jornada</h2>
-        <div class="podium-section" id="podium-container"></div>
+        <!-- HEADER -->
+        <header class="main-header">
+            <div class="header-title">
+                <h1><i class="fa-solid fa-soccer-ball"></i> Quiniela Mundial 2026</h1>
+                <p id="last-update">Actualizando datos...</p>
+            </div>
+            <div class="premium-badge"><i class="fa-solid fa-trophy"></i> Premium Stadium</div>
+        </header>
 
-        <!-- TABLA GENERAL -->
-        <h2 class="section-title">Tabla General de Posiciones</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 70px;">Pos</th>
-                        <th>Participante</th>
-                        <th>Partidos Jugados</th>
-                        <th>Aciertos</th>
-                        <th>Puntos Totales</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body"></tbody>
-            </table>
+        <!-- RECUADROS INFORMATIVOS (KPIS) -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Líder Actual</h3>
+                    <div class="kpi-value" id="kpi-leader" style="color: var(--text-gold); font-size: 1.4rem; text-transform: uppercase;">-</div>
+                </div>
+                <i class="fa-solid fa-medal"></i>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Partidos Jugados</h3>
+                    <div class="kpi-value" id="kpi-played" style="color: var(--text-neon);">0 / 72</div>
+                </div>
+                <i class="fa-solid fa-chart-bar"></i>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Máximo Aciertos</h3>
+                    <div class="kpi-value" id="kpi-max" style="color: var(--text-blue);">0</div>
+                </div>
+                <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Participantes</h3>
+                    <div class="kpi-value" id="kpi-count">0</div>
+                </div>
+                <i class="fa-solid fa-users"></i>
+            </div>
+        </section>
+
+        <!-- CONTENIDO INTERMEDIO (TABLA Y TARJETA LÍDER) -->
+        <div class="main-content-layout">
+            
+            <!-- PANEL TABLA DE POSICIONES -->
+            <div class="panel-box">
+                <div class="panel-title"><i class="fa-solid fa-list-ol" style="color: var(--text-blue);"></i> Tabla de Posiciones en Vivo</div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">Pos</th>
+                                <th>Participante</th>
+                                <th>Partidos Jugados</th>
+                                <th>Aciertos</th>
+                                <th style="text-align: right;">Puntos Totales</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Inyección dinámica -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PANEL TARJETA LÍDER FUT -->
+            <div class="panel-box">
+                <div class="panel-title"><i class="fa-solid fa-id-card" style="color: var(--text-gold);"></i> Tarjeta FIFA Líder</div>
+                <div class="fifa-card-container">
+                    <div class="fut-card">
+                        <div class="avatar-icon"><i class="fa-solid fa-user-shield"></i></div>
+                        <div class="leader-name" id="card-name">PENDIENTE</div>
+                        <div class="leader-stat-badge" id="card-pts">0 PTS</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- HEATMAP -->
-        <h2 class="section-title">Matriz de Rendimiento (Heatmap)</h2>
-        <div class="heatmap-grid">
-            <table class="heatmap-table">
-                <thead id="heatmap-head"></thead>
-                <tbody id="heatmap-body"></tbody>
-            </table>
+        <!-- PANEL HISTORIAL / HEATMAP COMPLETO ABAJO -->
+        <div class="panel-box">
+            <div class="panel-title"><i class="fa-solid fa-fire" style="color: #ff5252;"></i> Historial de Aciertos por Partido (Heatmap)</div>
+            <div class="heatmap-container">
+                <table class="heatmap-table">
+                    <thead id="heatmap-head"></thead>
+                    <tbody id="heatmap-body"></tbody>
+                </table>
+            </div>
         </div>
 
     </div>
 
+    <!-- FOOTER SOLICITADO -->
     <footer>
-        <p>Creado por <a href="https://www.facebook.com/tuxmar" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Derechos Reservados &copy; 2026</p>
+        <p>Creado por <a href="https://www.facebook.com/tuxmar" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
     </footer>
 
     <script>
-        // Rutas locales relativas (asumiendo que están en la misma carpeta)
-        const URL_MUNDIAL = 'mundial.csv';
-        const URL_PARTICIPANTES = 'participantes.cvs'; // conserva la extensión .cvs que especificaste
+        // Forzamos rutas dinámicas sin importar si estás en local o en servidor (GitHub Pages)
+        const URL_MUNDIAL = './mundial.csv?v=' + Date.now();
+        const URL_PARTICIPANTES = './participantes.cvs?v=' + Date.now();
 
         function parseCSV(text) {
-            const lines = text.split('\n').map(line => line.trim()).filter(line => line !== '');
-            if(lines.length === 0) return [];
-            
-            const headers = lines[0].split(',');
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (lines.length === 0) return [];
+            const headers = lines[0].split(',').map(h => h.trim());
             return lines.slice(1).map(line => {
                 const values = line.split(',');
                 const obj = {};
                 headers.forEach((header, index) => {
-                    obj[header.trim()] = values[index] ? values[index].trim() : "";
+                    obj[header] = values[index] ? values[index].trim() : "";
                 });
                 return obj;
             });
         }
 
-        async function initDashboard() {
+        async function cargarQuiniela() {
             try {
-                // 1. Obtener datos de mundial.csv y su fecha de modificación en el servidor
+                // Intentar leer mundial.csv
                 const resMundial = await fetch(URL_MUNDIAL);
-                if (!resMundial.ok) throw new Error("No se pudo cargar mundial.csv");
-                
-                // Extraer la fecha 'Last-Modified' del servidor de hosting
-                const lastModifiedHeader = resMundial.headers.get('Last-Modified');
-                if (lastModifiedHeader) {
-                    const dateObj = new Date(lastModifiedHeader);
-                    document.getElementById('last-update').innerHTML = `<i class="fa-solid fa-clock"></i> Actualizado el: ${dateObj.toLocaleString('es-MX')}`;
-                } else {
-                    document.getElementById('last-update').innerHTML = `<i class="fa-solid fa-clock"></i> Actualizado el: Recién sincronizado`;
-                }
-                
-                const mundialText = await resMundial.text();
-                const mundialData = parseCSV(mundialText);
+                if (!resMundial.ok) throw new Error();
+                const textMundial = await resMundial.text();
+                const mundialData = parseCSV(textMundial);
 
-                // 2. Obtener datos de participantes.cvs
+                // Intentar leer participantes.cvs
                 const resPart = await fetch(URL_PARTICIPANTES);
-                if (!resPart.ok) throw new Error("No se pudo cargar participantes.cvs");
-                const partText = await resPart.text();
-                const participantesData = parseCSV(partText);
+                if (!resPart.ok) throw new Error();
+                const textPart = await resPart.text();
+                const participantesData = parseCSV(textPart);
 
-                // Mapear partidos jugados con resultado cargado
+                // Procesar la fecha de modificación real
+                const lastMod = resMundial.headers.get('Last-Modified');
+                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA ACTUALIZACIÓN DEL SERVIDOR: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
+
+                // Mapear resultados reales
                 const partidosReales = {};
+                let countJugados = 0;
                 mundialData.forEach(p => {
-                    if(p.RESULTADO && p.RESULTADO.trim() !== "") {
+                    if (p.RESULTADO && p.RESULTADO.trim() !== "") {
                         partidosReales[p.ID_PARTIDO] = p.RESULTADO.trim().toUpperCase();
+                        countJugados++;
                     }
                 });
 
-                // Calcular puntajes de los participantes
+                // Procesar puntuaciones de los participantes
                 const tablaPosiciones = [];
                 participantesData.forEach(p => {
-                    if(!p.nombre) return; // saltar líneas vacías
+                    if (!p.nombre) return;
                     let aciertos = 0;
-                    let jugados = 0;
 
                     Object.keys(partidosReales).forEach(idMatch => {
-                        if (p[idMatch]) {
-                            jugados++;
-                            if (p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
-                                aciertos++;
-                            }
+                        if (p[idMatch] && p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
+                            aciertos++;
                         }
                     });
 
                     tablaPosiciones.push({
                         nombre: p.nombre,
-                        jugados: jugados,
+                        jugados: countJugados,
                         aciertos: aciertos,
                         puntos: aciertos * 1, // 1 punto por acierto
                         predicciones: p
                     });
                 });
 
-                // Ordenar por puntos desc, luego por aciertos
+                // Ordenar líderes
                 tablaPosiciones.sort((a, b) => b.puntos - a.puntos || b.aciertos - a.aciertos);
 
-                // Agrupación para Podios (Manejo exacto de empates Oro/Plata/Bronce)
-                const agrupadosPorPuntos = [];
-                tablaPosiciones.forEach(p => {
-                    let grupo = agrupadosPorPuntos.find(g => g.puntos === p.puntos);
-                    if(!grupo) {
-                        grupo = { puntos: p.puntos, nombres: [] };
-                        agrupadosPorPuntos.push(grupo);
-                    }
-                    grupo.nombres.push(p.nombre.toUpperCase());
-                });
+                // ACTUALIZAR KPIS ARRIBA
+                if (tablaPosiciones.length > 0) {
+                    document.getElementById('kpi-leader').innerText = tablaPosiciones[0].nombre;
+                    document.getElementById('kpi-max').innerText = tablaPosiciones[0].puntos;
+                    document.getElementById('card-name').innerText = tablaPosiciones[0].nombre.toUpperCase();
+                    document.getElementById('card-pts').innerText = `${tablaPosiciones[0].puntos} PTS`;
+                }
+                document.getElementById('kpi-played').innerText = `${countJugados} / 72`;
+                document.getElementById('kpi-count').innerText = tablaPosiciones.length;
 
-                // Renderizar Podio
-                const podiumContainer = document.getElementById('podium-container');
-                podiumContainer.innerHTML = '';
-                
-                const medallas = [
-                    { clase: 'oro', icon: 'fa-trophy', label: 'Oro', index: 1 },
-                    { clase: 'plata', icon: 'fa-medal', label: 'Plata', index: 2 },
-                    { clase: 'bronce', icon: 'fa-award', label: 'Bronce', index: 3 }
-                ];
-
-                const posicionesPodio = [1, 0, 2]; // Orden visual deportivo: Plata - Oro - Bronce
-                posicionesPodio.forEach(idx => {
-                    const medalla = medallas[idx];
-                    const grupo = agrupadosPorPuntos[medalla.index - 1];
-
-                    if(grupo) {
-                        const nombresStr = grupo.nombres.join(' / ');
-                        const cardHtml = `
-                            <div class="podium-card ${medalla.clase} p-${medalla.index}">
-                                <div class="medal-icon"><i class="fa-solid ${medalla.icon}"></i></div>
-                                <h3>Lugar de ${medalla.label}</h3>
-                                <div class="podium-names">${nombresStr}</div>
-                                <div class="podium-pts">${grupo.puntos} PTS</div>
-                            </div>
-                        `;
-                        podiumContainer.insertAdjacentHTML('beforeend', cardHtml);
-                    }
-                });
-
-                // Renderizar Tabla General
+                // RENDERIZAR TABLA DE POSICIONES
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
-
                 let rank = 1;
-                tablaPosiciones.forEach((p, index) => {
-                    if (index > 0 && p.puntos < tablaPosiciones[index - 1].puntos) {
-                        rank = index + 1;
-                    }
-                    const row = `
+                tablaPosiciones.forEach((p, idx) => {
+                    if (idx > 0 && p.puntos < tablaPosiciones[idx - 1].puntos) rank = idx + 1;
+                    leaderboardBody.insertAdjacentHTML('beforeend', `
                         <tr>
                             <td class="rank-number">#${rank}</td>
-                            <td style="color: #fff; font-weight: 600;">${p.nombre.toUpperCase()}</td>
+                            <td class="user-name">${p.nombre.toUpperCase()}</td>
                             <td>${p.jugados}</td>
                             <td>${p.aciertos}</td>
-                            <td><span class="pts-badge">${p.puntos} PTS</span></td>
+                            <td class="pts-count" style="text-align: right;">${p.puntos} PTS</td>
                         </tr>
-                    `;
-                    leaderboardBody.insertAdjacentHTML('beforeend', row);
+                    `);
                 });
 
-                // Renderizar Heatmap
+                // RENDERIZAR HEATMAP (CABECERA)
                 const heatmapHead = document.getElementById('heatmap-head');
-                const heatmapBody = document.getElementById('heatmap-body');
-                
-                let headHtml = `<tr><th class="name-col">Participante</th>`;
+                let headHtml = `<tr><th class="sticky-col">Participante</th>`;
                 mundialData.forEach(p => {
-                    headHtml += `<th>${p.ID_PARTIDO}<br><small style="color:var(--text-secondary)">${p.ABREVIATURA}</small></th>`;
+                    headHtml += `<th>${p.ID_PARTIDO.split('-')[1]}<br><small style="color:var(--text-blue)">${p.ABREVIATURA}</small></th>`;
                 });
                 headHtml += `</tr>`;
                 heatmapHead.innerHTML = headHtml;
 
-                let bodyHtml = '';
+                // RENDERIZAR HEATMAP (FILAS)
+                const heatmapBody = document.getElementById('heatmap-body');
+                heatmapBody.innerHTML = '';
                 tablaPosiciones.forEach(p => {
-                    bodyHtml += `<tr><td class="name-col">${p.nombre.toUpperCase()}</td>`;
+                    let rowHtml = `<tr><td class="sticky-col">${p.nombre.toUpperCase()}</td>`;
                     mundialData.forEach(m => {
                         const pred = p.predicciones[m.ID_PARTIDO] ? p.predicciones[m.ID_PARTIDO].trim().toUpperCase() : '';
                         const real = partidosReales[m.ID_PARTIDO] || '';
-                        
-                        let claseCelda = 'pending';
-                        if(real !== '') {
-                            claseCelda = (pred === real) ? 'hit' : 'miss';
+                        let cellClass = 'c-pending';
+                        if (real !== '') {
+                            cellClass = (pred === real) ? 'c-hit' : 'c-miss';
                         }
-                        bodyHtml += `<td class="cell-prediction ${claseCelda}" title="${p.nombre} apostó: ${pred || 'N/A'} | Real: ${real || 'Pendiente'}">${pred || '-'}</td>`;
+                        rowHtml += `<td class="${cellClass}">${pred || '-'}</td>`;
                     });
-                    bodyHtml += `</tr>`;
+                    rowHtml += `</tr>`;
+                    heatmapBody.insertAdjacentHTML('beforeend', rowHtml);
                 });
-                heatmapBody.innerHTML = bodyHtml;
 
-            } catch (error) {
-                console.error("Error cargando la quiniela:", error);
-                document.getElementById('last-update').innerText = "Error al cargar archivos locales (.csv)";
+            } catch (err) {
+                console.error(err);
+                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252; background:rgba(255,82,82,0.1); padding:5px 10px; border-radius:5px;">Error al cargar archivos locales (.csv). Verifica que estén en la misma carpeta.</span>`;
             }
         }
 
-        window.onload = initDashboard;
+        window.onload = cargarQuiniela;
     </script>
 </body>
 </html>
