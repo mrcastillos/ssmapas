@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2 PRO PLUS</title>
+    <!-- Google Fonts, FontAwesome & Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --bg-body: #020612;
+            --bg-card: #091124;
+            --border-card: #14254b;
+            --text-neon: #00ff66;
+            --text-blue: #00e5ff;
+            --text-gold: #ffb703;
+            --text-light: #8fa0bc;
+            --text-white: #ffffff;
+            --oro: linear-gradient(135deg, #ffe066 0%, #f5b041 100%);
+            --plata: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+            --bronce: linear-gradient(135deg, #edae7e 0%, #a0522d 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 30px;
+            padding-bottom: 140px;
+        }
+
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* HEADER */
+        .main-header {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-left: 6px solid var(--text-gold);
+            border-radius: 12px;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            color: var(--text-white);
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .animated-trophy {
+            color: var(--text-gold);
+            animation: pulseGlow 2s infinite alternate;
+            text-shadow: 0 0 15px rgba(255, 183, 3, 0.6);
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255,183,3,0.4)); }
+            100% { transform: scale(1.1); filter: drop-shadow(0 0 12px rgba(255,183,3,0.9)); }
+        }
+
+        .header-title p {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+
+        .premium-badge {
+            background: rgba(255, 183, 3, 0.1);
+            border: 1px solid var(--text-gold);
+            color: var(--text-gold);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* PODIO OLÍMPICO */
+        .olympic-podium-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            align-items: flex-end;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .olympic-podium-container { grid-template-columns: 1fr; gap: 25px; }
+        }
+
+        .podium-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .col-plata { order: 1; }
+        .col-oro { order: 2; }
+        .col-bronce { order: 3; }
+
+        .fifa-card-v2 {
+            width: 100%;
+            max-width: 240px;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.1);
+            color: #030814;
+            font-weight: 700;
+        }
+
+        .fifa-card-v2.gold { background: var(--oro); }
+        .fifa-card-v2.silver { background: var(--plata); }
+        .fifa-card-v2.bronze { background: var(--bronce); }
+
+        .fifa-card-v2 .badge-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .fifa-card-v2 .names {
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 10px 0;
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+
+        .fifa-card-v2 .score {
+            background-color: rgba(3, 8, 20, 0.9);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .pedestal {
+            width: 100%;
+            max-width: 240px;
+            background: linear-gradient(180deg, #14254b 0%, #091124 100%);
+            border: 1px solid var(--border-card);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.05);
+        }
+        .col-oro .pedestal { height: 100px; color: rgba(255, 183, 3, 0.1); border-top: 3px solid var(--text-gold); }
+        .col-plata .pedestal { height: 70px; color: rgba(148, 163, 184, 0.1); border-top: 3px solid #94a3b8; }
+        .col-bronce .pedestal { height: 45px; color: rgba(237, 174, 126, 0.1); border-top: 3px solid #edae7e; }
+
+        /* SECCIÓN CENTRAL INTERMEDIA */
+        .main-content-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content-layout { grid-template-columns: 1fr; }
+        }
+
+        .panel-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .panel-title {
+            color: var(--text-white);
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* TABLAS REESTILIZADAS */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            color: var(--text-white);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--border-card);
+            text-align: left;
+        }
+        td {
+            padding: 14px 15px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-bottom: 1px solid rgba(20, 37, 75, 0.5);
+        }
+
+        .rank-number { font-weight: 900; color: var(--text-blue); }
+        .user-name { font-weight: 700; color: var(--text-white); display: flex; align-items: center; gap: 8px;}
+        .pts-count { font-weight: 800; color: var(--text-neon); }
+
+        .trend-up { color: var(--text-neon); }
+        .trend-down { color: #ff5252; }
+        .trend-equal { color: var(--text-blue); opacity: 0.5; }
+
+        /* ANALYTICS BLOCK */
+        .analytics-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .analytics-card {
+            background: rgba(20, 37, 75, 0.2);
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .analytics-card h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-white);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .prob-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        .prob-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(20,37,75,0.4);
+            padding-bottom: 4px;
+        }
+
+        /* Componente Barra de Tendencia Distribuida */
+        .trend-bar-wrapper { margin-top: 10px; }
+        .trend-bar-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        .trend-bar-graphic {
+            display: flex;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #14254b;
+        }
+        .bar-segment { height: 100%; transition: width 0.5s ease; }
+        .bar-segment.local { background-color: var(--text-neon); }
+        .bar-segment.draw { background-color: var(--text-blue); }
+        .bar-segment.visit { background-color: #ff5252; }
+
+        /* CONTENEDOR DE LA GRÁFICA DE TENDENCIAS */
+        .chart-box-wrapper {
+            margin-top: 15px;
+            height: 180px;
+            position: relative;
+        }
+
+        /* HEATMAP */
+        .heatmap-container { max-width: 100%; overflow-x: auto; padding-bottom: 5px; }
+        .heatmap-table th { font-size: 0.65rem; padding: 8px; text-align: center; min-width: 50px; }
+        .heatmap-table td { padding: 8px; text-align: center; font-weight: 800; font-size: 0.8rem; }
+        .heatmap-table .sticky-col {
+            position: sticky; left: 0; background-color: var(--bg-card); z-index: 5;
+            text-align: left; font-weight: 700; color: var(--text-white);
+            border-right: 2px solid var(--border-card); min-width: 140px;
+        }
+
+        .c-hit { background-color: rgba(0, 255, 102, 0.15); color: var(--text-neon); border: 1px solid rgba(0, 255, 102, 0.3); }
+        .c-miss { background-color: rgba(255, 51, 51, 0.15); color: #ff5252; border: 1px solid rgba(255, 51, 51, 0.3); }
+        .c-pending { background-color: rgba(143, 160, 188, 0.05); color: rgba(143, 160, 188, 0.4); border: 1px solid transparent; }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--bg-body); border-top: 1px solid var(--border-card);
+            text-align: center; padding: 25px; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
+        }
+        footer p { font-size: 0.85rem; font-weight: 700;}
+        footer a { color: var(--text-gold); text-decoration: none; font-weight: 800;}
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <!-- HEADER -->
+        <header class="main-header">
+            <div class="header-title">
+                <h1><i class="fa-solid fa-trophy animated-trophy"></i> Quiniela Mundial 2026</h1>
+                <p id="last-update">Sincronizando transmisión...</p>
+            </div>
+            <div class="premium-badge"><i class="fa-solid fa-bolt"></i> Fox Sports Premium</div>
+        </header>
+
+        <!-- TARJETA FIFA WORLD CUP TOP 3 (PODIO OLÍMPICO) -->
+        <h2 style="color: #fff; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: -10px;"><i class="fa-solid fa-star" style="color: var(--text-gold);"></i> Tarjetas FIFA World Cup Top 3</h2>
+        <section class="olympic-podium-container" id="podium-section-container">
+            
+            <!-- SEGUNDO LUGAR (PLATA) -->
+            <div class="podium-column col-plata">
+                <div class="fifa-card-v2 silver">
+                    <div class="badge-title">2do Lugar / Plata</div>
+                    <div class="names" id="podium-silver-names">Calculando...</div>
+                    <div class="score" id="podium-silver-pts">0 PTS</div>
+                </div>
+                <div class="pedestal">2</div>
+            </div>
+
+            <!-- PRIMER LUGAR (ORO) -->
+            <div class="podium-column col-oro">
+                <div class="fifa-card-v2 gold">
+                    <div class="badge-title">1er Lugar / Oro</div>
+                    <div class="names" id="podium-gold-names">Calculando...</div>
+                    <div class="score" id="podium-gold-pts">0 PTS</div>
+                </div>
+                <div class="pedestal">1</div>
+            </div>
+
+            <!-- TERCER LUGAR (BRONCE) -->
+            <div class="podium-column col-bronce">
+                <div class="fifa-card-v2 bronze">
+                    <div class="badge-title">3er Lugar / Bronce</div>
+                    <div class="names" id="podium-bronze-names">Calculando...</div>
+                    <div class="score" id="podium-bronze-pts">0 PTS</div>
+                </div>
+                <div class="pedestal">3</div>
+            </div>
+
+        </section>
+
+        <!-- CONTENIDO INTERMEDIO -->
+        <div class="main-content-layout">
+            
+            <!-- PANEL TABLA DE POSICIONES -->
+            <div class="panel-box">
+                <div class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--text-blue);"></i> Clasificación General de Competidores</div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">Pos</th>
+                                <th>Participante</th>
+                                <th>Acertados</th>
+                                <th style="text-align: right;">Puntos Totales</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PROBABILIDAD DE CAMPEÓN & TOP PICKS -->
+            <div class="panel-box">
+                <div class="panel-title"><i class="fa-solid fa-chart-line" style="color: var(--text-gold);"></i> Analítica de Tendencias</div>
+                <div class="analytics-container">
+                    
+                    <!-- PROBABILIDAD DE CAMPEÓN (TOP 4 DISTRIBUIDO) -->
+                    <div class="analytics-card">
+                        <h4>🏆 Probabilidad de Campeón (Top 4)</h4>
+                        <div class="prob-list" id="an-prob-list"></div>
+                    </div>
+
+                    <!-- TOP PICKS CON BARRA DE RENDIMIENTO 100% -->
+                    <div class="analytics-card">
+                        <h4>🔥 Top Picks (Próximo Favorito)</h4>
+                        <div style="font-weight: 800; color:#fff; font-size:0.95rem; margin-bottom: 5px;" id="next-match-label">Buscando juego...</div>
+                        <div class="trend-bar-wrapper">
+                            <div class="trend-bar-info">
+                                <span style="color: var(--text-neon);" id="lbl-bar-l">L: 0%</span>
+                                <span style="color: var(--text-blue);" id="lbl-bar-e">E: 0%</span>
+                                <span style="color: #ff5252;" id="lbl-bar-v">V: 0%</span>
+                            </div>
+                            <div class="trend-bar-graphic">
+                                <div class="bar-segment local" id="bar-l" style="width: 33.3%"></div>
+                                <div class="bar-segment draw" id="bar-e" style="width: 33.3%"></div>
+                                <div class="bar-segment visit" id="bar-v" style="width: 33.3%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GRÁFICA DE TENDENCIAS EN VIVO -->
+                    <div class="analytics-card">
+                        <h4>📈 Curva de Avance Histórico (Top Líderes)</h4>
+                        <div class="chart-box-wrapper">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- HEATMAP -->
+        <div class="panel-box">
+            <div class="panel-title"><i class="fa-solid fa-border-all" style="color: #ff5252;"></i> Historial Desplegable de Rendimiento</div>
+            <div class="heatmap-container">
+                <table class="heatmap-table">
+                    <thead id="heatmap-head"></thead>
+                    <tbody id="heatmap-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Creado por <a href="https://www.facebook.com/tuxmar" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
+    </footer>
+
+    <script>
+        const URL_MUNDIAL = './mundial.csv';
+        const URL_PARTICIPANTES = './participantes.csv';
+
+        function parseCSV(text) {
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (lines.length === 0) return [];
+            const headers = lines[0].split(',').map(h => h.trim());
+            return lines.slice(1).map(line => {
+                const values = line.split(',');
+                const obj = {};
+                headers.forEach((header, index) => {
+                    obj[header] = values[index] ? values[index].trim() : "";
+                });
+                return obj;
+            });
+        }
+
+        function calcularRanking(participantes, partidosReales, listaPartidosIDs) {
+            const lista = [];
+            participantes.forEach(p => {
+                if (!p.nombre) return;
+                let aciertos = 0;
+                let fallados = 0;
+
+                listaPartidosIDs.forEach(idMatch => {
+                    if (p[idMatch]) {
+                        if (p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
+                            aciertos++;
+                        } else {
+                            fallados++;
+                        }
+                    }
+                });
+
+                lista.push({
+                    nombre: p.nombre.trim(),
+                    aciertos: aciertos,
+                    fallados: fallados,
+                    puntos: aciertos * 1,
+                    predicciones: p
+                });
+            });
+
+            lista.sort((a, b) => b.puntos - a.puntos || a.nombre.localeCompare(b.nombre));
+            return lista;
+        }
+
+        async function cargarQuiniela() {
+            try {
+                const resMundial = await fetch(URL_MUNDIAL + '?v=' + Date.now());
+                if (!resMundial.ok) throw new Error();
+                const textMundial = await resMundial.text();
+                const mundialData = parseCSV(textMundial);
+
+                const resPart = await fetch(URL_PARTICIPANTES + '?v=' + Date.now());
+                if (!resPart.ok) throw new Error();
+                const textPart = await resPart.text();
+                const participantesData = parseCSV(textPart);
+
+                const lastMod = resMundial.headers.get('Last-Modified');
+                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA TRANSMISIÓN EN VIVO: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
+
+                const partidosConResultadoIDs = [];
+                const partidosReales = {};
+                let proximoPartidoID = null;
+                let proximoPartidoAbrev = "";
+
+                mundialData.forEach(p => {
+                    if (p.RESULTADO && p.RESULTADO.trim() !== "") {
+                        partidosReales[p.ID_PARTIDO] = p.RESULTADO.trim().toUpperCase();
+                        partidosConResultadoIDs.push(p.ID_PARTIDO);
+                    } else if (!proximoPartidoID) {
+                        proximoPartidoID = p.ID_PARTIDO;
+                        proximoPartidoAbrev = p.ABREVIATURA;
+                    }
+                });
+
+                const totalJugados = partidosConResultadoIDs.length;
+                const rankingActual = calcularRanking(participantesData, partidosReales, partidosConResultadoIDs);
+
+                // TENDENCIAS HISTÓRICAS DE POSICIÓN
+                let tendencias = {};
+                if (totalJugados > 1) {
+                    const partidosIDsAnterior = partidosConResultadoIDs.slice(0, -1);
+                    const rankingAnterior = calcularRanking(participantesData, partidosReales, partidosIDsAnterior);
+                    let posicionPrevia = 1;
+                    rankingAnterior.forEach((p, idx) => {
+                        if (idx > 0 && p.puntos < rankingAnterior[idx - 1].puntos) posicionPrevia = idx + 1;
+                        tendencias[p.nombre] = posicionPrevia;
+                    });
+                }
+
+                // CÁLCULO DISTRIBUIDO DE PROBABILIDAD DE CAMPEÓN (TOP 4)
+                const probListContainer = document.getElementById('an-prob-list');
+                probListContainer.innerHTML = '';
+                if (rankingActual.length > 0) {
+                    let sumAciertosTop4 = rankingActual.slice(0, 4).reduce((acc, curr) => acc + curr.puntos, 0);
+                    
+                    rankingActual.slice(0, 4).forEach((p, idx) => {
+                        let colorMedal = idx === 0 ? 'var(--text-gold)' : 'var(--text-white)';
+                        let pctPlausible = sumAciertosTop4 > 0 ? Math.round((p.puntos / sumAciertosTop4) * 100) : 25;
+                        probListContainer.insertAdjacentHTML('beforeend', `
+                            <div class="prob-item">
+                                <span style="font-weight:700; color:${colorMedal}">#${idx+1} ${p.nombre.toUpperCase()}</span>
+                                <span style="font-weight:900; color:var(--text-blue)">${pctPlausible}%</span>
+                            </div>
+                        `);
+                    });
+                }
+
+                // CÁLCULO DE LA BARRA DE TENDENCIA DEL PROX PARTIDO (100% DISTRIBUIDO)
+                if (proximoPartidoID) {
+                    document.getElementById('next-match-label').innerText = `${proximoPartidoID} : ${proximoPartidoAbrev.toUpperCase()}`;
+                    let totalVotos = 0;
+                    let votos = { L: 0, E: 0, V: 0 };
+                    
+                    participantesData.forEach(p => {
+                        let pred = p[proximoPartidoID] ? p[proximoPartidoID].trim().toUpperCase() : '';
+                        if (votos[pred] !== undefined) {
+                            votos[pred]++;
+                            totalVotos++;
+                        }
+                    });
+
+                    if (totalVotos > 0) {
+                        let pctL = Math.round((votos['L'] / totalVotos) * 100);
+                        let pctE = Math.round((votos['E'] / totalVotos) * 100);
+                        let pctV = 100 - (pctL + pctE);
+                        if(votos['V'] === 0) pctV = 0;
+
+                        document.getElementById('lbl-bar-l').innerText = `L: ${pctL}%`;
+                        document.getElementById('lbl-bar-e').innerText = `E: ${pctE}%`;
+                        document.getElementById('lbl-bar-v').innerText = `V: ${pctV}%`;
+
+                        document.getElementById('bar-l').style.width = `${pctL}%`;
+                        document.getElementById('bar-e').style.width = `${pctE}%`;
+                        document.getElementById('bar-v').style.width = `${pctV}%`;
+                    }
+                } else {
+                    document.getElementById('next-match-label').innerText = "Fase de Grupos Completada";
+                }
+
+                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO
+                const leaderboardBody = document.getElementById('leaderboard-body');
+                leaderboardBody.innerHTML = '';
+                
+                let rank = 1;
+                rankingActual.forEach((p, idx) => {
+                    if (idx > 0 && p.puntos < rankingActual[idx - 1].puntos) rank = idx + 1;
+                    
+                    let iconTrend = '<i class="fa-solid fa-minus trend-equal"></i>'; 
+                    if (tendencias[p.nombre]) {
+                        const rankViejo = tendencias[p.nombre];
+                        if (rank < rankViejo) {
+                            iconTrend = `<i class="fa-solid fa-arrow-trend-up trend-up"></i>`;
+                        } else if (rank > rankViejo) {
+                            iconTrend = `<i class="fa-solid fa-arrow-trend-down trend-down"></i>`;
+                        }
+                    }
+
+                    leaderboardBody.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td class="rank-number">#${rank}</td>
+                            <td class="user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
+                            <td>${p.aciertos}</td>
+                            <td class="pts-count" style="text-align: right;">${p.puntos} PTS</td>
+                        </tr>
+                    `);
+                });
+
+                // RENDERIZAR PODIO OLÍMPICO (TOP 3)
+                const gruposPuntajes = [];
+                rankingActual.forEach(p => {
+                    let g = gruposPuntajes.find(x => x.puntos === p.puntos);
+                    if (!g) {
+                        g = { puntos: p.puntos, nombres: [] };
+                        gruposPuntajes.push(g);
+                    }
+                    g.nombres.push(p.nombre.toUpperCase());
+                });
+
+                if (gruposPuntajes[0]) {
+                    document.getElementById('podium-gold-names').innerText = gruposPuntajes[0].nombres.join(' / ');
+                    document.getElementById('podium-gold-pts').innerText = `${gruposPuntajes[0].puntos} PTS`;
+                }
+                if (gruposPuntajes[1]) {
+                    document.getElementById('podium-silver-names').innerText = gruposPuntajes[1].nombres.join(' / ');
+                    document.getElementById('podium-silver-pts').innerText = `${gruposPuntajes[1].puntos} PTS`;
+                } else {
+                    document.getElementById('podium-silver-names').innerText = "PENDIENTE";
+                }
+                if (gruposPuntajes[2]) {
+                    document.getElementById('podium-bronze-names').innerText = gruposPuntajes[2].nombres.join(' / ');
+                    document.getElementById('podium-bronze-pts').innerText = `${gruposPuntajes[2].puntos} PTS`;
+                } else {
+                    document.getElementById('podium-bronze-names').innerText = "PENDIENTE";
+                }
+
+                // CÁLCULO ESTADÍSTICO PARA GENERAR LA GRÁFICA DE LÍNEAS (Evolución de los 3 mejores líderes)
+                const top3Nombres = rankingActual.slice(0, 3).map(p => p.nombre);
+                const datasetsGrafica = top3Nombres.map((nombre, i) => {
+                    let ptsAcumulados = 0;
+                    let dataPuntos = [];
+                    let pData = participantesData.find(x => x.nombre && x.nombre.trim() === nombre);
+                    
+                    partidosConResultadoIDs.forEach(idMatch => {
+                        if(pData && pData[idMatch] && pData[idMatch].trim().toUpperCase() === partidosReales[idMatch]){
+                            ptsAcumulados++;
+                        }
+                        dataPuntos.push(ptsAcumulados);
+                    });
+
+                    const coloresLinea = ['#ffb703', '#94a3b8', '#edae7e'];
+                    return {
+                        label: nombre.toUpperCase(),
+                        data: dataPuntos,
+                        borderColor: coloresLinea[i] || '#00e5ff',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        tension: 0.2,
+                        pointRadius: 0
+                    };
+                });
+
+                // Crear etiquetas de eje X (Juegos 1, 2, 3...)
+                const labelsX = partidosConResultadoIDs.map((_, idx) => `J${idx+1}`);
+
+                // Inicializar Chart.js en el Canvas
+                const ctx = document.getElementById('trendChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: labelsX, datasets: datasetsGrafica },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#fff', font: { family: 'Montserrat', weight: 'bold', size: 10 } } } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#8fa0bc', font: { size: 9 } } },
+                            y: { grid: { color: 'rgba(20,37,75,0.3)' }, ticks: { color: '#8fa0bc', font: { size: 9 } } }
+                        }
+                    }
+                });
+
+                // RENDERIZAR CABECERA DEL HEATMAP
+                const heatmapHead = document.getElementById('heatmap-head');
+                let headHtml = `<tr><th class="sticky-col">Participante</th>`;
+                mundialData.forEach(p => {
+                    headHtml += `<th>${p.ID_PARTIDO.split('-')[1]}<br><small style="color:var(--text-blue)">${p.ABREVIATURA}</small></th>`;
+                });
+                headHtml += `</tr>`;
+                heatmapHead.innerHTML = headHtml;
+
+                // RENDERIZAR FILAS DEL HEATMAP
+                const heatmapBody = document.getElementById('heatmap-body');
+                heatmapBody.innerHTML = '';
+                rankingActual.forEach(p => {
+                    let rowHtml = `<tr><td class="sticky-col">${p.nombre.toUpperCase()}</td>`;
+                    mundialData.forEach(m => {
+                        const pred = p.predicciones[m.ID_PARTIDO] ? p.predicciones[m.ID_PARTIDO].trim().toUpperCase() : '';
+                        const real = partidosReales[m.ID_PARTIDO] || '';
+                        let cellClass = 'c-pending';
+                        if (real !== '') {
+                            cellClass = (pred === real) ? 'c-hit' : 'c-miss';
+                        }
+                        rowHtml += `<td class="${cellClass}">${pred || '-'}</td>`;
+                    });
+                    rowHtml += `</tr>`;
+                    heatmapBody.insertAdjacentHTML('beforeend', rowHtml);
+                });
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252;">Error de sincronización con los archivos locales.</span>`;
+            }
+        }
+
+        window.onload = cargarQuiniela;
+    </script>
+</body>
+</html>
