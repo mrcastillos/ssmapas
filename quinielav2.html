@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2 PRO</title>
-    <!-- Google Fonts & FontAwesome -->
+    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2 PRO PLUS</title>
+    <!-- Google Fonts, FontAwesome & Chart.js -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
@@ -34,8 +35,12 @@
             background-color: var(--bg-body);
             color: var(--text-light);
             min-height: 100vh;
-            padding: 30px;
+            padding: 15px;
             padding-bottom: 140px;
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 30px; padding-bottom: 140px; }
         }
 
         .dashboard-container {
@@ -46,26 +51,35 @@
             gap: 25px;
         }
 
-        /* HEADER CON COPA ANIMADA */
+        /* HEADER OPTIMIZADO */
         .main-header {
             background-color: var(--bg-card);
             border: 1px solid var(--border-card);
             border-left: 6px solid var(--text-gold);
             border-radius: 12px;
-            padding: 25px 30px;
+            padding: 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        @media (min-width: 768px) {
+            .main-header { padding: 25px 30px; flex-direction: row; justify-content: space-between; align-items: center; }
         }
 
         .header-title h1 {
             color: var(--text-white);
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 900;
             text-transform: uppercase;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .header-title h1 { font-size: 1.8rem; }
         }
 
         .animated-trophy {
@@ -80,40 +94,40 @@
         }
 
         .header-title p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             color: var(--text-light);
             margin-top: 5px;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .premium-badge {
-            background: rgba(255, 183, 3, 0.1);
-            border: 1px solid var(--text-gold);
-            color: var(--text-gold);
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid var(--text-neon);
+            color: var(--text-neon);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* PODIO ESTILO OLÍMPICO CON TARJETA FIFA */
+        /* PODIO RESPONSIVO INTELIGENTE */
         .olympic-podium-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            align-items: flex-end;
+            grid-template-columns: 1fr;
+            gap: 20px;
             background-color: var(--bg-card);
             border: 1px solid var(--border-card);
             border-radius: 12px;
-            padding: 30px;
+            padding: 20px;
             margin-top: 10px;
         }
 
-        @media (max-width: 768px) {
-            .olympic-podium-container { grid-template-columns: 1fr; gap: 25px; }
+        @media (min-width: 768px) {
+            .olympic-podium-container { grid-template-columns: repeat(3, 1fr); gap: 15px; align-items: flex-end; padding: 30px; }
         }
 
         .podium-column {
@@ -121,15 +135,24 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
+            width: 100%;
         }
 
-        .col-plata { order: 1; }
-        .col-oro { order: 2; }
+        /* En celulares: Oro arriba(1), Plata medio(2), Bronce abajo(3) */
+        .col-oro { order: 1; }
+        .col-plata { order: 2; }
         .col-bronce { order: 3; }
+
+        /* En computadoras: Mantenemos el orden de TV Olímpica (Plata - Oro - Bronce) */
+        @media (min-width: 768px) {
+            .col-plata { order: 1; }
+            .col-oro { order: 2; }
+            .col-bronce { order: 3; }
+        }
 
         .fifa-card-v2 {
             width: 100%;
-            max-width: 240px;
+            max-width: 260px;
             border-radius: 14px;
             padding: 20px;
             text-align: center;
@@ -173,45 +196,53 @@
         }
 
         .pedestal {
+            display: none; /* Se oculta en celulares para ahorrar espacio */
             width: 100%;
-            max-width: 240px;
+            max-width: 260px;
             background: linear-gradient(180deg, #14254b 0%, #091124 100%);
             border: 1px solid var(--border-card);
             border-bottom: none;
             border-radius: 8px 8px 0 0;
             margin-top: 15px;
-            display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.5rem;
             font-weight: 900;
             color: rgba(255,255,255,0.05);
         }
-        .col-oro .pedestal { height: 100px; color: rgba(255, 183, 3, 0.1); border-top: 3px solid var(--text-gold); }
-        .col-plata .pedestal { height: 70px; color: rgba(148, 163, 184, 0.1); border-top: 3px solid #94a3b8; }
-        .col-bronce .pedestal { height: 45px; color: rgba(237, 174, 126, 0.1); border-top: 3px solid #edae7e; }
 
-        /* SECCIÓN CENTRAL INTERMEDIA */
+        @media (min-width: 768px) {
+            .pedestal { display: flex; }
+            .col-oro .pedestal { height: 100px; color: rgba(255, 183, 3, 0.1); border-top: 3px solid var(--text-gold); }
+            .col-plata .pedestal { height: 70px; color: rgba(148, 163, 184, 0.1); border-top: 3px solid #94a3b8; }
+            .col-bronce .pedestal { height: 45px; color: rgba(237, 174, 126, 0.1); border-top: 3px solid #edae7e; }
+        }
+
+        /* LAYOUT CENTRAL */
         .main-content-layout {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr;
             gap: 20px;
         }
 
-        @media (max-width: 1024px) {
-            .main-content-layout { grid-template-columns: 1fr; }
+        @media (min-width: 1024px) {
+            .main-content-layout { grid-template-columns: 2fr 1fr; }
         }
 
         .panel-box {
             background-color: var(--bg-card);
             border: 1px solid var(--border-card);
             border-radius: 12px;
-            padding: 25px;
+            padding: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .panel-box { padding: 25px; }
         }
 
         .panel-title {
             color: var(--text-white);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
             text-transform: uppercase;
             margin-bottom: 20px;
@@ -220,9 +251,15 @@
             gap: 12px;
         }
 
-        /* TABLAS REESTILIZADAS */
-        .table-responsive { overflow-x: auto; }
+        /* NUEVA ESTRUCTURA DE DESPLAZAMIENTO FLUIDO CON COLUMNA FIJA PARA AMBAS TABLAS */
+        .table-responsive {
+            max-width: 100%;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
         table { width: 100%; border-collapse: collapse; }
+        
         th {
             color: var(--text-white);
             font-size: 0.75rem;
@@ -231,110 +268,62 @@
             padding: 12px 15px;
             border-bottom: 2px solid var(--border-card);
             text-align: left;
+            white-space: nowrap;
         }
+        
         td {
             padding: 14px 15px;
             font-size: 0.9rem;
             color: var(--text-light);
             border-bottom: 1px solid rgba(20, 37, 75, 0.5);
+            white-space: nowrap;
+        }
+
+        /* Congelamos de forma idéntica la columna de nombres en ambas tablas para celulares */
+        table .sticky-col {
+            position: sticky;
+            left: 0;
+            background-color: var(--bg-card);
+            z-index: 5;
+            text-align: left;
+            border-right: 2px solid var(--border-card);
+            min-width: 140px;
         }
 
         .rank-number { font-weight: 900; color: var(--text-blue); }
         .user-name { font-weight: 700; color: var(--text-white); display: flex; align-items: center; gap: 8px;}
-        .pts-count { font-weight: 800; color: var(--text-neon); }
+        .pts-count { font-weight: 800; color: var(--text-neon); text-align: right; }
 
         .trend-up { color: var(--text-neon); }
         .trend-down { color: #ff5252; }
         .trend-equal { color: var(--text-blue); opacity: 0.5; }
 
-        /* RECUADROS DE RACHA HISTÓRICA (AVANCE) */
-        .streak-container {
-            display: flex;
-            gap: 5px;
-        }
-        .streak-dot {
-            width: 22px;
-            height: 22px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-        }
-        .streak-dot.w { background-color: var(--text-neon); }
-        .streak-dot.l { background-color: #ff5252; color: #fff; }
-
-        /* ANALYTICS BLOCK */
-        .analytics-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
+        /* ANALYTICS */
+        .analytics-container { display: flex; flex-direction: column; gap: 15px; }
         .analytics-card {
             background: rgba(20, 37, 75, 0.2);
             border: 1px solid var(--border-card);
             border-radius: 8px;
             padding: 15px;
         }
+        .analytics-card h4 { font-size: 0.75rem; text-transform: uppercase; color: var(--text-white); margin-bottom: 8px; }
+        
+        .prob-list { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
+        .prob-item { display: flex; justify-content: space-between; font-size: 0.85rem; border-bottom: 1px solid rgba(20,37,75,0.4); padding-bottom: 4px; }
 
-        .analytics-card h4 {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-white);
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        /* Lista distribuciones probabilidad */
-        .prob-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 5px;
-        }
-        .prob-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            border-bottom: 1px solid rgba(20,37,75,0.4);
-            padding-bottom: 4px;
-        }
-
-        /* Componente Barra de Tendencia Distribuida */
-        .trend-bar-wrapper {
-            margin-top: 10px;
-        }
-        .trend-bar-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
-        .trend-bar-graphic {
-            display: flex;
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-            background: #14254b;
-        }
+        .trend-bar-wrapper { margin-top: 10px; }
+        .trend-bar-info { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; font-weight: 700; }
+        .trend-bar-graphic { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: #14254b; }
         .bar-segment { height: 100%; transition: width 0.5s ease; }
         .bar-segment.local { background-color: var(--text-neon); }
         .bar-segment.draw { background-color: var(--text-blue); }
         .bar-segment.visit { background-color: #ff5252; }
 
+        .chart-box-wrapper { margin-top: 15px; height: 180px; position: relative; }
+
         /* HEATMAP */
-        .heatmap-container { max-width: 100%; overflow-x: auto; padding-bottom: 5px; }
         .heatmap-table th { font-size: 0.65rem; padding: 8px; text-align: center; min-width: 50px; }
         .heatmap-table td { padding: 8px; text-align: center; font-weight: 800; font-size: 0.8rem; }
-        .heatmap-table .sticky-col {
-            position: sticky; left: 0; background-color: var(--bg-card); z-index: 5;
-            text-align: left; font-weight: 700; color: var(--text-white);
-            border-right: 2px solid var(--border-card); min-width: 140px;
-        }
 
         .c-hit { background-color: rgba(0, 255, 102, 0.15); color: var(--text-neon); border: 1px solid rgba(0, 255, 102, 0.3); }
         .c-miss { background-color: rgba(255, 51, 51, 0.15); color: #ff5252; border: 1px solid rgba(255, 51, 51, 0.3); }
@@ -401,18 +390,17 @@
         <!-- CONTENIDO INTERMEDIO -->
         <div class="main-content-layout">
             
-            <!-- PANEL TABLA DE POSICIONES -->
+            <!-- PANEL TABLA DE POSICIONES OPTIMIZADA PARA CELULARES -->
             <div class="panel-box">
                 <div class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--text-blue);"></i> Clasificación General de Competidores</div>
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
-                                <th style="width: 60px;">Pos</th>
-                                <th>Participante</th>
+                                <th style="width: 50px;">Pos</th>
+                                <th class="sticky-col">Participante</th>
                                 <th>Acertados</th>
                                 <th>Fallados</th>
-                                <th>Evolución Reciente (Últimos 5)</th>
                                 <th style="text-align: right;">Puntos Totales</th>
                             </tr>
                         </thead>
@@ -426,15 +414,13 @@
                 <div class="panel-title"><i class="fa-solid fa-chart-line" style="color: var(--text-gold);"></i> Analítica de Tendencias</div>
                 <div class="analytics-container">
                     
-                    <!-- PROBABILIDAD DE CAMPEÓN (TOP 4 DISTRIBUIDO) -->
+                    <!-- PROBABILIDAD DE CAMPEÓN -->
                     <div class="analytics-card">
                         <h4>🏆 Probabilidad de Campeón (Top 4)</h4>
-                        <div class="prob-list" id="an-prob-list">
-                            <!-- Inyección dinámica de los 4 mejores de la jornada -->
-                        </div>
+                        <div class="prob-list" id="an-prob-list"></div>
                     </div>
 
-                    <!-- TOP PICKS CON BARRA DE RENDIMIENTO 100% -->
+                    <!-- TOP PICKS CON BARRA -->
                     <div class="analytics-card">
                         <h4>🔥 Top Picks (Próximo Favorito)</h4>
                         <div style="font-weight: 800; color:#fff; font-size:0.95rem; margin-bottom: 5px;" id="next-match-label">Buscando juego...</div>
@@ -449,6 +435,14 @@
                                 <div class="bar-segment draw" id="bar-e" style="width: 33.3%"></div>
                                 <div class="bar-segment visit" id="bar-v" style="width: 33.3%"></div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- GRÁFICA DE TENDENCIAS -->
+                    <div class="analytics-card">
+                        <h4>📈 Curva de Avance Histórico (Top Líderes)</h4>
+                        <div class="chart-box-wrapper">
+                            <canvas id="trendChart"></canvas>
                         </div>
                     </div>
 
@@ -472,7 +466,7 @@
 
     <!-- FOOTER -->
     <footer>
-        <p>Creado por <a href="https://www.facebook.com/MaloSquishy" target="_blank">Martín R. Castillo Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
+        <p>Creado por <a href="https://www.facebook.com/MaloSquishy" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
     </footer>
 
     <script>
@@ -499,16 +493,13 @@
                 if (!p.nombre) return;
                 let aciertos = 0;
                 let fallados = 0;
-                let historialRacha = []; // Guardará el avance histórico cronológico
 
                 listaPartidosIDs.forEach(idMatch => {
                     if (p[idMatch]) {
                         if (p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
                             aciertos++;
-                            historialRacha.push('w');
                         } else {
                             fallados++;
-                            historialRacha.push('l');
                         }
                     }
                 });
@@ -518,7 +509,6 @@
                     aciertos: aciertos,
                     fallados: fallados,
                     puntos: aciertos * 1,
-                    racha: historialRacha.slice(-5), // Extraer avance de los últimos 5 partidos jugados
                     predicciones: p
                 });
             });
@@ -540,7 +530,7 @@
                 const participantesData = parseCSV(textPart);
 
                 const lastMod = resMundial.headers.get('Last-Modified');
-                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA ACTUALIZACIÓN: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
+                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA TRANSMISIÓN EN VIVO: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
 
                 const partidosConResultadoIDs = [];
                 const partidosReales = {};
@@ -590,7 +580,7 @@
                     });
                 }
 
-                // CÁLCULO DE LA BARRA DE TENDENCIA DEL PROX PARTIDO (100% DISTRIBUIDO)
+                // CÁLCULO DE LA BARRA DE TENDENCIA DEL PROX PARTIDO
                 if (proximoPartidoID) {
                     document.getElementById('next-match-label').innerText = `${proximoPartidoID} : ${proximoPartidoAbrev.toUpperCase()}`;
                     let totalVotos = 0;
@@ -607,8 +597,7 @@
                     if (totalVotos > 0) {
                         let pctL = Math.round((votos['L'] / totalVotos) * 100);
                         let pctE = Math.round((votos['E'] / totalVotos) * 100);
-                        let pctV = 100 - (pctL + pctE); // Garantizar cuadre del 100% matemático
-                        
+                        let pctV = 100 - (pctL + pctE);
                         if(votos['V'] === 0) pctV = 0;
 
                         document.getElementById('lbl-bar-l').innerText = `L: ${pctL}%`;
@@ -623,7 +612,7 @@
                     document.getElementById('next-match-label').innerText = "Fase de Grupos Completada";
                 }
 
-                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO CON LÍNEA DE TENDENCIA / AVANCE
+                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO CON SOPORTE DE DESPLAZAMIENTO FIJO DE COLUMNA
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
                 
@@ -641,22 +630,13 @@
                         }
                     }
 
-                    // Construcción visual de los bloques de racha
-                    let streakHtml = `<div class="streak-container">`;
-                    p.racha.forEach(matchStatus => {
-                        streakHtml += `<span class="streak-dot ${matchStatus}">${matchStatus.toUpperCase()}</span>`;
-                    });
-                    if(p.racha.length === 0) streakHtml += `<span style="font-size:0.75rem; opacity:0.4;">Sin partidos</span>`;
-                    streakHtml += `</div>`;
-
                     leaderboardBody.insertAdjacentHTML('beforeend', `
                         <tr>
                             <td class="rank-number">#${rank}</td>
-                            <td class="user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
+                            <td class="sticky-col user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
                             <td>${p.aciertos}</td>
-                            <td style="color:#ff5252;">${p.fallados}</td>
-                            <td>${streakHtml}</td>
-                            <td class="pts-count" style="text-align: right;">${p.puntos} PTS</td>
+                            <td style="color: #ff5252;">${p.fallados}</td>
+                            <td class="pts-count" style="text-align: right; font-weight: 800; color: var(--text-neon);">${p.puntos} PTS</td>
                         </tr>
                     `);
                 });
@@ -688,6 +668,49 @@
                 } else {
                     document.getElementById('podium-bronze-names').innerText = "PENDIENTE";
                 }
+
+                // GENERAR LA GRÁFICA DE LÍNEAS (Evolución de los 3 mejores líderes)
+                const top3Nombres = rankingActual.slice(0, 3).map(p => p.nombre);
+                const datasetsGrafica = top3Nombres.map((nombre, i) => {
+                    let ptsAcumulados = 0;
+                    let dataPuntos = [];
+                    let pData = participantesData.find(x => x.nombre && x.nombre.trim() === nombre);
+                    
+                    partidosConResultadoIDs.forEach(idMatch => {
+                        if(pData && pData[idMatch] && pData[idMatch].trim().toUpperCase() === partidosReales[idMatch]){
+                            ptsAcumulados++;
+                        }
+                        dataPuntos.push(ptsAcumulados);
+                    });
+
+                    const coloresLinea = ['#ffb703', '#94a3b8', '#edae7e'];
+                    return {
+                        label: nombre.toUpperCase(),
+                        data: dataPuntos,
+                        borderColor: coloresLinea[i] || '#00e5ff',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        tension: 0.2,
+                        pointRadius: 0
+                    };
+                });
+
+                const labelsX = partidosConResultadoIDs.map((_, idx) => `J${idx+1}`);
+
+                const ctx = document.getElementById('trendChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: labelsX, datasets: datasetsGrafica },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#fff', font: { family: 'Montserrat', weight: 'bold', size: 10 } } } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#8fa0bc', font: { size: 9 } } },
+                            y: { grid: { color: 'rgba(20,37,75,0.3)' }, ticks: { color: '#8fa0bc', font: { size: 9 } } }
+                        }
+                    }
+                });
 
                 // RENDERIZAR CABECERA DEL HEATMAP
                 const heatmapHead = document.getElementById('heatmap-head');
