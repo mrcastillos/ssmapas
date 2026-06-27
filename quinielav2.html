@@ -248,14 +248,14 @@
             gap: 12px;
         }
 
-        /* TABLAS RESPONSIVAS CON COLUMNA STICKY */
+        /* TABLAS RESPONSIVAS CON COLUMNA STICKY MEJORADA */
         .table-responsive {
             max-width: 100%;
             overflow-x: auto;
             padding-bottom: 5px;
         }
 
-        table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
         
         th {
             color: var(--text-white);
@@ -276,11 +276,12 @@
             white-space: nowrap;
         }
 
+        /* Corrección total al glitch de desaparición en scroll */
         table .sticky-col {
             position: sticky;
             left: 0;
-            background-color: var(--bg-card);
-            z-index: 5;
+            background-color: #091124 !important; /* Fuerza el color exacto del fondo del contenedor */
+            z-index: 10 !important;
             text-align: left;
             border-right: 2px solid var(--border-card);
             min-width: 140px;
@@ -315,7 +316,7 @@
         .trend-bar-block:last-child { border: none; padding-bottom: 0; margin-bottom: 0; }
         .trend-bar-wrapper { margin-top: 5px; }
         .trend-bar-info { display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px; font-weight: 700; }
-        .trend-bar-graphic { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: #14254b; }
+        .trend-bar-graphic { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: #14254b; }
         .bar-segment { height: 100%; transition: width 0.5s ease; }
         .bar-segment.local { background-color: var(--text-neon); }
         .bar-segment.draw { background-color: var(--text-blue); }
@@ -325,9 +326,9 @@
         .heatmap-table th { font-size: 0.65rem; padding: 8px; text-align: center; min-width: 50px; }
         .heatmap-table td { padding: 8px; text-align: center; font-weight: 800; font-size: 0.8rem; }
 
-        .c-hit { background-color: rgba(0, 255, 102, 0.15); color: var(--text-neon); border: 1px solid rgba(0, 255, 102, 0.3); }
-        .c-miss { background-color: rgba(255, 51, 51, 0.15); color: #ff5252; border: 1px solid rgba(255, 51, 51, 0.3); }
-        .c-pending { background-color: rgba(143, 160, 188, 0.05); color: rgba(143, 160, 188, 0.4); border: 1px solid transparent; }
+        .c-hit { background-color: rgba(0, 255, 102, 0.15) !important; color: var(--text-neon) !important; border: 1px solid rgba(0, 255, 102, 0.3); }
+        .c-miss { background-color: rgba(255, 51, 51, 0.15) !important; color: #ff5252 !important; border: 1px solid rgba(255, 51, 51, 0.3); }
+        .c-pending { background-color: rgba(143, 160, 188, 0.05) !important; color: rgba(143, 160, 188, 0.4) !important; border: 1px solid transparent; }
 
         /* FOOTER */
         footer {
@@ -354,14 +355,14 @@
             <div class="premium-badge"><i class="fa-solid fa-bolt"></i> ¡Vamos con todo!</div>
         </header>
 
-        <!-- TARJETA FIFA WORLD CUP TOP 3 -->
+        <!-- TARJETA FIFA WORLD CUP TOP 3 CON MEDALLAS -->
         <h2 style="color: #fff; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: -10px;"><i class="fa-solid fa-star" style="color: var(--text-gold);"></i> Tarjetas FIFA World Cup Top 3</h2>
         <section class="olympic-podium-container" id="podium-section-container">
             
             <!-- SEGUNDO LUGAR (PLATA) -->
             <div class="podium-column col-plata">
                 <div class="fifa-card-v2 silver">
-                    <div class="badge-title">2do Lugar / Plata</div>
+                    <div class="badge-title">🥈 2do Lugar / Plata</div>
                     <div class="names" id="podium-silver-names">Calculando...</div>
                     <div class="score" id="podium-silver-pts">0 PTS</div>
                 </div>
@@ -371,7 +372,7 @@
             <!-- PRIMER LUGAR (ORO) -->
             <div class="podium-column col-oro">
                 <div class="fifa-card-v2 gold">
-                    <div class="badge-title">1er Lugar / Oro</div>
+                    <div class="badge-title">🥇 1er Lugar / Oro</div>
                     <div class="names" id="podium-gold-names">Calculando...</div>
                     <div class="score" id="podium-gold-pts">0 PTS</div>
                 </div>
@@ -381,7 +382,7 @@
             <!-- TERCER LUGAR (BRONCE) -->
             <div class="podium-column col-bronce">
                 <div class="fifa-card-v2 bronze">
-                    <div class="badge-title">3er Lugar / Bronce</div>
+                    <div class="badge-title">🥉 3er Lugar / Bronce</div>
                     <div class="names" id="podium-bronze-names">Calculando...</div>
                     <div class="score" id="podium-bronze-pts">0 PTS</div>
                 </div>
@@ -401,7 +402,7 @@
                         <thead>
                             <tr>
                                 <th style="width: 50px;">Pos</th>
-                                <th class="sticky-col">Participante</th>
+                                <th class="sticky-col" style="color: var(--text-white); font-weight: 800;">Participante</th>
                                 <th>Acertados</th>
                                 <th>Fallados</th>
                                 <th style="text-align: right;">Puntos Totales</th>
@@ -423,20 +424,16 @@
                         <div class="prob-list" id="an-prob-list"></div>
                     </div>
 
-                    <!-- TOP PICKS CON LAS 3 PRÓXIMAS BARRAS DINÁMICAS -->
+                    <!-- TOP PICKS CON LAS 3 PRÓXIMAS BARRAS -->
                     <div class="analytics-card">
                         <h4>🔥 Top Picks (Próximos Favoritos)</h4>
-                        <div id="next-matches-container">
-                            <!-- Inyección dinámica de las 3 próximas barras distributivas -->
-                        </div>
+                        <div id="next-matches-container"></div>
                     </div>
 
-                    <!-- ESTADÍSTICAS GLOBALES DEL GRUPO (PARA COMPENSAR EL ESPACIO EN BLANCO) -->
+                    <!-- ESTADÍSTICAS GLOBALES DEL GRUPO -->
                     <div class="analytics-card">
                         <h4>📊 Tendencia de Estilo del Grupo</h4>
-                        <div class="prob-list" id="global-behavior-stats">
-                            <!-- Datos globales calculados solos -->
-                        </div>
+                        <div class="prob-list" id="global-behavior-stats"></div>
                     </div>
 
                 </div>
@@ -543,7 +540,6 @@
                         partidosReales[p.ID_PARTIDO] = p.RESULTADO.trim().toUpperCase();
                         partidosConResultadoIDs.push(p.ID_PARTIDO);
                     } else if (proximosPartidosArray.length < 3) {
-                        // Capturar la fila de los próximos 3 partidos ordenados para las barras predictivas
                         proximosPartidosArray.push({ id: p.ID_PARTIDO, abrev: p.ABREVIATURA });
                     }
                 });
@@ -562,7 +558,7 @@
                     });
                 }
 
-                // PROBABILIDAD DE CAMPEÓN CORREGIDA AL TOP 5
+                // PROBABILIDAD DE CAMPEÓN (TOP 5)
                 const probListContainer = document.getElementById('an-prob-list');
                 probListContainer.innerHTML = '';
                 if (rankingActual.length > 0) {
@@ -580,7 +576,7 @@
                     });
                 }
 
-                // GENERAR LAS 3 BARRAS DE PROXIMOS FAVORITOS EN VIVO
+                // BARRAS DE PROXIMOS FAVORITOS
                 const nextMatchesContainer = document.getElementById('next-matches-container');
                 nextMatchesContainer.innerHTML = '';
 
@@ -621,10 +617,10 @@
                         `);
                     });
                 } else {
-                    nextMatchesContainer.innerHTML = `<div style="font-size:0.85rem; opacity:0.5;">Fase de Grupos Completada</div>`;
+                    nextMatchesContainer.innerHTML = `<div style="font-size:0.85rem; opacity:0.5;">Torneo finalizado</div>`;
                 }
 
-                // CÁLCULO EXTRA DE ESTADÍSTICAS GLOBALES DE ESTILO DEL GRUPO
+                // ESTADÍSTICAS GLOBALES
                 let acumuladoGlobalVotos = { L: 0, E: 0, V: 0, total: 0 };
                 participantesData.forEach(p => {
                     mundialData.forEach(m => {
@@ -647,12 +643,9 @@
                         <div class="prob-item"><span>Preferencia por Empate (E)</span><span style="color:var(--text-blue); font-weight:800;">${pctGlobalE}%</span></div>
                         <div class="prob-item"><span>Preferencia por Visitante (V)</span><span style="color:#ff5252; font-weight:800;">${pctGlobalV}%</span></div>
                     `;
-                } else {
-                    globalStatsContainer.innerHTML = `<div style="font-size:0.85rem; opacity:0.5;">Sin datos históricos</div>`;
                 }
 
-
-                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO
+                // RENDERIZAR CLASIFICACIÓN GENERAL
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
                 
@@ -676,12 +669,12 @@
                             <td class="sticky-col user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
                             <td>${p.aciertos}</td>
                             <td style="color: #ff5252;">${p.fallados}</td>
-                            <td class="pts-count" style="text-align: right; font-weight: 800; color: var(--text-neon);">${p.puntos} PTS</td>
+                            <td class="pts-count" style="font-weight: 800; color: var(--text-neon);">${p.puntos} PTS</td>
                         </tr>
                     `);
                 });
 
-                // RENDERIZAR PODIO OLÍMPICO (TOP 3)
+                // RENDERIZAR PODIO
                 const gruposPuntajes = [];
                 rankingActual.forEach(p => {
                     let g = gruposPuntajes.find(x => x.puntos === p.puntos);
@@ -709,7 +702,7 @@
                     document.getElementById('podium-bronze-names').innerText = "PENDIENTE";
                 }
 
-                // RENDERIZAR CABECERA DEL HEATMAP
+                // HEATMAP
                 const heatmapHead = document.getElementById('heatmap-head');
                 let headHtml = `<tr><th class="sticky-col">Participante</th>`;
                 mundialData.forEach(p => {
@@ -718,7 +711,6 @@
                 headHtml += `</tr>`;
                 heatmapHead.innerHTML = headHtml;
 
-                // RENDERIZAR FILAS DEL HEATMAP
                 const heatmapBody = document.getElementById('heatmap-body');
                 heatmapBody.innerHTML = '';
                 rankingActual.forEach(p => {
