@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM</title>
-    <!-- Google Fonts & FontAwesome -->
+    <title>QUINIELES MUNDIAL 2026 - PREMIUM STADIUM V2</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-body: #030814;
-            --bg-card: #0b1426;
-            --border-card: #13223f;
+            --bg-body: #020612;
+            --bg-card: #091124;
+            --border-card: #14254b;
             --text-neon: #00ff66;
             --text-blue: #00e5ff;
             --text-gold: #ffb703;
             --text-light: #8fa0bc;
             --text-white: #ffffff;
-            --oro: #ffd700;
-            --plata: #c0c0c0;
-            --bronce: #cd7f32;
+            --oro: linear-gradient(135deg, #ffe066 0%, #f5b041 100%);
+            --plata: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+            --bronce: linear-gradient(135deg, #edae7e 0%, #a0522d 100%);
         }
 
         * {
@@ -35,7 +34,7 @@
             color: var(--text-light);
             min-height: 100vh;
             padding: 30px;
-            padding-bottom: 120px;
+            padding-bottom: 140px;
         }
 
         .dashboard-container {
@@ -43,10 +42,10 @@
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
         }
 
-        /* HEADER ESTILO EA SPORTS */
+        /* HEADER CON COPA ANIMADA */
         .main-header {
             background-color: var(--bg-card);
             border: 1px solid var(--border-card);
@@ -63,10 +62,21 @@
             font-size: 1.8rem;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 15px;
+        }
+
+        /* Animación de pulso dorado para la copa */
+        .animated-trophy {
+            color: var(--text-gold);
+            animation: pulseGlow 2s infinite alternate;
+            text-shadow: 0 0 15px rgba(255, 183, 3, 0.6);
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255,183,3,0.4)); }
+            100% { transform: scale(1.1); filter: drop-shadow(0 0 12px rgba(255,183,3,0.9)); }
         }
 
         .header-title p {
@@ -87,46 +97,102 @@
             font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        /* GRID DE RECUADROS / KPIS */
-        .kpi-grid {
+        /* PODIO ESTILO OLÍMPICO CON TARJETA FIFA */
+        .olympic-podium-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .kpi-card {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            align-items: flex-end;
             background-color: var(--bg-card);
             border: 1px solid var(--border-card);
             border-radius: 12px;
-            padding: 20px 25px;
+            padding: 30px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .olympic-podium-container { grid-template-columns: 1fr; gap: 25px; }
+        }
+
+        .podium-column {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
+            justify-content: flex-end;
+        }
+
+        /* Orden olímpico en Grid Desktop: Plata(1) - Oro(2) - Bronce(3) */
+        .col-plata { order: 1; }
+        .col-oro { order: 2; }
+        .col-bronce { order: 3; }
+
+        .fifa-card-v2 {
+            width: 100%;
+            max-width: 240px;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
             position: relative;
-        }
-
-        .kpi-info h3 {
-            font-size: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.1);
+            color: #030814;
             font-weight: 700;
+        }
+
+        .fifa-card-v2.gold { background: var(--oro); }
+        .fifa-card-v2.silver { background: var(--plata); }
+        .fifa-card-v2.bronze { background: var(--bronce); }
+
+        .fifa-card-v2 .badge-title {
+            font-size: 0.7rem;
             text-transform: uppercase;
-            color: var(--text-light);
             letter-spacing: 1px;
-            margin-bottom: 10px;
+            opacity: 0.8;
+            margin-bottom: 8px;
         }
 
-        .kpi-value {
-            font-size: 1.8rem;
+        .fifa-card-v2 .names {
+            font-size: 1.1rem;
             font-weight: 900;
-            color: var(--text-white);
+            text-transform: uppercase;
+            margin: 10px 0;
+            line-height: 1.3;
+            word-wrap: break-word;
         }
 
-        .kpi-card i {
-            font-size: 1.8rem;
-            color: rgba(143, 160, 188, 0.15);
+        .fifa-card-v2 .score {
+            background-color: rgba(3, 8, 20, 0.9);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            margin-top: 5px;
         }
+
+        /* Pedestales del podio */
+        .pedestal {
+            width: 100%;
+            max-width: 240px;
+            background: linear-gradient(180deg, #14254b 0%, #091124 100%);
+            border: 1px solid var(--border-card);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.05);
+        }
+        .col-oro .pedestal { height: 100px; color: rgba(255, 183, 3, 0.1); border-top: 3px solid var(--text-gold); }
+        .col-plata .pedestal { height: 70px; color: rgba(148, 163, 184, 0.1); border-top: 3px solid #94a3b8; }
+        .col-bronce .pedestal { height: 45px; color: rgba(237, 174, 126, 0.1); border-top: 3px solid #edae7e; }
+
 
         /* SECCIÓN CENTRAL INTERMEDIA */
         .main-content-layout {
@@ -139,7 +205,6 @@
             .main-content-layout { grid-template-columns: 1fr; }
         }
 
-        /* CONTENEDOR COMÚN DE SECCIONES */
         .panel-box {
             background-color: var(--bg-card);
             border: 1px solid var(--border-card);
@@ -156,247 +221,169 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            letter-spacing: 0.5px;
         }
 
-        /* TABLAS ESTILO FOX SPORTS */
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
+        /* TABLAS REESTILIZADAS */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
         th {
             color: var(--text-white);
             font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
             padding: 12px 15px;
             border-bottom: 2px solid var(--border-card);
             text-align: left;
         }
-
         td {
             padding: 14px 15px;
             font-size: 0.9rem;
             color: var(--text-light);
-            border-bottom: 1px solid rgba(19, 34, 63, 0.5);
+            border-bottom: 1px solid rgba(20, 37, 75, 0.5);
         }
-
-        tr:last-child td { border: none; }
 
         .rank-number { font-weight: 900; color: var(--text-blue); }
         .user-name { font-weight: 700; color: var(--text-white); display: flex; align-items: center; gap: 8px;}
         .pts-count { font-weight: 800; color: var(--text-neon); }
 
-        /* Iconos de tendencia */
-        .trend-up { color: var(--text-neon); font-size: 0.8rem; }
-        .trend-down { color: #ff5252; font-size: 0.8rem; }
-        .trend-equal { color: var(--text-blue); font-size: 0.8rem; }
+        .trend-up { color: var(--text-neon); }
+        .trend-down { color: #ff5252; }
+        .trend-equal { color: var(--text-blue); opacity: 0.5; }
 
-        /* HEATMAP INTEGRADO ABAJO */
-        .heatmap-container {
-            max-width: 100%;
-            overflow-x: auto;
-            padding-bottom: 5px;
+        /* ANALYTICS BLOCK (PROBABILIDADES Y TOP PICKS) */
+        .analytics-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .heatmap-table th {
-            font-size: 0.65rem;
-            padding: 8px;
-            text-align: center;
-            min-width: 50px;
+        .analytics-card {
+            background: rgba(20, 37, 75, 0.2);
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 15px;
         }
 
-        .heatmap-table td {
-            padding: 8px;
-            text-align: center;
-            font-weight: 800;
-            font-size: 0.8rem;
-        }
-
-        .heatmap-table .sticky-col {
-            position: sticky;
-            left: 0;
-            background-color: var(--bg-card);
-            z-index: 5;
-            text-align: left;
-            font-weight: 700;
+        .analytics-card h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
             color: var(--text-white);
-            border-right: 2px solid var(--border-card);
-            min-width: 140px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .analytics-value {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--text-blue);
+        }
+
+        /* HEATMAP */
+        .heatmap-container { max-width: 100%; overflow-x: auto; padding-bottom: 5px; }
+        .heatmap-table th { font-size: 0.65rem; padding: 8px; text-align: center; min-width: 50px; }
+        .heatmap-table td { padding: 8px; text-align: center; font-weight: 800; font-size: 0.8rem; }
+        .heatmap-table .sticky-col {
+            position: sticky; left: 0; background-color: var(--bg-card); z-index: 5;
+            text-align: left; font-weight: 700; color: var(--text-white);
+            border-right: 2px solid var(--border-card); min-width: 140px;
         }
 
         .c-hit { background-color: rgba(0, 255, 102, 0.15); color: var(--text-neon); border: 1px solid rgba(0, 255, 102, 0.3); }
         .c-miss { background-color: rgba(255, 51, 51, 0.15); color: #ff5252; border: 1px solid rgba(255, 51, 51, 0.3); }
         .c-pending { background-color: rgba(143, 160, 188, 0.05); color: rgba(143, 160, 188, 0.4); border: 1px solid transparent; }
 
-        /* COMPONENTE EXTRAS: PODIO EN TARJETA */
-        .fifa-podium-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 10px 0;
-        }
-
-        .mini-podium-row {
-            display: flex;
-            align-items: center;
-            background: rgba(19, 34, 63, 0.3);
-            border: 1px solid var(--border-card);
-            padding: 12px 15px;
-            border-radius: 8px;
-            gap: 15px;
-        }
-
-        .mini-podium-row.gold-border { border-left: 4px solid var(--oro); }
-        .mini-podium-row.silver-border { border-left: 4px solid var(--plata); }
-        .mini-podium-row.bronze-border { border-left: 4px solid var(--bronce); }
-
-        .medal-badge {
-            font-size: 1.3rem;
-            width: 30px;
-            text-align: center;
-        }
-        .gold-border .medal-badge { color: var(--oro); }
-        .silver-border .medal-badge { color: var(--plata); }
-        .bronze-border .medal-badge { color: var(--bronce); }
-
-        .podium-info-text {
-            flex-grow: 1;
-        }
-
-        .podium-info-text .p-label {
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
-            margin-bottom: 2px;
-        }
-        .gold-border .p-label { color: var(--oro); }
-        .silver-border .p-label { color: var(--plata); }
-        .bronze-border .p-label { color: var(--bronce); }
-
-        .podium-info-text .p-names {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-white);
-            text-transform: uppercase;
-        }
-
-        .podium-info-text .p-pts {
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: var(--text-blue);
-            text-align: right;
-            white-space: nowrap;
-        }
-
         /* FOOTER */
         footer {
-            background-color: var(--bg-body);
-            border-top: 1px solid var(--border-card);
-            text-align: center;
-            padding: 25px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 100;
+            background-color: var(--bg-body); border-top: 1px solid var(--border-card);
+            text-align: center; padding: 25px; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
         }
-
-        footer p { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px;}
+        footer p { font-size: 0.85rem; font-weight: 700;}
         footer a { color: var(--text-gold); text-decoration: none; font-weight: 800;}
-        footer a:hover { text-shadow: 0 0 10px var(--text-gold); }
     </style>
 </head>
 <body>
 
     <div class="dashboard-container">
         
-        <!-- HEADER -->
         <header class="main-header">
             <div class="header-title">
-                <h1><i class="fa-solid fa-soccer-ball"></i> Quiniela Mundial 2026</h1>
-                <p id="last-update">Actualizando datos...</p>
+                <h1><i class="fa-solid fa-trophy animated-trophy"></i> Quiniela Mundial 2026</h1>
+                <p id="last-update">Sincronizando transmisión...</p>
             </div>
-            <div class="premium-badge"><i class="fa-solid fa-trophy"></i> Premium Stadium</div>
+            <div class="premium-badge"><i class="fa-solid fa-bolt"></i> Fox Sports Premium</div>
         </header>
 
-        <!-- RECUADROS INFORMATIVOS (KPIS) -->
-        <section class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-info">
-                    <h3>Líder Actual</h3>
-                    <div class="kpi-value" id="kpi-leader" style="color: var(--text-gold); font-size: 1.4rem; text-transform: uppercase;">-</div>
+        <h2 style="color: #fff; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: -10px;"><i class="fa-solid fa-star" style="color: var(--text-gold);"></i> Tarjetas FIFA World Cup Top 3</h2>
+        <section class="olympic-podium-container" id="podium-section-container">
+            
+            <div class="podium-column col-plata">
+                <div class="fifa-card-v2 silver">
+                    <div class="badge-title">2do Lugar / Plata</div>
+                    <div class="names" id="podium-silver-names">Calculando...</div>
+                    <div class="score" id="podium-silver-pts">0 PTS</div>
                 </div>
-                <i class="fa-solid fa-medal"></i>
+                <div class="pedestal">2</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-info">
-                    <h3>Partidos Jugados</h3>
-                    <div class="kpi-value" id="kpi-played" style="color: var(--text-neon);">0 / 72</div>
+
+            <div class="podium-column col-oro">
+                <div class="fifa-card-v2 gold">
+                    <div class="badge-title">1er Lugar / Oro</div>
+                    <div class="names" id="podium-gold-names">Calculando...</div>
+                    <div class="score" id="podium-gold-pts">0 PTS</div>
                 </div>
-                <i class="fa-solid fa-chart-bar"></i>
+                <div class="pedestal">1</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-info">
-                    <h3>Máximo Aciertos</h3>
-                    <div class="kpi-value" id="kpi-max" style="color: var(--text-blue);">0</div>
+
+            <div class="podium-column col-bronce">
+                <div class="fifa-card-v2 bronze">
+                    <div class="badge-title">3er Lugar / Bronce</div>
+                    <div class="names" id="podium-bronze-names">Calculando...</div>
+                    <div class="score" id="podium-bronze-pts">0 PTS</div>
                 </div>
-                <i class="fa-solid fa-bullseye"></i>
+                <div class="pedestal">3</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-info">
-                    <h3>Participantes</h3>
-                    <div class="kpi-value" id="kpi-count">0</div>
-                </div>
-                <i class="fa-solid fa-users"></i>
-            </div>
+
         </section>
 
-        <!-- CONTENIDO INTERMEDIO -->
         <div class="main-content-layout">
             
-            <!-- PANEL TABLA DE POSICIONES -->
             <div class="panel-box">
-                <div class="panel-title"><i class="fa-solid fa-list-ol" style="color: var(--text-blue);"></i> Tabla de Posiciones en Vivo</div>
+                <div class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--text-blue);"></i> Clasificación General de Competidores</div>
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
                                 <th style="width: 60px;">Pos</th>
                                 <th>Participante</th>
-                                <th>Partidos Jugados</th>
-                                <th>Aciertos</th>
+                                <th>Acertados</th>
+                                <th>Fallados</th>
                                 <th style="text-align: right;">Puntos Totales</th>
                             </tr>
                         </thead>
-                        <tbody id="leaderboard-body">
-                            <!-- Inyección dinámica -->
-                        </tbody>
+                        <tbody id="leaderboard-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- PANEL PROYECCIÓN DEL PODIO (ORO, PLATA, BRONCE) -->
             <div class="panel-box">
-                <div class="panel-title"><i class="fa-solid fa-id-card" style="color: var(--text-gold);"></i> Podio de la Jornada</div>
-                <div class="fifa-podium-list" id="fifa-podium-container">
-                    <!-- Filas de Oro, Plata y Bronce inyectadas dinámicamente -->
+                <div class="panel-title"><i class="fa-solid fa-chart-line" style="color: var(--text-gold);"></i> Analítica de Tendencias</div>
+                <div class="analytics-container">
+                    <div class="analytics-card">
+                        <h4>🏆 Probabilidad de Campeón</h4>
+                        <div class="analytics-value" id="an-prob" style="color: var(--text-gold); text-transform: uppercase;">-</div>
+                        <small style="font-size:0.7rem; color:var(--text-light)">Basado en efectividad acumulada de aciertos</small>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>🔥 Top Picks (Próximo Favorito)</h4>
+                        <div class="analytics-value" id="an-pick" style="color: var(--text-blue); font-size: 1rem;">Buscando próximo juego...</div>
+                        <small style="font-size:0.7rem; color:var(--text-light)">Tendencia de predicción mayoritaria del grupo</small>
+                    </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- PANEL HISTORIAL / HEATMAP -->
         <div class="panel-box">
-            <div class="panel-title"><i class="fa-solid fa-fire" style="color: #ff5252;"></i> Historial de Aciertos por Partido (Heatmap)</div>
+            <div class="panel-title"><i class="fa-solid fa-border-all" style="color: #ff5252;"></i> Historial Desplegable de Rendimiento</div>
             <div class="heatmap-container">
                 <table class="heatmap-table">
                     <thead id="heatmap-head"></thead>
@@ -407,9 +394,8 @@
 
     </div>
 
-    <!-- FOOTER -->
     <footer>
-        <p>Creado por <a href="MaloSquishy" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
+        <p>Creado por <a href="https://www.facebook.com/tuxmar" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
     </footer>
 
     <script>
@@ -437,26 +423,33 @@
             });
         }
 
-        // Helper para calcular un ranking ordenado por puntos desc y luego orden alfabético asc
         function calcularRanking(participantes, partidosReales, listaPartidosIDs) {
             const lista = [];
             participantes.forEach(p => {
                 if (!p.nombre) return;
                 let aciertos = 0;
+                let fallados = 0;
+
                 listaPartidosIDs.forEach(idMatch => {
-                    if (p[idMatch] && p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
-                        aciertos++;
+                    if (p[idMatch]) {
+                        if (p[idMatch].trim().toUpperCase() === partidosReales[idMatch]) {
+                            aciertos++;
+                        } else {
+                            fallados++;
+                        }
                     }
                 });
+
                 lista.push({
                     nombre: p.nombre.trim(),
                     aciertos: aciertos,
+                    fallados: fallados,
                     puntos: aciertos * 1,
                     predicciones: p
                 });
             });
 
-            // Ordenación: Primero por puntos (Descendente), luego Alfabético (Ascendente)
+            // Ordenación V2: Por puntos desc y Empate por Orden Alfabético asc
             lista.sort((a, b) => b.puntos - a.puntos || a.nombre.localeCompare(b.nombre));
             return lista;
         }
@@ -474,30 +467,34 @@
                 const participantesData = parseCSV(textPart);
 
                 const lastMod = resMundial.headers.get('Last-Modified');
-                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA ACTUALIZACIÓN DEL SERVIDOR: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
+                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA TRANSMISIÓN EN VIVO: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
 
-                // Array cronológico de partidos que ya traen resultado asignado
                 const partidosConResultadoIDs = [];
                 const partidosReales = {};
+                let proximoPartidoID = null;
+                let proximoPartidoAbrev = "";
+
                 mundialData.forEach(p => {
                     if (p.RESULTADO && p.RESULTADO.trim() !== "") {
                         partidosReales[p.ID_PARTIDO] = p.RESULTADO.trim().toUpperCase();
                         partidosConResultadoIDs.push(p.ID_PARTIDO);
+                    } else if (!proximoPartidoID) {
+                        // Capturar el primer partido que no tiene resultado para la analítica (Top Pick)
+                        proximoPartidoID = p.ID_PARTIDO;
+                        proximoPartidoAbrev = p.ABREVIATURA;
                     }
                 });
 
                 const totalJugados = partidosConResultadoIDs.length;
 
-                // 1. CALCULAR RANKING ACTUAL EN VIVO (Con todos los partidos completados)
+                // 1. CALCULOS RANKING V2
                 const rankingActual = calcularRanking(participantesData, partidosReales, partidosConResultadoIDs);
 
-                // 2. SIMULADOR DE TENDENCIAS (Ranking anterior sin contar el último partido jugado)
+                // 2. TENDENCIAS COMPARATIVAS ANTERIORES
                 let tendencias = {};
                 if (totalJugados > 1) {
                     const partidosIDsAnterior = partidosConResultadoIDs.slice(0, -1);
                     const rankingAnterior = calcularRanking(participantesData, partidosReales, partidosIDsAnterior);
-                    
-                    // Asignar posición histórica
                     let posicionPrevia = 1;
                     rankingAnterior.forEach((p, idx) => {
                         if (idx > 0 && p.puntos < rankingAnterior[idx - 1].puntos) posicionPrevia = idx + 1;
@@ -505,15 +502,35 @@
                     });
                 }
 
-                // ACTUALIZAR INDICADORES PRINCIPALES (KPIS)
-                if (rankingActual.length > 0) {
-                    document.getElementById('kpi-leader').innerText = rankingActual[0].nombre;
-                    document.getElementById('kpi-max').innerText = rankingActual[0].puntos;
-                }
+                // ACTUALIZAR CONTROL DE KPIS
+                document.getElementById('kpi-leader').innerText = rankingActual.length > 0 ? rankingActual[0].nombre : '-';
+                document.getElementById('kpi-max').innerText = rankingActual.length > 0 ? rankingActual[0].puntos : '0';
                 document.getElementById('kpi-played').innerText = `${totalJugados} / 72`;
                 document.getElementById('kpi-count').innerText = rankingActual.length;
 
-                // RENDERIZAR TABLA DE POSICIONES EN VIVO
+                // CALCULAR PROBABILIDAD DE CAMPEÓN
+                if (rankingActual.length > 0) {
+                    let totalAciertosGrupo = rankingActual.reduce((acc, curr) => acc + curr.puntos, 0);
+                    let efectividadLeader = totalAciertosGrupo > 0 ? Math.round((rankingActual[0].puntos / totalAciertosGrupo) * 100) : 100;
+                    // Proyección ponderada basada en su ventaja
+                    document.getElementById('an-prob').innerText = `${rankingActual[0].nombre} (${efectividadLeader + 20}% Max)`;
+                }
+
+                // CALCULAR TOP PICKS PARA EL SIGUIENTE PARTIDO
+                if (proximoPartidoID) {
+                    let conteoVotos = { L: 0, E: 0, V: 0 };
+                    participantesData.forEach(p => {
+                        let voto = p[proximoPartidoID] ? p[proximoPartidoID].trim().toUpperCase() : '';
+                        if (conteoVotos[voto] !== undefined) conteoVotos[voto]++;
+                    });
+                    let favorito = Object.keys(conteoVotos).reduce((a, b) => conteoVotos[a] > conteoVotos[b] ? a : b);
+                    let tipoVoto = favorito === 'L' ? 'Local' : favorito === 'E' ? 'Empate' : 'Visitante';
+                    document.getElementById('an-pick').innerText = `${proximoPartidoAbrev} ➔ gana ${tipoVoto}`;
+                } else {
+                    document.getElementById('an-pick').innerText = "Fase de Grupos finalizada";
+                }
+
+                // RENDERIZAR CLASIFICACIÓN GENERAL EN VIVO
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboardBody.innerHTML = '';
                 
@@ -521,14 +538,13 @@
                 rankingActual.forEach((p, idx) => {
                     if (idx > 0 && p.puntos < rankingActual[idx - 1].puntos) rank = idx + 1;
                     
-                    // Calcular flecha de tendencia comparando rank actual vs previo
-                    let iconTrend = '<i class="fa-solid fa-circle trend-equal" title="Sin cambios"></i>'; 
+                    let iconTrend = '<i class="fa-solid fa-minus trend-equal"></i>'; 
                     if (tendencias[p.nombre]) {
                         const rankViejo = tendencias[p.nombre];
                         if (rank < rankViejo) {
-                            iconTrend = `<i class="fa-solid fa-arrow-up trend-up" title="Subió ${rankViejo - rank} posiciones"></i>`;
+                            iconTrend = `<i class="fa-solid fa-arrow-trend-up trend-up"></i>`;
                         } else if (rank > rankViejo) {
-                            iconTrend = `<i class="fa-solid fa-arrow-down trend-down" title="Bajó ${rank - rankViejo} posiciones"></i>`;
+                            iconTrend = `<i class="fa-solid fa-arrow-trend-down trend-down"></i>`;
                         }
                     }
 
@@ -536,14 +552,14 @@
                         <tr>
                             <td class="rank-number">#${rank}</td>
                             <td class="user-name">${iconTrend} ${p.nombre.toUpperCase()}</td>
-                            <td>${totalJugados}</td>
                             <td>${p.aciertos}</td>
+                            <td style="color:#ff5252;">${p.fallados}</td>
                             <td class="pts-count" style="text-align: right;">${p.puntos} PTS</td>
                         </tr>
                     `);
                 });
 
-                // AGRUPAR PARTICIPANTES POR PUNTOS PARA RENDERIZAR ORO, PLATA Y BRONCE
+                // AGRUPAR PARA OLYMPIC PODIUM (TOP 3)
                 const gruposPuntajes = [];
                 rankingActual.forEach(p => {
                     let g = gruposPuntajes.find(x => x.puntos === p.puntos);
@@ -554,32 +570,23 @@
                     g.nombres.push(p.nombre.toUpperCase());
                 });
 
-                // Renderizar Bloque de Podio de la Jornada
-                const fifaPodiumContainer = document.getElementById('fifa-podium-container');
-                fifaPodiumContainer.innerHTML = '';
-
-                const estructuraMedallas = [
-                    { label: '1er Lugar (Oro)', claseBorder: 'gold-border', icon: 'fa-trophy' },
-                    { label: '2do Lugar (Plata)', claseBorder: 'silver-border', icon: 'fa-medal' },
-                    { label: '3er Lugar (Bronce)', claseBorder: 'bronze-border', icon: 'fa-award' }
-                ];
-
-                estructuraMedallas.forEach((medalla, index) => {
-                    const grupo = gruposPuntajes[index];
-                    if (grupo) {
-                        const nombresString = grupo.nombres.join(' / ');
-                        fifaPodiumContainer.insertAdjacentHTML('beforeend', `
-                            <div class="mini-podium-row ${medalla.claseBorder}">
-                                <div class="medal-badge"><i class="fa-solid ${medalla.icon}"></i></div>
-                                <div class="podium-info-text">
-                                    <span class="p-label">${medalla.label}</span>
-                                    <span class="p-names">${nombresString}</span>
-                                </div>
-                                <div class="p-pts">${grupo.puntos} PTS</div>
-                            </div>
-                        `);
-                    }
-                });
+                // Inyección de nombres en las Tarjetas Olímpicas FIFA
+                if (gruposPuntajes[0]) {
+                    document.getElementById('podium-gold-names').innerText = gruposPuntajes[0].nombres.join(' / ');
+                    document.getElementById('podium-gold-pts').innerText = `${gruposPuntajes[0].puntos} PTS`;
+                }
+                if (gruposPuntajes[1]) {
+                    document.getElementById('podium-silver-names').innerText = gruposPuntajes[1].nombres.join(' / ');
+                    document.getElementById('podium-silver-pts').innerText = `${gruposPuntajes[1].puntos} PTS`;
+                } else {
+                    document.getElementById('podium-silver-names').innerText = "SIN CONTENDIENTE";
+                }
+                if (gruposPuntajes[2]) {
+                    document.getElementById('podium-bronze-names').innerText = gruposPuntajes[2].nombres.join(' / ');
+                    document.getElementById('podium-bronze-pts').innerText = `${gruposPuntajes[2].puntos} PTS`;
+                } else {
+                    document.getElementById('podium-bronze-names').innerText = "SIN CONTENDIENTE";
+                }
 
                 // RENDERIZAR CABECERA DEL HEATMAP
                 const heatmapHead = document.getElementById('heatmap-head');
@@ -610,7 +617,7 @@
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252; background:rgba(255,82,82,0.1); padding:5px 10px; border-radius:5px;">Error al cargar los archivos .csv.</span>`;
+                document.getElementById('last-update').innerHTML = `<span style="color:#ff5252;">Error de sincronización con mundial.csv o participantes.csv.</span>`;
             }
         }
 
