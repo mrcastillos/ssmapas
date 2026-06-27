@@ -359,7 +359,7 @@
                 <h1><i class="fa-solid fa-trophy animated-trophy"></i> Quiniela Mundial 2026</h1>
                 <p id="last-update">Sincronizando transmisión...</p>
             </div>
-            <div class="premium-badge"><i class="fa-solid fa-bolt"></i> Fox Sports Premium</div>
+            <div class="premium-badge"><i class="fa-solid fa-bolt"></i> ¡Vamos con todo!</div>
         </header>
 
         <!-- TARJETA FIFA WORLD CUP TOP 3 (PODIO OLÍMPICO) -->
@@ -472,7 +472,7 @@
 
     <!-- FOOTER -->
     <footer>
-        <p>Creado por <a href="https://www.facebook.com/tuxmar" target="_blank">Martín Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
+        <p>Creado por <a href="https://www.facebook.com/MaloSquishy" target="_blank">Martín R. Castillo Sánchez <i class="fa-brands fa-facebook"></i></a> | Todos los derechos reservados &copy; 2026</p>
     </footer>
 
     <script>
@@ -540,7 +540,7 @@
                 const participantesData = parseCSV(textPart);
 
                 const lastMod = resMundial.headers.get('Last-Modified');
-                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA TRANSMISIÓN EN VIVO: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
+                document.getElementById('last-update').innerText = lastMod ? `ÚLTIMA ACTUALIZACIÓN: ${new Date(lastMod).toLocaleString('es-MX')}` : 'DATOS EN VIVO ACTUALIZADOS';
 
                 const partidosConResultadoIDs = [];
                 const partidosReales = {};
