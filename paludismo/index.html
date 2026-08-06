@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Datos Entomológicos</title>
+    <!-- Leaflet CSS para el mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f7f6; }
+        .form-container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #333; }
+        input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        #map { height: 300px; border-radius: 6px; margin-bottom: 15px; }
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 4px; background: #fafafa; }
+        .checkbox-group label { font-weight: normal; font-style: italic; font-size: 0.8em; }
+        .btn-submit { background-color: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-size: 1em; width: 100%; margin-top: 15px; }
+        .btn-submit:hover { background-color: #219150; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Formulario de Captura de Muestras</h2>
+    <form id="entomologyForm">
+        
+        <div class="grid">
+            <div class="form-group">
+                <label for="id">ID / Folio*</label>
+                <input type="text" id="id" required pattern="[A-Za-z0-9\-_]+" title="Solo letras, números, guiones">
+            </div>
+            <div class="form-group">
+                <label for="fecha">Fecha*</label>
+                <input type="date" id="fecha" required>
+            </div>
+            <div class="form-group">
+                <label for="jurisdiccion">Jurisdicción*</label>
+                <input type="text" id="jurisdiccion" required>
+            </div>
+            <div class="form-group">
+                <label for="quien_realizo">Quien realizó la colecta*</label>
+                <input type="text" id="quien_realizo" required minlength="3">
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label for="municipio">Municipio*</label>
+                <input type="text" id="municipio" required>
+            </div>
+            <div class="form-group">
+                <label for="localidad">Localidad*</label>
+                <input type="text" id="localidad" required>
+            </div>
+            <div class="form-group">
+                <label for="altitud">Altitud (msnm)</label>
+                <input type="number" id="altitud" step="0.1" min="-100" max="6000">
+            </div>
+            <div class="form-group">
+                <label for="temp">T° (°C)</label>
+                <input type="number" id="temp" step="0.1" min="-10" max="60">
+            </div>
+            <div class="form-group">
+                <label for="humedad">H° (%)</label>
+                <input type="number" id="humedad" min="0" max="100">
+            </div>
+        </div>
+
+        <!-- Selección de Coordenadas con Mapa -->
+        <label>Ubicación Geográfica (Haz clic en el mapa para fijar latitud y longitud)*</label>
+        <div id="map"></div>
+        <div class="grid">
+            <div class="form-group">
+                <label for="latitud">Latitud*</label>
+                <input type="number" id="latitud" step="any" min="-90" max="90" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="longitud">Longitud*</label>
+                <input type="number" id="longitud" step="any" min="-180" max="180" required readonly>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label for="tipo_criadero">Tipo de Criadero*</label>
+                <select id="tipo_criadero" required>
+                    <option value="">-- Seleccionar --</option>
+                    <option value="Presa">Presa</option>
+                    <option value="Río">Río</option>
+                    <option value="Lago">Lago</option>
+                    <option value="Estanque de peces">Estanque de peces</option>
+                    <option value="Barranca">Barranca</option>
+                    <option value="Canal">Canal</option>
+                    <option value="Acueducto">Acueducto</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="no_reg_tubo">No. Reg / Tubo*</label>
+                <input type="text" id="no_reg_tubo" required>
+            </div>
+            <div class="form-group">
+                <label for="fecha_lesp">Fecha de resultado LESP</label>
+                <input type="date" id="fecha_lesp">
+            </div>
+        </div>
+
+        <!-- Checkbox List de Especies -->
+        <label>Especies Identificadas</label>
+        <div class="checkbox-group" id="especiesContainer">
+            <!-- Se generan dinámicamente o manualmente según la lista -->
+        </div>
+
+        <button type="submit" class="btn-submit">Guardar Registro en CSV</button>
+    </form>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Lista de especies extraídas de la imagen
+    const especies = [
+        "A. pseudopunctipennis", "Culex coronator", "Culex stigmatosoma", 
+        "Aedes aegypti", "Aedes epactius", "Culex quinquefasciatus", 
+        "Culex bidens", "Culiseta incides", "Culex bigoti", 
+        "Culex nigripalpus", "Culex salinarus", "Culex restuans", 
+        "Culiseta particeps", "Culex pinarocampa"
+    ];
+
+    // Renderizar checkboxes de especies
+    const container = document.getElementById('especiesContainer');
+    especies.forEach(sp => {
+        const div = document.createElement('div');
+        div.innerHTML = `<input type="checkbox" name="especies" value="${sp}" id="${sp}"> <label for="${sp}">${sp}</label>`;
+        container.appendChild(div);
+    });
+
+    // Inicializar Mapa
+    const defaultLat = 18.9261; // Centro predeterminado (Ej. Morelos)
+    const defaultLng = -99.2307;
+    const map = L.map('map').setView([defaultLat, defaultLng], 10);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    let marker;
+
+    map.on('click', function(e) {
+        const lat = e.latlng.lat.toFixed(6);
+        const lng = e.latlng.lng.toFixed(6);
+
+        document.getElementById('latitud').value = lat;
+        document.getElementById('longitud').value = lng;
+
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+    });
+
+    // Manejo de guardado en CSV mediante File System Access API
+    let fileHandle = null;
+
+    document.getElementById('entomologyForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Extraer especies seleccionadas
+        const checkedEspecies = Array.from(document.querySelectorAll('input[name="especies"]:checked'))
+                                    .map(cb => cb.value);
+
+        const data = {
+            id: document.getElementById('id').value,
+            fecha: document.getElementById('fecha').value,
+            jurisdiccion: document.getElementById('jurisdiccion').value,
+            quien_realizo: document.getElementById('quien_realizo').value,
+            municipio: document.getElementById('municipio').value,
+            localidad: document.getElementById('localidad').value,
+            altitud: document.getElementById('altitud').value,
+            latitud: document.getElementById('latitud').value,
+            longitud: document.getElementById('longitud').value,
+            temp: document.getElementById('temp').value,
+            humedad: document.getElementById('humedad').value,
+            tipo_criadero: document.getElementById('tipo_criadero').value,
+            no_reg_tubo: document.getElementById('no_reg_tubo').value,
+            fecha_lesp: document.getElementById('fecha_lesp').value,
+            // Crea columnas dinámicas con 1 o 0 para cada especie
+            ...especies.reduce((acc, sp) => {
+                acc[sp] = checkedEspecies.includes(sp) ? "1" : "0";
+                return acc;
+            }, {})
+        };
+
+        await saveToCSV(data);
+    });
+
+    async function saveToCSV(newRecord) {
+        const headers = Object.keys(newRecord).join(",") + "\n";
+        const row = Object.values(newRecord).map(val => `"${val}"`).join(",") + "\n";
+
+        try {
+            // Solicita al usuario seleccionar o crear el archivo CSV en la carpeta local
+            if (!fileHandle) {
+                fileHandle = await window.showSaveFilePicker({
+                    suggestedName: 'captura_datos.csv',
+                    types: [{
+                        description: 'CSV File',
+                        accept: {'text/csv': ['.csv']},
+                    }],
+                });
+            }
+
+            const file = await fileHandle.getFile();
+            let content = "";
+            
+            // Si el archivo ya tiene contenido no sobrescribe los encabezados
+            if (file.size > 0) {
+                content = await file.text();
+                content += row;
+            } else {
+                content = headers + row;
+            }
+
+            const writable = await fileHandle.createWritable();
+            await writable.write(content);
+            await writable.close();
+
+            alert("Registro guardado con éxito en el CSV.");
+            document.getElementById('entomologyForm').reset();
+            if (marker) map.removeLayer(marker);
+
+        } catch (err) {
+            console.error(err);
+            alert("Error o cancelación al guardar el archivo.");
+        }
+    }
+</script>
+
+</body>
+</html>
